@@ -1,3 +1,426 @@
 # (PART) Symmetric cryptography {-} 
 
-# Pseudorandom generators {#pseudorandom_generators}
+# Randomness in cryptography
+
+As we saw above, and made explicit in
+[Principle 3](#principle:3){reference-type="ref"
+reference="principle:3"}, we require randomness to guarantee secure
+cryptography. In this section, we will give some thought to how to
+obtain this randomness in the first place, and what to do when we do not
+have enough of it. As a motivating example, we will start by describing
+a well-known encryption scheme.
+
+We will learn about:
+
+1.  The one-time pad encryption scheme;
+
+2.  Pseudorandom generators;
+
+3.  Sources of randomness.
+
+## One-time pad
+
+The *one-time pad (OTP)* is an old encryption scheme, which was already
+known in the late 19th century, and was widely used in the 20th century
+for many military and intelligence operations.
+
+The idea is extremely simple. Let us first recall the *exclusive or*
+($\mathsf{XOR}$) logic operation. Given two bits $b_0,b_1\in\{0,1\}$,
+the operation is defined as
+$$\mathsf{XOR}(b_0,b_1)=b_0\oplus b_1=\left\{\begin{array}{ll}
+    0 & \text{if }b_0=b_1, \\
+    1 & \text{if }b_0\neq b_1. \\
+\end{array}\right.$$ Equivalently, the operation corresponds to the
+following truth table:
+
+::: {.center}
+   $b_0$   $b_1$   $b_0\oplus b_1$
+  ------- ------- -----------------
+     0       0            0
+     0       1            1
+     1       0            1
+     1       1            0
+:::
+
+We extend the notation to bitstrings of any length, i.e., given two
+bistrings $\mathbf b_0$ and $\mathbf b_1$ of the same length, we define
+$$\mathbf b_0 \oplus \mathbf b_1$$ to be the bistring that results from
+$\mathsf{XOR}$'ing each bit of $\mathbf b_0$ with the bit in the same
+position of $\mathbf b_1$.
+
+Assume that Alice wants to send an encrypted message to Bob. The
+one-time pad works as follows. Key generation consists of choosing as a
+secret key a uniformly random bitstring of length $\lambda$ as the key:
+$$\mathsf{k}=k_1k_2\dots k_\lambda.$$ We denote this process by
+$\mathsf{k}\gets\{0,1\}^\lambda$. Let $m$ be a message that Alice wants
+to encrypt, written as a bitstring[^7]
+$$\mathsf{m}=m_1m_2\dots m_\lambda$$ of the same length. Then, the
+one-time pad encryption scheme works by $\mathsf{XOR}$'ing each message
+bit with the corresponding key bit. More precisely, for the $i$th bit of
+the message, we compute $$\mathsf{c}= \mathsf{m}\oplus \mathbf k,$$
+which is sent to Bob. Note that, because the $\mathsf{XOR}$ operation is
+its own inverse, the decryption algorithm works exactly like encryption.
+That is, Bob can recover the message by computing
+$$\mathsf{m}= \mathsf{c}\oplus\mathsf{k}.$$
+
+The first property that we want from any encryption scheme is
+*correctness*, which means that for any message $\mathsf{m}$ and any key
+$\mathsf{k}$, we have that
+$$\mathsf{Dec}_{\mathsf{k}}(\mathsf{Enc}_{\mathsf{k}}(\mathsf{m}))=\mathsf{m},$$
+that is, if we encrypt and decrypt, we should recover the same message.
+Otherwise Alice and Bob will not be able to communicate.
+
+::: {.proposition}
+*The one-time pad is a correct encryption scheme.*
+:::
+
+::: {.proof}
+*Proof.* Using the definitions of encryption and decryption, we have
+that
+$$\mathsf{Dec}_{\mathsf{k}}(\mathsf{Enc}_{\mathsf{k}}(\mathsf{m}))=\mathsf{Dec}_{\mathsf{k}}(\mathsf{m}\oplus\mathsf{k})=(\mathsf{m}\oplus\mathsf{k})\oplus \mathsf{k}= \mathsf{m}\oplus (\mathsf{k}\oplus\mathsf{k})=\mathsf{m}\oplus\mathbf 0=\mathsf{m},$$
+where $\mathbf 0$ means the string of zeroes of size $\lambda$. In the
+last two steps, we used, respectively, that $\mathsf{XOR}$'ing any
+string with itself produces $\mathbf 0$, and that $\mathsf{XOR}$'ing any
+string with $\mathbf 0$ does not change the string.
+:::
+
+Here is a straightforward implementation of the one-time pad. In this
+example, we want to send a message with $12$ ASCII characters, so each
+character will require $8$ bits. Thus, we choose a key length of $96$.
+
+```{python, eval=FALSE}
+from sage.crypto.util import ascii_integer
+from sage.crypto.util import bin_to_ascii
+
+# Set a security parameter
+sec_param = 96
+
+# Define the XOR operation:
+def xor(a,b):
+    return mod(int(a)+int(b),2) # You will learn why this is equivalent
+                                # to XOR later in the course
+
+### KEY GENERATION 
+# Generate a random key of length sec_param
+k = random_vector(GF(2),sec_param)
+
+### ENCRYPTION 
+# Choose a message
+m = "Hello there."
+# Process the message into a bitstring
+m_bin = str(BinaryStrings().encoding(m))
+
+# Encrypt the message bit by bit
+c = ""
+if (len(m_bin)<=sec_param):
+    for i in range(len(m_bin)):
+        c += str(xor(m_bin[i],k[i]))
+    print("Ciphertext: "+c)
+else:
+    print("Message too long. Need a longer key.")
+
+### DECRYPTION 
+# We use the same ciphertext obtained in the encryption part. 
+
+# Decrypt the ciphertext bit by bit
+m_bin = ""
+if (len(c)<=sec_param):
+    for i in range(len(c)):
+        m_bin += str(xor(c[i],k[i]))
+    print("Plaintext: "+bin_to_ascii(m_bin))
+else:
+    print("Ciphertext too long. Need a longer key.")
+```
+
+The one-time pad receives its name from the fact that, when the key is
+used only once, the scheme has *perfect secrecy*. This means that the
+ciphertext produced reveals absolutely no information about the
+underlying plaintext, besides its length. We formalize this by saying
+that, given a ciphertext and two messages, the ciphertext has the same
+probability of corresponding to each of the messages.
+
+::: {.definition}
+*An encryption scheme has* perfect secrecy *when, for
+a uniformly random key $\mathsf{k}$, all ciphertexts $\mathsf{c}$ and all pairs of
+messages $\mathsf{m}_0,\mathsf{m}_1$,*
+$$\Pr[\mathsf{c}=\mathsf{Enc}_{\mathsf{k}}(\mathsf{m}_0)]=\Pr[\mathsf{c}=\mathsf{Enc}_{\mathsf{k}}(\mathsf{m}_1)].$$
+:::
+
+Intuitively, the perfect secrecy of the OTP stems from these two
+observations:
+
+-   Look again at the truth table of the $\mathsf{XOR}$ operation, and
+    observe that a $0$ in the plaintext could equally come from a $0$ or
+    a $1$ in the plaintext, depending on the key bit. Similarly, a $1$
+    in the ciphertext could also come from a $0$ or a $1$ in the
+    plaintext. In other words, if the key is chosen uniformly at random,
+    each bit of the ciphertext has a probability of $1/2$ of coming from
+    a $0$, and a probability $1/2$ of coming from a $1$.
+
+-   Because of the above, an adversary that intercepts a ciphertext
+    $c_1c_2\dots c_\lambda$ cannot know the corresponding plaintext, as
+    any given plaintext can be encrypted to *any* bitstring of length
+    $\lambda$. In other words, for every ciphertext $\mathsf{c}$ and
+    every message $\mathsf{m}$, there exists a key $\mathsf{k}$ and a
+    message such that
+    $$\mathsf{Enc}_{\mathsf{k}}(m)=\mathsf{c}\qquad\text{and}\qquad\mathsf{Dec}_{\mathsf{k}}(\mathsf{c})=m.$$
+    So any ciphertext could correspond to any message, and there is no
+    way to do better, regardless of the computational power of the
+    attacker!
+
+We formalize the above discussion in the following result.
+
+::: {.proposition}
+*The one-time pad encryption scheme has perfect
+secrecy.*
+:::
+
+::: {.proof}
+*Proof.* By the discussion above, we have that for any key $\mathsf{k}$,
+message $\mathsf{m}$ and ciphertext $\mathsf{c}$,
+$$\Pr[\mathsf{c}=\mathsf{Enc}_{\mathsf{k}}(\mathsf{m})]=\frac{\#\{\text{keys $\mathsf{k}$ such that } \mathsf{Enc}_{\mathsf{k}}(\mathsf{m})\}}{\#\{\text{possible keys}\}}=\frac{1}{2^\lambda}.$$
+:::
+
+::: {.exercise}
+*We said above that for every message $\mathsf{m}$ and any
+ciphertext $\mathsf{c}$, there is always exactly one key ${\mathsf{k}}$
+such that
+$$\mathsf{Enc}_{\mathsf{k}}(m)=\mathsf{c}\qquad\text{and}\qquad\mathsf{Dec}_{\mathsf{k}}(\mathsf{c})=m.$$
+For arbitrary $\mathsf{m}$ and $\mathsf{c}$, which is that key,
+expressed in terms of $\mathsf{m}$ and $\mathsf{c}$?*
+:::
+
+This is all well and good, but obviously there's a catch. While the
+security of one-time pad is as good as it gets, it is simply impractical
+for a very simple reason: we need a key as large as the message, and
+moreover, we need a new key for each message. Moreover, if we want
+perfect secrecy, this is unavoidable.
+
+::: {.proposition}
+*Any encryption scheme with perfect secrecy requires a
+key that is as long as the message, and it cannot be reused.*
+:::
+
+One reason that highlights how reusing keys in OTP breaks perfect
+secrecy is the following. Assume that we use the same key $\mathsf{k}$
+for two messages $\mathsf{m}_0,\mathsf{m}_1$. Then, an attacker
+intercepts the ciphertexts
+$$\mathsf{c}_0=\mathsf{m}_0\oplus\mathsf{k}, \qquad \mathsf{c}_1=\mathsf{m}_1\oplus\mathsf{k}.$$
+The adversary can compute
+$$\mathsf{c}_0\oplus\mathsf{c}_1=(\mathsf{m}_0\oplus\mathsf{k})\oplus (\mathsf{m}_1\oplus\mathsf{k})= \mathsf{m}_0\oplus\mathsf{m}_1\oplus(\mathsf{k}\oplus\mathsf{k})=\mathsf{m}_0\oplus\mathsf{m}_1\oplus\mathbf 0=\mathsf{m}_0\oplus m_1.$$
+That is, the adversary can get the $\mathsf{XOR}$ result of the two
+messages. Even if they do not know any of the messages on their own,
+this leaks partial information (e.g. a $0$ in any position means that
+the two messages have the same value on that position).
+
+So it's clear that for OTP to work we need keys as long as the messages,
+and there is no way around that. But how much of a big deal is that? An
+issue that we have not addressed yet is the fact that, for any of this
+to happen, the two parties involved need to agree on a common key
+${\mathsf{k}}$, that must remain secret for anyone else. If an insecure
+channel is the only medium for communication available:
+
+-   they cannot share the key unencrypted, since an attacker could be
+    listening, and grab the key to decrypt everything that comes
+    afterwards.
+
+-   they cannot encrypt the key, since the don't have a shared key to
+    use encryption yet!
+
+Later in the course, we will see that there are ways to securely share a
+key over an insecure channel. But for now, it suffices to say that these
+methods exist. However, sharing a new key of the size of the message,
+and a new one for each message, is simply not practical most of the
+time. Imagine the key sizes for sending audio or video over the
+Internet. This, ultimately, is what kills the one-time pad.
+
+## Pseudorandom generators {#sec:prngs}
+
+Before we move on, let us see if there is still some hope for the
+one-time pad. What if we start from a short uniformly random key
+$\mathsf{k}$, and try to expand it to a longer key?
+
+Let us assume that Alice and Bob wish to communicate using the one-time
+pad, and Alice wants to send a message of length $h$. But they have only
+shared a key ${\mathsf{k}}\in\{0,1\}^\ell$, for some $\ell<h$, so they
+proceed as follows:
+
+1.  They agree on a public function
+    $$G:\{0,1\}^\ell\rightarrow\{0,1\}^{h}.$$ That is, $G$ receives a
+    bitstring of length $\ell$ and outputs another of length $h$.
+
+2.  Since the function is deterministic, they can both compute
+    $${\mathsf{k}}'=G({\mathsf{k}})$$ on their own. Now they both know
+    ${\mathsf{k}}'\in\{0,1\}^{h}$.
+
+3.  They use the one-time pad with key ${\mathsf{k}}'$.
+
+Observe that, since they have already "stretched" the key once, they
+could potentially take parts of $\mathsf{k}'$ and apply the function $G$
+again to generate new keys on demand. The scheme that results from
+stretching the randomness of a short shared key to an arbitrary length
+and encrypt the message through the $\mathsf{XOR}$ operation is known as
+a *stream cipher*. The initial key used is called the *seed*, and the
+subsequent keys generated are called the *key stream*.
+
+The function $G$ must be deterministic, otherwise Alice and Bob will not
+arrive at the same key, and they will not be able to communicate. Also
+note that, although $G$ is public, ${\mathsf{k}}$ is not, so an attacker
+has no way of learning the new key ${\mathsf{k}}'$.
+
+However, there are some caveats to this. Since the input of the function
+is a set of size $2^\ell$, there are at most $2^\ell$ outputs, whereas
+if we had used a uniformly random key of length $h$, we would have
+$2^{h}$ potential keys. Recall that perfect secrecy strongly relied on
+the keys being uniformly random, which clearly will not be the case
+here.
+
+But, what if the output of $G$ looks "close enough" to random? By this,
+we mean that no efficient algorithm can distinguish the output
+distribution of $G$ and the uniform distribution in $\{0,1\}^{h}$. Then,
+if an adversary cannot tell that we are using a non-uniform
+distribution, they will not be able to exploit this fact in their
+attacks, and so our scheme will remain secure. Is any function $G$ good
+enough for our purposes?
+
+::: {.exercise}
+*Consider the stream cipher presented above, with the
+following choices for the function $G$, for $h=2\ell$.*
+
+1.  *$G$ outputs a string or $2\ell$ zeroes.*
+
+2.  *$G$ outputs the input, followed by a string of $\ell$ zeroes.*
+
+3.  *$G$ outputs two concatenated copies of the input.*
+
+*In each of these cases, discuss whether the scheme is still secure.*
+:::
+
+The above exercise shows that we need to be careful when choosing our
+function $G$. This leads us to the following definition.
+
+::: {.definition}
+*A* pseudorandom number generator (PRNG) *is a
+function $$G:\{0,1\}^\ell\rightarrow\{0,1\}^h$$such that no efficient
+adversary can distinguish the output distribution of $G$ from the
+uniform distribution on* $\{0,1\}^h$.
+:::
+
+We emphasize the importance of randomness here. A function $G$ whose
+output cannot be distinguished from uniform randomness by any
+(efficient) algorithm implies that, for all practical purposes, the
+output of $G$ can be considered uniformly random in $\{0,1\}^h$. In
+particular, informally this means that a key stream generated with a
+PRNG is *unpredictable*, i.e., given some output bits of $G$, there is
+no way to predict the next in polynomial time, with a success rate
+higher than $50\%$. This contrasts with non-cryptographic PRNGs, in
+which it is enough that the output passes some statistical tests, but
+might not be completely unpredictable.
+
+::: {.exercise}
+*Assume that there is a very bad PRNG that outputs one
+bit at a time, and that bit is a $0$ with probability $3/4$. This PRNG is
+used in a stream cipher to produce a ciphertext $$c=01.$$ In OTP, the
+probability of the corresponding plaintext being $00$, $01$, $10$ or
+$11$ would be $1/4$ each. Compute the corresponding probabilities when
+the bad PRNG described above is in use.*
+:::
+
+An interesting property of PRNGs is that, if we manage to build one that
+stretches the key by just a little, then we can produce an infinitely
+large key stream, and still maintain essentially the same security
+guarantees. To illustrate this, let us again consider a function
+$$G:\{0,1\}^\ell\rightarrow\{0,1\}^{2\ell},$$ and let us assume that it
+is a PRNG.[^8] Consider the following construction of a new function
+$$H:\{0,1\}^\ell\rightarrow\{0,1\}^{3\ell},$$ which works as follows: on
+input ${\mathsf{k}}$,
+
+1.  First compute $G({\mathsf{k}})\in\{0,1\}^{2\ell}$.
+
+2.  Split the result in two halves $\mathbf{x},\mathbf{y}$, each of
+    length $\ell$.
+
+3.  Compute $\mathbf{z}=G(\mathbf{y})\in\{0,1\}^{2\ell}$.
+
+4.  Output $(\mathbf{x},\mathbf{z})\in\{0,1\}^{3\ell}$.
+
+::: {.proposition}
+*If $G$ is a PRNG, then $H$, constructed as described
+above, is also a PRNG.*
+:::
+
+We have already seen some bad PRNGs, so what about the good ones?
+Although there exist some proposals of PRNGs that are believed to be
+secure and are built "from scratch", what happens in practice is that,
+when one wants a PRNG, it is common to build it from a block cipher,
+which is a topic that we will cover later in the course, so we delay the
+examples of cryptographic PRNGs until then. For completeness, we next look at a function that is enough for most applications of pseudorandom generation, but is not secure for
+cryptographic use.
+
+## Linear feedback shift registers {#sec:examples}
+
+A *linear feedback shift register* is a type of "stretching function"
+that produces an output that looks quite random, and it passes some
+statistical tests, although it is still weak from a cryptographic point
+of view. We will start with a particular example. Assume that we have a
+seed $k$, written as a bitstring ${\mathsf{k}}=k_1k_2k_3$. The linear
+feedback shift register recursively produces each new element of the key
+according to the formula: $$k_{i+3}=k_{i+1}\oplus k_i.$$ For example, if
+the seed is $011$, the key stream will be
+$$0111001\quad 0111001\quad 0111001\quad 0111001\quad 0111001 \quad \dots$$
+We included the spaces to emphasize the fact that, after a while, the
+output seems to repeat. This is not something specific to this example,
+but actually happens to any linear feedback shift register.
+
+Indeed, let us define a general *linear feedback shift register (LFSR)
+of length $\ell$*. It starts with a seed ${\mathsf{k}}$, expressed as a
+bitstring $${\mathsf{k}}=k_1k_2\dots k_\ell,$$ and derives each new
+element of the key stream according to the formula
+$$k_{i}=p_{1}k_{i-1}\oplus \dots \oplus p_\ell k_{i-\ell},$$ for some
+coefficients $p_j\in\{0,1\}$, for $j=1,\dots,\ell$.
+
+::: {.proposition}
+*The output of a LFSR of length $\ell$ repeats
+periodically, with a period of at most $2^{\ell}-1$.*
+:::
+
+Note the "at most" in the statement. For some choices of the
+coefficients $p_j$, the period could be much shorter. However, for
+well-chosen coefficients, we can meet the bound, thus obtaining a period
+that is exponential in the length of the initial key. The output of a
+well-chosen LFSR has some good statistical properties. In particular,
+the output looks "random enough" for most applications. However, there
+are attacks that allow an adversary to distinguish the output from
+uniformly random, and thus LFSRs are not suited for cryptography.
+
+Still, a clever combination of a few LFSRs, with a couple of extra
+details, seems to be enough to realize the stream cipher Trivium, which,
+to this date, is believed to be secure [@de2008trivium].
+
+## True randomness
+
+We have dealt with the problem of stretching a tiny bit of randomness
+into something usable. But where does this initial randomness come from?
+It cannot really come from our computers, since these are deterministic,
+so the answer lies out in the physical world.[^9] The general idea is to
+look for unpredictable processes from which to extract randomness. Some
+examples are radioactive decay, cosmic radiation, hardware processes
+like the least significant bit of the timestamp of a keystroke.
+
+These processes might not produce uniformly random outputs, but from our
+perspective we have little to none information about their output
+distribution. These values are not used raw, but processed by a *random
+number generator (RNG)*, which refines them into what we assume to be
+uniformly random outputs. These can now be fed into our PRNGs to stretch
+them.
+
+[^7]: If the message is written with a different set of characters, like
+    English letters, it is first processed into a bitstring, e.g. by
+    associating to each letter its ASCII code in binary
+    (<https://en.wikipedia.org/wiki/ASCII>).
+
+[^8]: We set the output length to be $2\ell$ for simplicity, but the
+    idea could easily be adapted to any other output length.
+
+[^9]: Assuming, of course, that the universe is not completely
+    deterministic.

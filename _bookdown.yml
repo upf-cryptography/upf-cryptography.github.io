@@ -1,1 +1,18 @@
 output_dir: "docs"
+header-includes:
+  - \usepackage{tikz}
+  - \usepackage{algorithm,algorithmic,algorithm2e}
+  - \usepackage{amsmath,amsfonts,amssymb}
+  - \usepackage{appendix}
+  - \usepackage[clock]{ifsym}
+  - \usepackage{graphicx}
+  - \usepackage{hyperref}
+  - \usepackage{listings,color}
+  - \usepackage[official]{eurosym}
+  - \usepackage{tikz}
+  - \usetikzlibrary{arrows,shapes}
+  - \tikzstyle{block} = [draw, rectangle, minimum height=3em, minimum width=4em]
+  - \tikzstyle{xor} = [node distance=2cm]
+  - \tikzstyle{input} = [coordinate]
+  - \tikzstyle{output} = [coordinate]
+  - \tikzstyle{pinstyle} = [pin edge={to-,thin,black}]

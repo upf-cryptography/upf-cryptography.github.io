@@ -1,3 +1,369 @@
+# Introduction to Security
 
+We use cryptography on a daily basis: our wireless communications or web
+traffic are encrypted, companies protect their data with cryptographic
+algorithms, and so on. We all have a basic or intuitive understanding of
+how cryptographic algorithms work. In this chapter, we want to make this
+intuition more precise and give you tools to think about cryptographic
+algorithms more formally, and reason scientifically about security.
 
-# Security parameter {#security_parameter}
+Therefore, in this section we will:
+
+1.  Introduce three basic principles of cryptographic algorithm design;
+
+2.  Introduce the notion of security parameter and security level.
+
+## What cryptography is and is not
+
+Cryptography is a field that lies halfway between mathematics and
+computer science, and is occupied with building algorithms that protect
+communications in some way, for example ensuring privacy or integrity of
+a message sent through an insecure channel.
+
+In this course, we will describe some of the most important
+cryptographic algorithms. They are the foundation for many security
+mechanisms and protocols that are part of the digital world. Thus, when
+you finish this course, you will have the basis to understand these
+mechanisms. But it is also important that you understand what is *not*
+covered in this course, and what are the limitations of what you will
+learn. In particular, a well-known course on cryptography[^1] mentions
+three warnings that you should take into consideration:
+
+1.  Cryptography is not the solution to all security problems;
+
+2.  Cryptography is not reliable unless implemented and used properly;
+
+3.  Cryptography is not something that you should try to invent
+    yourself, as there are many and many examples of broken ad-hoc
+    designs.
+
+## Fundamental security principles
+
+Let us consider a common example. When we type our WiFi password to
+connect to a network, we are assuming that what we are doing is
+"secure\" because only us have some secret information (the password),
+that allows us to do this. In the context of cryptography, we call this
+secret information the *secret key*.
+
+But what if an attacker tries all the possible keys until he finds the
+right one? This is what is called a *brute-force attack*. We will
+consider a few different scenarios:
+
+-   Our secret key is a 4-digit number. Then, in the worst case, the
+    attacker will need to try $$10^4=10000$$ potential keys. Assuming
+    one try per second, this will take a bit less than three hours.
+
+-   Our secret key is a 12-character string of digits and English
+    letters. Since there are 10 possible digits and 26 possible letters
+    for each position, the number of potential keys is
+    $$36^{12}=4738381338321616896.$$ At the same rate, the attacker will
+    need, approximately, $1.5\cdot10^{11}$ *years* to try all of them.
+    For reference, this number is roughly half of the number of stars in
+    the Milky Way.
+
+::: {.exercise}
+*A WiFi password is $10$ bits long. How long does it
+take to find the key by brute force? What if the password is $\lambda$
+bits long?*
+:::
+
+The idea is that, if our password is generated in a good way, this will
+take too long! So we are implicitly thinking that our scheme is secure
+because an attacker has limited time or limited money to buy hardware to
+perform very fast attacks and find our password. This leads to the first
+fundamental principle of modern cryptography:
+
+::: {#principle:1 .principle}
+**Principle 1**. *Security depends on the resources of the attacker. We
+say that a cryptographic scheme is secure if there are no efficient
+attacks.*
+:::
+
+Cryptographic algorithms need to be carefully reviewed by the scientific
+community, and directions for implementation and interoperability must
+be given before they are adopted. This is done by institutions such as
+NIST, the National Institute of Standards and Technology in the US.[^2]
+Thus, coming up with new, secure algorithms is difficult. In fact, the
+algorithms that are used in practice are public, known to everyone, and
+in particular to potential attackers. For instance, in the case of a
+WiFi password, it is a publicly-known fact that WPA is used. This is a
+general design principle in cryptography: security must come from the
+choice of a secret key and not from attackers not knowing which
+algorithm we are using.
+
+::: {#principle:2 .principle}
+**Principle 2** (Kerckhoffs's principle). *Design your system so that it
+is secure even if the attacker knows all of its algorithms.[^3]*
+:::
+
+So what makes our systems secure is the fact that, although the attacker
+knows the algorithm, it does not know the secret key that we are using.
+Back to the WiFi example, an attacker knows that the WPA standard is
+used, but they just don't know our password.
+
+Another implicit assumption that we are making when we think that our
+connection is "secure\" is that our secret key is *sufficiently random*,
+that is, that there are *many possibilities* for the secret key. This
+leads us to the third and last principle.
+
+::: {#principle:3 .principle}
+**Principle 3**. *Security is impossible without randomness.*
+:::
+
+As we will see, randomness plays an essential role in cryptographic
+algorithms. In particular, it is always essential that secret keys are
+chosen to be sufficiently random (i.e. they should have enough entropy).
+A bad randomness source almost always translates into a weakness of the
+cryptographic algorithm.
+
+## Security parameter
+
+Obviously, cryptographic algorithms need to be efficient to be used in
+practice. On the other hand, we have seen that no attack should be
+efficient at all, i.e. they should be *computationally infeasible*.
+Before we go on, we need to determine the meaning of efficiency, so that
+the concept is formal and quantifiable. At the same time, and because of
+[Principle 1](#principle:1){reference-type="ref"
+reference="principle:1"}, we need to relate efficiency with security
+somehow.
+
+The way to achieve this is through a natural number that we call the
+*security parameter*, usually denoted by $\lambda$. The information
+about both security and efficiency will be expressed in terms of the
+security parameter.
+
+```{definition, label="efficiency"}
+*An algorithm $\mathcal{A}$ is said to be* efficient *(or* polynomial-time *if there exists a positive polynomial $p$ such
+that, for any $\lambda\in\mathbb{N}$, when $\mathcal{A}$ receives as
+input a bitstring of length $\lambda$, it finishes in $p(\lambda)$
+steps.*
+```
+
+We note that here we are interested in having a rough estimate on the
+running time, so we count each basic bit operation as one step. We use
+equivalently the terms *running time*, *number of steps*, *number of
+operations*.
+
+An important observation is that a *single polynomial* must work for any
+value of $\lambda$. Otherwise, any algorithm would be considered
+efficient. The intuition behind the definition is that we allow the
+running time of the algorithm to grow when the input gets larger, but
+not "too much too fast". Let us consider two examples to illustrate the
+concept of polynomial-time algorithms:
+
+-   Algorithm $\mathcal{A}$ takes two $\lambda$-bit integers $m,n$ and
+    adds them.
+
+-   Algorithm $\mathcal{B}$ takes a $\lambda$-bit integer
+    $n\in\{0,\dots,2^{\lambda}-1\}$ and finds its prime factors in the
+    following way: for each $i=1,\dots,n$, it checks whether $i$ divides
+    $n$, and if that is the case it outputs $i$.
+
+Are they efficient? The first one is efficient, because the number of
+operations is $O(\lambda)$, while the second one is inefficient because
+the number of operations is $O(2^{\lambda})$. In other words, the number
+of operations grows *exponentially* when we increase the size of the
+input. As is well known, exponential functions grow much faster than
+polynomials, and so in this case we will not be able to find a
+polynomial to satisfy Definition \@ref(def:efficiency). Thus, algorithm $\mathcal{B}$ is not
+efficient.
+
+Below, you can find a Sage implementation of each of the two algorithms,
+with the tools to compare their running times for different sizes of
+$\lambda$. Observe that, by increasing the security parameter, soon the
+second algorithm starts taking too long to terminate.
+
+```{python, eval=FALSE}
+# Choose the security parameter
+sec_param = 12
+
+# Generate two random numbers of bit length lambda
+n = randrange(2^(sec_param-1),2^(sec_param)-1)
+m = randrange(2^(sec_param-1),2^(sec_param)-1)
+
+print ("n =",n,"\nm =",m)
+
+# Define algorithm A, which adds the two numbers
+def algorithm_a(n,m):
+    n+m
+
+# Measure the time it takes to run algorithm A
+%time algorithm_a(n,m)
+
+# Define algorithm A, which tries to factor a number
+def algorithm_b(n):
+    for i in range(1,n+1):
+        if mod(n,i)==0:
+            i
+
+# Measure the time it takes to run algorithm B
+%time algorithm_b(n)
+```
+
+::: {.exercise}
+*Decide whether the following algorithms run in
+polynomial time:*
+
+-   *An algorithm that takes as input two integers $n,m$ (in base 2) and
+    computes the sum $n+m$.*
+
+-   *An algorithm that takes as input an integer $n$ and prints all the
+    integers from $1$ to $\ell$, if:*
+
+    -   *$\ell=n$.*
+
+    -   *$\ell=n/2$.*
+
+    -   *$\ell=\sqrt{n}$.*
+
+    -   *$\ell=10^6$.*
+
+    -   *$\ell=\log_2 n$.*
+:::
+
+We are now in position to discuss the efficiency and security of a
+cryptographic scheme in more grounded terms. For cryptographic schemes
+that require secret keys, the security parameter $\lambda$ is the bit
+length of the key. All the algorithms that compose some cryptographic
+scheme, like an encryption or signature scheme, should run in time
+polynomial in $\lambda$.
+
+A classical example of this is an encryption scheme, which is the
+cryptographic primitive that will be the focus of most of the course. We
+first introduce the notion of symmetric encryption scheme.[^4]
+
+```{definition}
+*A* symmetric encryption scheme *is composed of three
+efficient algorithms:* $$(\mathsf{KeyGen},\mathsf{Enc},\mathsf{Dec}).$$
+
+-   *The $\mathsf{KeyGen}$ algorithm chooses some key $\mathsf{k}$ of
+    length $\lambda$, according to some probability distribution.*
+
+-   *The $\mathsf{Enc}$ algorithm uses the secret key $\mathsf{k}$ to
+    encrypt a message $\mathsf{m}$, and outputs the encrypted message
+    $$\mathsf{c}=\mathsf{Enc}_{\mathsf{k}}(\mathsf{m}).$$*
+
+-   *The $\mathsf{Dec}$ algorithm uses the secret key $\mathsf{k}$ to
+    decrypt an encrypted message $\mathsf{c}$, recovering
+    $$\mathsf{Dec}_{\mathsf{k}}(\mathsf{c})=\mathsf{m}.$$*
+
+*In this context, $\mathsf{m}$ is called the *plaintext*, and
+$\mathsf{c}$ is said to be its corresponding *ciphertext*.*
+```
+
+Technically, the fact that the algorithms are efficient is expressed as
+requiring that the three algorithms run in time polynomial in
+$\lambda$.[^5]
+
+On the other hand, observe that, if an attacker wants to try all the
+possible secret keys, it needs $O(2^{\lambda})$ steps to do so. This is
+not polynomial time in the security parameter (again, it is
+exponential), so it is not efficient according to
+Definition \@ref(def:efficiency).
+
+## Security level
+
+Ideally, we would like that the best possible attack against a scheme is
+a brute-force attack, in which an attacker (also called *adversary*)
+needs to try all the possibilities. However, very often there exist much
+more sophisticated attacks that need less time. This motivates the
+following definition:
+
+```{definition}
+*A cryptographic scheme has* $n$-bit security *if the
+best known attack requires $2^{n}$ steps.*
+```
+
+When the best known attack is a brute-force attack, then $n=\lambda$,
+but we will see many examples of the opposite, which makes $n$
+significantly smaller. In a few lessons, we will see the example of hash
+functions, for which, in the best case, $$n=\frac\lambda 2.$$ If we
+require a security level of $80$ bits, this forces us to choose
+$\lambda=160$, at the least. Another example is RSA, which is a famous
+encryption scheme that we will study later in the course. In that case,
+$\lambda$ needs to be $1024$ to achieve a security level of roughly $80$
+bits.
+
+Although all the algorithms that compose a scheme, like
+$(\mathsf{KeyGen},\mathsf{Enc},\mathsf{Dec})$ in the encryption case,
+are still efficient, their running time typically increases with
+$\lambda$. The impact of this is that, the higher the value of
+$\lambda$, the more expensive the computations are.
+
+But what is a good security level? Suppose you have some cryptographic
+algorithm that has $n$-bit security for key length $\lambda$. How do you
+decide what $n$ is appropriate for your scheme to be secure? How is $n$
+to be chosen so that it is *infeasible* (i.e. inefficient for an
+adversary) to recover the key?
+
+There is no unique answer to this question. As we saw in
+[Principle 1](#principle:1){reference-type="ref"
+reference="principle:1"}, security is a matter of resources. If an
+adversary needs to use computational power to perform $2^n$ steps to
+attack your system, this will cost him money (electric power, hardware,
+etc). If your cryptographic tools are protecting something that is worth
+only $10$€, an attacker will not be willing to spend a lot of money
+attacking it. RFID tags are a good example of this. On the other hand,
+if you are protecting valuable financial information, or critical
+infrastructure, you would better make sure that this costs the adversary
+a *lot* of resources.
+
+A general rule of thumb is that a cryptosystem is expected to give you
+at the very least an $80$-bit security level. By today's computing power
+levels, this is considered even a bit weak, and acceptable security
+levels are more around the $100$-bit mark. This does not mean that any
+attack below $2^{100}$ can be easily run on your PC at home! The website
+<https://www.keylength.com/> maintains a list of key size
+recommendations suggested by different organizations.
+
+The following table, taken from Mike Rosulek's book *The Joy of
+Cryptography* gives some estimates of computational cost in
+economic terms.[^6]
+
+::: {.center}
+  [Security level]{.smallcaps}   [Approximate cost]{.smallcaps}   [Reference]{.smallcaps}
+  ------------------------------ -------------------------------- -------------------------------------------------
+  50                             \$3.50                           cup of coffee
+  55                             \$100                            decent tickets to a Portland Trailblazers game
+  65                             \$130000                         median home price in Oshkosh, WI
+  75                             \$130 million                    budget of one of the Harry Potter movies
+  85                             \$140 billion                    GDP of Hungary
+  92                             \$20 trillion                    GDP of the United States
+  99                             \$2 quadrillion                  all of human economic activity since 300,000 BC
+  128                            really a lot                     a billion human civilizations' worth of effort
+:::
+
+::: {.exercise}
+*Determine the security level when:*
+
+-   *My password consists of $20$ random letters of the Catalan
+    alphabet.*
+
+-   *Same as above, but including also capital letters.*
+
+-   *My password is a word of the Catalan dictionary (88500 words).*
+:::
+
+[^1]: D. Boneh. Cryptography I, Coursera. Available at
+    <https://www.coursera.org/learn/crypto>.
+
+[^2]: <https://www.nist.gov/>.
+
+[^3]: *Kerckhoffs's principle is named after Auguste Kerckhoffs, who
+    published the article *La Cryptographie Militaire* in 1883.*
+
+[^4]: In the second half of the course, we will deal with the notion of
+    *asymmetric encryption schemes*, in which there are two different
+    keys, a *public key* that is used for encryption and a *secret key*
+    that is used for decryption.
+
+[^5]: In many cryptography books, you will find that $\mathsf{KeyGen}$
+    should be a (probabilistic) polynomial time algorithm that takes as
+    input $1^{\lambda}$, which is the string with $\lambda$ ones. This
+    is a way to write that $\mathsf{KeyGen}$ should be polynomial in
+    $\lambda$.
+
+[^6]: Note that he uses the English definition of billion, that is,
+    $10^9$. Same for the other amounts. Also, the table seems to be
+    based on data from 2018, so the up-to-date numbers might vary
+    slightly.

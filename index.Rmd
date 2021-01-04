@@ -1,33 +1,57 @@
 ---
 title: "Cryptography lecture notes"
-author: "Javier Silva"
 site: bookdown::bookdown_site
 documentclass: book
 output:
   bookdown::gitbook: default
   bookdown::pdf_book: default
+bibliography:
+- biblio.bib
 ---
+
 # (PART) Introduction to modern cryptography {-} 
 
-# Introduction {#intro}
+# Front page {-}
 
-You can label chapter and section titles using `{#label}` after them, e.g., we can reference Chapter \@ref(intro). If you do not manually label them, there will be automatic labels anyway.
+This page contains some useful information related to the course and the lecture notes. 
 
-Figures and tables with captions will be placed in `figure` and `table` environments, respectively.
+#### Prerequisites {-}
 
-```{r nice-fig, fig.cap='Here is a nice figure!', out.width='80%', fig.asp=.75, fig.align='center'}
-par(mar = c(4, 4, .1, .1))
-plot(pressure, type = 'b', pch = 19)
-```
+The course assumes that you are familiar with previous maths courses from your degree. In particular, we will be using concepts from Discrete mathematics, and make extensive use of modular arithmetic. Refreshers for these topics will be uploaded soon.
 
-Reference a figure by its code chunk label with the `fig:` prefix, e.g., see Figure \@ref(fig:nice-fig). Similarly, you can reference tables generated from `knitr::kable()`, e.g., see Table \@ref(tab:nice-tab).
+#### Exercises {-}
 
-```{r nice-tab, tidy=FALSE}
-knitr::kable(
-  head(iris, 20), caption = 'Here is a nice table!',
-  booktabs = TRUE
-)
-```
+Besides the exercise lists that you will have for practices or seminars, these notes also have some exercises embedded into the explanations. These are mostly easy exercises, designed to be a sort of 'sanity check' before moving to the next topic. Hence, our recommendation is that you stop and think about every exercise you encounter in these notes, instead of rushing through the content. You might not always be able to write a full and formal solution, but make sure to get at least an intuition on each exercise before moving on. 
 
-You can write citations, too. For example, we are using the **bookdown** package [@R-bookdown] in this sample book, which was built on top of R Markdown and **knitr** [@xie2015].
+#### SageMath {-}
 
+*SageMath* (often called just *Sage*) is a powerful computer algebra system that we will use during the course to illustrate many concepts. It follows the Python syntax, which you will be familiar with, and comes equipped with many functions that are useful for cryptography. 
+
+These notes will sometimes provide chunks of Sage code, so that you can play with some of the schemes that we will introduce. You are also encouraged to try and implement other schemes, or use Sage to double-check your solutions to exercises. 
+
+There are two ways that you can use Sage:
+
+-   Download it from <https://www.sagemath.org/download.html>. This will allow you to run SageMath locally. It also comes packaged with a Jupyter-style notebook, for ease of use.
+-   Use it online at <https://cocalc.com/app>. This also comes in both terminal and notebook flavors. CoCalc has a freemium model, and in the free version you will get an annoying message telling you that your code will run really slow. Nevertheless, the free version is more than enough for the purpose of this course. 
+
+#### Bibliography {-}
+
+1. Boaz Barak. An Intensive Introduction to Cryptography. *Available freely from* <https://intensecrypto.org/public/>.
+
+2. Richard Crandall and Carl B Pomerance. *Prime numbers: a computational perspective*, volume 182. Springer Science & Business Media, 2006.
+
+3. Christophe De Canniere and Bart Preneel. Trivium. In *New Stream Cipher Designs*, pages 244–266. Springer, 2008.
+
+4. Jonathan Katz and Yehuda Lindell. *Introduction to modern cryptography*. CRC press, 2020.
+
+5. Christof Paar and Jan Pelzl. *Understanding cryptography: a textbook for students and practitioners*. Springer Science & Business Media, 2009.
+
+6. Mike Rosulek. The Joy of Cryptography, 2017. Available freely from <http://web.engr.oregonstate.edu/~rosulekm/crypto>.
+
+#### Changelog {-}
+
+-   04/01/2021. Sections \@ref(introduction-to-security) and \@ref(randomness-in-cryptography) uploaded.
+
+
+
+Notes written by Javier Silva, using [Bookdown](https://bookdown.org/) and [pandoc](https://pandoc.org/). 
