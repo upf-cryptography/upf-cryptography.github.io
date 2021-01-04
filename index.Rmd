@@ -5,8 +5,6 @@ documentclass: book
 output:
   bookdown::gitbook: default
   bookdown::pdf_book: default
-bibliography:
-- biblio.bib
 ---
 
 # (PART) Introduction to modern cryptography {-} 
