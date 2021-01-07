@@ -52,7 +52,7 @@ The documentation at <https://doc.sagemath.org/> is pretty good, although most o
 
 #### Changelog {-}
 
--   07/01/2021. Refreshes on Appendix \@ref(refreshers) and Section \@ref(modular-arithmetic) added. Added code for a LFSR. Some typos fixed in Sections \@ref(introduction-to-security) and \@ref(randomness-in-cryptography).
+-   07/01/2021. Refreshes on Appendix \@ref(refreshers) and Section \@ref(modular-arithmetic) added. Added code for LFSR. Some typos fixed in Sections \@ref(introduction-to-security) and \@ref(randomness-in-cryptography).
 -   04/01/2021. Sections \@ref(introduction-to-security) and \@ref(randomness-in-cryptography) uploaded.
 
 
