@@ -108,3 +108,5 @@ $a\equiv \alpha\pmod{n}$, then:*
 addition modulo $2$ are the same operation, by checking the four
 possible cases.*
 :::
+
+[^16]: The only small caveat is that, when $a$ is a multiple of $12$, the remainder will be $0$, not $12$, although both of these represent the same position. So, to be precise, let us assume that our clock has a $0$ instead of $12$, so that it perfectly aligns with the remainders.
