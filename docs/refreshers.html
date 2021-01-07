@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>10 Cryptanalysis | Cryptography lecture notes</title>
-  <meta name="description" content="10 Cryptanalysis | Cryptography lecture notes" />
+  <title>A Refreshers | Cryptography lecture notes</title>
+  <meta name="description" content="A Refreshers | Cryptography lecture notes" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="10 Cryptanalysis | Cryptography lecture notes" />
+  <meta property="og:title" content="A Refreshers | Cryptography lecture notes" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="10 Cryptanalysis | Cryptography lecture notes" />
+  <meta name="twitter:title" content="A Refreshers | Cryptography lecture notes" />
   
   
   
@@ -29,8 +29,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="signatures.html"/>
-<link rel="next" href="refreshers.html"/>
+<link rel="prev" href="cryptanalysis.html"/>
+
 <script src="libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -182,10 +182,159 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="cryptanalysis" class="section level1" number="10">
-<h1><span class="header-section-number">10</span> Cryptanalysis</h1>
+<div id="refreshers" class="section level1" number="11">
+<h1><span class="header-section-number">A</span> Refreshers</h1>
+<div id="set-notation" class="section level2" number="11.1">
+<h2><span class="header-section-number">A.1</span> Set notation</h2>
+<p>A <em>set</em> is a well-defined collection of objects. Such objects are said
+to be <em>elements</em> of the set, or that they <em>belong</em> to the set. For
+example, the set of the vowels is
+<span class="math display">\[V=\{\text{a},\text{e},\text{i},\text{o},\text{u}\}.\]</span> In the above
+line we are giving a name to the set, <span class="math inline">\(V\)</span>, and we are specifying the
+list of its elements: a, e, i, o and u. When describing a set
+explicitly, we write the list of its elements between braces
+<span class="math inline">\(\{\hspace{0.1cm} \}\)</span>.</p>
+<p>Two sets are equal if they have exactly the same elements. An element
+cannot belong ‘twice’ to a set. Therefore, we can say that
+<span class="math display">\[V=\{\text{a},\text{e},\text{i},\text{o},\text{u}\}=\{\text{u},\text{o},\text{i},\text{e},\text{a}\}=\{\text{a},\text{a},\text{e},\text{e},\text{e},\text{i},\text{o},\text{u}\}.\]</span>
+The symbol <span class="math inline">\(\in\)</span> indicates membership of an element in a set. For
+example, we can write a <span class="math inline">\(\in V\)</span>, because a belongs to the set <span class="math inline">\(V\)</span>. On
+the other hand, we have that b <span class="math inline">\(\not\in V\)</span>, since b is not any of the
+elements of <span class="math inline">\(V\)</span>.</p>
+<p>There are some number sets that show up very frequently, so we give them
+special names.</p>
+<ul>
+<li><p><span class="math inline">\(\mathbb{N}\)</span>: set of natural numbers.</p></li>
+<li><p><span class="math inline">\(\mathbb{Z}\)</span>: set of integer numbers.</p></li>
+<li><p><span class="math inline">\(\mathbb{Q}\)</span>: set of rational numbers.</p></li>
+<li><p><span class="math inline">\(\mathbb{R}\)</span>: set of real numbers.</p></li>
+<li><p><span class="math inline">\(\mathbb{C}\)</span>: set of complex numbers.</p></li>
+</ul>
+<p>Observe that, unlike in the prior examples, all these sets are
+<em>infinite</em>, that is, they have an infinite number of elements. Obviously
+we cannot describe an infinite set explicitly, as we have done with the
+set of vowels. What we can do is refer to other sets that we have
+already defined and define restrictions on them. For example, we can
+define the set of even natural numbers as the set of natural numbers
+that are multiples of <span class="math inline">\(2\)</span>. Formally, we write this set as
+<span class="math display">\[\{n\in \mathbb{N}\mid  n=2k\text{ for some }k\in\mathbb{N}\}.\]</span> Here
+we have introduced some new notation. Instead of explicitly enumerating
+all the elements of a set, we give some conditions. We read the
+description above as ‘the set of elements of the form indicated on the
+left of the vertical line, such that they verify the condition on the
+right’. In this case, the set of natural numbers such that they are of
+the form <span class="math inline">\(2k\)</span> for some natural value of <span class="math inline">\(k\)</span>. Similarly, we can define
+the set of all real numbers greater than <span class="math inline">\(5\)</span> in the following way:
+<span class="math display">\[\{x\in \mathbb{R}\mid  x&gt;5\}.\]</span></p>
+<p>We denote the size (number of elements) of a set <span class="math inline">\(S\)</span> by <span class="math inline">\(\#S\)</span>.</p>
+<p>We can produce new sets by considering the <em>product</em> of known sets:
+given two sets <span class="math inline">\(S,T\)</span>, we define the set <span class="math inline">\(S\times T\)</span> as the set whose
+elements are the pairs <span class="math inline">\((s,t)\)</span>, where <span class="math inline">\(s\in S\)</span> and <span class="math inline">\(t\in T\)</span>. For
+example,
+<span class="math display">\[\{0,1\}\times\{0,1,2\}=\{(0,0),(0,1),(0,2),(1,0),(1,1),(1,2)\}.\]</span>
+Observe that <span class="math inline">\(\#(X\times Y)=\#X\cdot\#Y\)</span>. It is easy to generalize this
+definition to products of three or more sets. In particular, given a set
+<span class="math inline">\(S\)</span>, we define
+<span class="math display">\[S^n=\underbrace{S\times S\times \dots \times S}_{n\text{ times}}\]</span> In
+this course, we will often use the set <span class="math inline">\(\{0,1\}\)</span> of possible bits, the
+set <span class="math inline">\(\{0,1\}^\ell\)</span> of possible bitstrings of length <span class="math inline">\(\ell\)</span>, and the set
+<span class="math inline">\(\{0,1\}^*\)</span> of bitstrings of any length. Observe that
+<span class="math display">\[\#\{0,1\}=2,\qquad\#\{0,1\}^\ell=2^\ell,\qquad \#\{0,1\}^*=\infty.\]</span></p>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-26" class="exercise"><strong>Exercise A.1  </strong></span><em>Write these sets using implicit notation:</em></p>
+<ul>
+<li><p><em>The set of complex numbers with real part equal to <span class="math inline">\(1\)</span>.</em></p></li>
+<li><p><em>The set of pairs, where the first component of the pair is a
+rational number and the second component is an odd natural number.</em></p></li>
+<li><p><em>The set of bitstrings of length <span class="math inline">\(10\)</span> with exactly <span class="math inline">\(5\)</span> zeros.</em></p></li>
+</ul>
+</div>
+</div>
+<div id="probability-theory" class="section level2" number="11.2">
+<h2><span class="header-section-number">A.2</span> Probability theory</h2>
+<p>We will deal with probability distributions over finite sets. In
+particular, recall that the <em>uniform distribution</em> over a set <span class="math inline">\(S\)</span> is the
+probability distribution that assigns the same probability <span class="math inline">\(1/\#S\)</span> to
+each element of <span class="math inline">\(S\)</span>. We denote sampling an element <span class="math inline">\(x\)</span> from the uniform
+distribution over <span class="math inline">\(S\)</span> by <span class="math display">\[x\gets S.\]</span> For example, the notation
+<span class="math display">\[\mathbf b\gets \{0,1\}^{128}\]</span> means that <span class="math inline">\(\mathbf b\)</span> is a uniformly
+random bitstring of length <span class="math inline">\(128\)</span>.</p>
+<p>Given an event <span class="math inline">\(A\)</span>, we denote the <em>probability of <span class="math inline">\(A\)</span></em> by <span class="math inline">\(\Pr[A]\)</span>.
+Given two events <span class="math inline">\(A,B\)</span>, we denote the <em>probability of <span class="math inline">\(A\)</span> conditioned on
+<span class="math inline">\(B\)</span></em> by <span class="math inline">\(\Pr[A|B]\)</span>, and if <span class="math inline">\(\Pr[B]\neq0\)</span> we have that
+<span class="math display">\[\Pr[A|B]=\frac{\Pr[A\cap B]}{\Pr[B]},\]</span> where <span class="math inline">\(\Pr[A\cap B]\)</span> means the
+probability of both <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> happening. Recall that, if <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>
+are independent events, then <span class="math display">\[\Pr[A\cap B]=\Pr[A]\cdot\Pr[B].\]</span></p>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-27" class="exercise"><strong>Exercise A.2  </strong></span><em>Compute the probability of a random bitstring of
+length <span class="math inline">\(4\)</span> being the string <span class="math inline">\(1110\)</span>.</em></p>
+</div>
+</div>
+<div id="asymptotic-notation" class="section level2" number="11.3">
+<h2><span class="header-section-number">A.3</span> Asymptotic notation</h2>
+<p>Asymptotic notation allows us to easily express the <em>asymptotic
+behaviour</em> of functions, that is, how the function changes for
+arbitrarily large inputs, with respect to some other function. For
+example, take the functions defined by <span class="math display">\[f(x)=x,\qquad\qquad g(x)=x^2.\]</span>
+Both tend to infinity as <span class="math inline">\(x\)</span> tends to infinity, but the second does it
+“faster”. More precisely, let <span class="math display">\[f,g:\mathbb{N}\rightarrow\mathbb{N}\]</span> be
+two functions. We write <span class="math display">\[f(x)=O(g(x))\]</span> when there is some
+<span class="math inline">\(N,M\in\mathbb{N}\)</span> such that, for all <span class="math inline">\(x&gt;N\)</span>, we have
+<span class="math display">\[f(x)\leq M\cdot g(x).\]</span> We read this as “<span class="math inline">\(f\)</span> is big-O of <span class="math inline">\(g\)</span>”. Then,
+back to the initial example, we can say write <span class="math display">\[x=O(x^2).\]</span> Note that,
+because the big-O notation “absorbs” constants into <span class="math inline">\(M\)</span>, we can write
+<span class="math display">\[2x=O(x),\]</span> even though <span class="math inline">\(2x\geq x\)</span> for <span class="math inline">\(x\in\mathbb{N}\)</span>.</p>
+<p>Big-O notation is useful for representing bounds on the growth speed of
+a function. By saying, for example, that a function <span class="math inline">\(f\)</span> satisfies
+<span class="math display">\[f(x)=O(x^3),\]</span> we are saying that, at worst, the function <span class="math inline">\(f\)</span> grows as
+fast as a cubic polynomial. Therefore, in particular, it will not grow
+as fast as a polynomial of degree <span class="math inline">\(4\)</span>, or an exponential function like
+<span class="math inline">\(2^x\)</span>.</p>
+<p>We recall that logarithmic functions grow slower than polynomials of any
+degree, and polynomials of any degree grow slower than exponential
+functions. Given two polynomials of different degrees, the one with the
+higher degree grows faster.</p>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-28" class="exercise"><strong>Exercise A.3  </strong></span><em>Decide whether each of these statements is true or
+false.</em></p>
+<ul>
+<li><p><em><span class="math inline">\(10^{10}x^3=O(x^4)\)</span>.</em></p></li>
+<li><p><em><span class="math inline">\(10^x=O(x^4)\)</span>.</em></p></li>
+<li><p><em><span class="math inline">\(\log(x)=O(x\log x)\)</span>.</em></p></li>
+<li><p><em><span class="math inline">\(4^x=O(2^x)\)</span>.</em></p></li>
+</ul>
+</div>
 
 </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -194,8 +343,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="signatures.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="refreshers.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="cryptanalysis.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

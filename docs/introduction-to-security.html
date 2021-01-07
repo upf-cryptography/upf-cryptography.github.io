@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>1 Introduction to Security | Cryptography lecture notes</title>
-  <meta name="description" content="1 Introduction to Security | Cryptography lecture notes" />
+  <title>1 Introduction to security | Cryptography lecture notes</title>
+  <meta name="description" content="1 Introduction to security | Cryptography lecture notes" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="1 Introduction to Security | Cryptography lecture notes" />
+  <meta property="og:title" content="1 Introduction to security | Cryptography lecture notes" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="1 Introduction to Security | Cryptography lecture notes" />
+  <meta name="twitter:title" content="1 Introduction to security | Cryptography lecture notes" />
   
   
   
@@ -130,7 +130,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul class="summary">
 <li class="part"><span><b>I Introduction to modern cryptography</b></span></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Front page</a></li>
-<li class="chapter" data-level="1" data-path="introduction-to-security.html"><a href="introduction-to-security.html"><i class="fa fa-check"></i><b>1</b> Introduction to Security</a>
+<li class="chapter" data-level="1" data-path="introduction-to-security.html"><a href="introduction-to-security.html"><i class="fa fa-check"></i><b>1</b> Introduction to security</a>
 <ul>
 <li class="chapter" data-level="1.1" data-path="introduction-to-security.html"><a href="introduction-to-security.html#what-cryptography-is-and-is-not"><i class="fa fa-check"></i><b>1.1</b> What cryptography is and is not</a></li>
 <li class="chapter" data-level="1.2" data-path="introduction-to-security.html"><a href="introduction-to-security.html#fundamental-security-principles"><i class="fa fa-check"></i><b>1.2</b> Fundamental security principles</a></li>
@@ -148,7 +148,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="block-ciphers.html"><a href="block-ciphers.html"><i class="fa fa-check"></i><b>3</b> Block ciphers</a></li>
 <li class="chapter" data-level="4" data-path="hash-functions.html"><a href="hash-functions.html"><i class="fa fa-check"></i><b>4</b> Hash functions</a></li>
 <li class="part"><span><b>III Asymmetric cryptography</b></span></li>
-<li class="chapter" data-level="5" data-path="number-theory.html"><a href="number-theory.html"><i class="fa fa-check"></i><b>5</b> Elementary number theory</a></li>
+<li class="chapter" data-level="5" data-path="number-theory.html"><a href="number-theory.html"><i class="fa fa-check"></i><b>5</b> Elementary number theory</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="number-theory.html"><a href="number-theory.html#modular-arithmetic"><i class="fa fa-check"></i><b>5.1</b> Modular arithmetic</a></li>
+</ul></li>
 <li class="chapter" data-level="6" data-path="algebraic-structures.html"><a href="algebraic-structures.html"><i class="fa fa-check"></i><b>6</b> Algebraic structures</a></li>
 <li class="chapter" data-level="7" data-path="pke.html"><a href="pke.html"><i class="fa fa-check"></i><b>7</b> Public-key encryption</a></li>
 <li class="chapter" data-level="8" data-path="dh.html"><a href="dh.html"><i class="fa fa-check"></i><b>8</b> The Diffie–Hellman key exchange</a></li>
@@ -156,8 +159,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="part"><span><b>IV Other topics</b></span></li>
 <li class="chapter" data-level="10" data-path="cryptanalysis.html"><a href="cryptanalysis.html"><i class="fa fa-check"></i><b>10</b> Cryptanalysis</a></li>
 <li class="appendix"><span><b>Appendices</b></span></li>
-<li class="chapter" data-level="A" data-path="set-theory.html"><a href="set-theory.html"><i class="fa fa-check"></i><b>A</b> Set theory</a></li>
-<li class="chapter" data-level="B" data-path="introduction-to-sage.html"><a href="introduction-to-sage.html"><i class="fa fa-check"></i><b>B</b> Introduction to Sage</a></li>
+<li class="chapter" data-level="A" data-path="refreshers.html"><a href="refreshers.html"><i class="fa fa-check"></i><b>A</b> Refreshers</a>
+<ul>
+<li class="chapter" data-level="A.1" data-path="refreshers.html"><a href="refreshers.html#set-notation"><i class="fa fa-check"></i><b>A.1</b> Set notation</a></li>
+<li class="chapter" data-level="A.2" data-path="refreshers.html"><a href="refreshers.html#probability-theory"><i class="fa fa-check"></i><b>A.2</b> Probability theory</a></li>
+<li class="chapter" data-level="A.3" data-path="refreshers.html"><a href="refreshers.html#asymptotic-notation"><i class="fa fa-check"></i><b>A.3</b> Asymptotic notation</a></li>
+</ul></li>
 </ul>
 
       </nav>
@@ -176,7 +183,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="introduction-to-security" class="section level1" number="1">
-<h1><span class="header-section-number">1</span> Introduction to Security</h1>
+<h1><span class="header-section-number">1</span> Introduction to security</h1>
 <p>We use cryptography on a daily basis: our wireless communications or web
 traffic are encrypted, companies protect their data with cryptographic
 algorithms, and so on. We all have a basic or intuitive understanding of
@@ -233,7 +240,7 @@ For reference, this number is roughly half of the number of stars in
 the Milky Way.</p></li>
 </ul>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-1" class="exercise"><strong>Exercise 1.1  </strong></span><em>A WiFi password is <span class="math inline">\(10\)</span> bits long. How long does it
+<p><span id="exr:unlabeled-div-1" class="exercise"><strong>Exercise 1.1  </strong></span><em>A WiFi password is <span class="math inline">\(10\)</span> bits long. Assume that an attacker tries one password per second. How long does it
 take to find the key by brute force? What if the password is <span class="math inline">\(\lambda\)</span>
 bits long?</em></p>
 </div>
@@ -294,7 +301,7 @@ about both security and efficiency will be expressed in terms of the
 security parameter.</p>
 
 <div class="definition">
-<span id="def:efficiency" class="definition"><strong>Definition 1.1  </strong></span><em>An algorithm <span class="math inline">\(\mathcal{A}\)</span> is said to be</em> efficient <em>(or</em> polynomial-time <em>if there exists a positive polynomial <span class="math inline">\(p\)</span> such
+<span id="def:efficiency" class="definition"><strong>Definition 1.1  </strong></span><em>An algorithm <span class="math inline">\(\mathcal{A}\)</span> is said to be</em> efficient <em>(or</em> polynomial-time) <em>if there exists a positive polynomial <span class="math inline">\(p\)</span> such
 that, for any <span class="math inline">\(\lambda\in\mathbb{N}\)</span>, when <span class="math inline">\(\mathcal{A}\)</span> receives as
 input a bitstring of length <span class="math inline">\(\lambda\)</span>, it finishes in <span class="math inline">\(p(\lambda)\)</span>
 steps.</em>
@@ -390,7 +397,7 @@ length <span class="math inline">\(\lambda\)</span>, according to some probabili
 encrypt a message <span class="math inline">\(\mathsf{m}\)</span>, and outputs the encrypted message
 <span class="math display">\[\mathsf{c}=\mathsf{Enc}_{\mathsf{k}}(\mathsf{m}).\]</span></em></p></li>
 <li><p><em>The <span class="math inline">\(\mathsf{Dec}\)</span> algorithm uses the secret key <span class="math inline">\(\mathsf{k}\)</span> to
-decrypt an encrypted message <span class="math inline">\(\mathsf{c}\)</span>, recovering
+decrypt an encrypted message <span class="math inline">\(\mathsf{c}\)</span>, recovering <span class="math display">\[\mathsf{m}\]</span> as
 <span class="math display">\[\mathsf{Dec}_{\mathsf{k}}(\mathsf{c})=\mathsf{m}.\]</span></em></p></li>
 </ul>
 <em>In this context, <span class="math inline">\(\mathsf{m}\)</span> is called the </em>plaintext<em>, and
@@ -595,7 +602,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["_main.pdf"],
+"download": null,
 "toc": {
 "collapse": "subsection"
 }

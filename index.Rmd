@@ -11,11 +11,13 @@ output:
 
 # Front page {-}
 
-This page contains some useful information related to the course and the lecture notes. 
+*Latest update: 07/01/2021.*
+
+This page contains some useful information related to the course and the lecture notes. Note that there are some useful buttons above the text, in particular one to download the notes as a well-formatted PDF, for offline use. 
 
 #### Prerequisites {-}
 
-The course assumes that you are familiar with previous maths courses from your degree. In particular, we will be using concepts from Discrete mathematics, and make extensive use of modular arithmetic. Refreshers for these topics will be uploaded soon.
+The course assumes that you are familiar with previous maths courses from your degree. In particular, we will be using concepts from Probability theory and Discrete mathematics, and make extensive use of modular arithmetic. Refreshers for these topics can be found in Appendix \@ref(refreshers) and Section \@ref(modular-arithmetic).
 
 #### Exercises {-}
 
@@ -31,6 +33,8 @@ There are two ways that you can use Sage:
 
 -   Download it from <https://www.sagemath.org/download.html>. This will allow you to run SageMath locally. It also comes packaged with a Jupyter-style notebook, for ease of use.
 -   Use it online at <https://cocalc.com/app>. This also comes in both terminal and notebook flavors. CoCalc has a freemium model, and in the free version you will get an annoying message telling you that your code will run really slow. Nevertheless, the free version is more than enough for the purpose of this course. 
+
+The documentation at <https://doc.sagemath.org/> is pretty good, although most of the functions that we will use are self-explanatory. 
 
 #### Bibliography {-}
 
@@ -48,6 +52,7 @@ There are two ways that you can use Sage:
 
 #### Changelog {-}
 
+-   07/01/2021. Refreshes on Appendix \@ref(refreshers) and Section \@ref(modular-arithmetic) added. Added code for a LFSR. Some typos fixed in Sections \@ref(introduction-to-security) and \@ref(randomness-in-cryptography).
 -   04/01/2021. Sections \@ref(introduction-to-security) and \@ref(randomness-in-cryptography) uploaded.
 
 

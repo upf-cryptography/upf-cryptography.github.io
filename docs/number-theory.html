@@ -130,7 +130,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul class="summary">
 <li class="part"><span><b>I Introduction to modern cryptography</b></span></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Front page</a></li>
-<li class="chapter" data-level="1" data-path="introduction-to-security.html"><a href="introduction-to-security.html"><i class="fa fa-check"></i><b>1</b> Introduction to Security</a>
+<li class="chapter" data-level="1" data-path="introduction-to-security.html"><a href="introduction-to-security.html"><i class="fa fa-check"></i><b>1</b> Introduction to security</a>
 <ul>
 <li class="chapter" data-level="1.1" data-path="introduction-to-security.html"><a href="introduction-to-security.html#what-cryptography-is-and-is-not"><i class="fa fa-check"></i><b>1.1</b> What cryptography is and is not</a></li>
 <li class="chapter" data-level="1.2" data-path="introduction-to-security.html"><a href="introduction-to-security.html#fundamental-security-principles"><i class="fa fa-check"></i><b>1.2</b> Fundamental security principles</a></li>
@@ -148,7 +148,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="block-ciphers.html"><a href="block-ciphers.html"><i class="fa fa-check"></i><b>3</b> Block ciphers</a></li>
 <li class="chapter" data-level="4" data-path="hash-functions.html"><a href="hash-functions.html"><i class="fa fa-check"></i><b>4</b> Hash functions</a></li>
 <li class="part"><span><b>III Asymmetric cryptography</b></span></li>
-<li class="chapter" data-level="5" data-path="number-theory.html"><a href="number-theory.html"><i class="fa fa-check"></i><b>5</b> Elementary number theory</a></li>
+<li class="chapter" data-level="5" data-path="number-theory.html"><a href="number-theory.html"><i class="fa fa-check"></i><b>5</b> Elementary number theory</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="number-theory.html"><a href="number-theory.html#modular-arithmetic"><i class="fa fa-check"></i><b>5.1</b> Modular arithmetic</a></li>
+</ul></li>
 <li class="chapter" data-level="6" data-path="algebraic-structures.html"><a href="algebraic-structures.html"><i class="fa fa-check"></i><b>6</b> Algebraic structures</a></li>
 <li class="chapter" data-level="7" data-path="pke.html"><a href="pke.html"><i class="fa fa-check"></i><b>7</b> Public-key encryption</a></li>
 <li class="chapter" data-level="8" data-path="dh.html"><a href="dh.html"><i class="fa fa-check"></i><b>8</b> The Diffie–Hellman key exchange</a></li>
@@ -156,8 +159,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="part"><span><b>IV Other topics</b></span></li>
 <li class="chapter" data-level="10" data-path="cryptanalysis.html"><a href="cryptanalysis.html"><i class="fa fa-check"></i><b>10</b> Cryptanalysis</a></li>
 <li class="appendix"><span><b>Appendices</b></span></li>
-<li class="chapter" data-level="A" data-path="set-theory.html"><a href="set-theory.html"><i class="fa fa-check"></i><b>A</b> Set theory</a></li>
-<li class="chapter" data-level="B" data-path="introduction-to-sage.html"><a href="introduction-to-sage.html"><i class="fa fa-check"></i><b>B</b> Introduction to Sage</a></li>
+<li class="chapter" data-level="A" data-path="refreshers.html"><a href="refreshers.html"><i class="fa fa-check"></i><b>A</b> Refreshers</a>
+<ul>
+<li class="chapter" data-level="A.1" data-path="refreshers.html"><a href="refreshers.html#set-notation"><i class="fa fa-check"></i><b>A.1</b> Set notation</a></li>
+<li class="chapter" data-level="A.2" data-path="refreshers.html"><a href="refreshers.html#probability-theory"><i class="fa fa-check"></i><b>A.2</b> Probability theory</a></li>
+<li class="chapter" data-level="A.3" data-path="refreshers.html"><a href="refreshers.html#asymptotic-notation"><i class="fa fa-check"></i><b>A.3</b> Asymptotic notation</a></li>
+</ul></li>
 </ul>
 
       </nav>
@@ -177,7 +184,98 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="number_theory" class="section level1" number="5">
 <h1><span class="header-section-number">5</span> Elementary number theory</h1>
+<div id="modular-arithmetic" class="section level2" number="5.1">
+<h2><span class="header-section-number">5.1</span> Modular arithmetic</h2>
+<p>Modular arithmetic is, informally, clock arithmetic. Let us take the
+usual analog 12-hour clock, and say it is 11 o’clock now. After three
+hours, it is 2 o’clock. But wait a minute, shouldn’t it be <span class="math inline">\(11+3=14\)</span>?
+Furthermore, after a whole day, shouldn’t the clock show <span class="math inline">\(11+24=35\)</span>
+o’clock? But it is showing <span class="math inline">\(11\)</span> instead!</p>
+<p>This example shows that the usual integer arithmetic is not useful for
+modelling the behaviour of a clock. Let us see how we can modify it so
+that the passing of time makes sense again. We consider the following
+problem.</p>
+<div class="problem">
+<p><strong>Problem.</strong> <em>Let <span class="math inline">\(a\in\mathbb{N}\)</span>. Assume that the current position
+of the clock is <span class="math inline">\(12\)</span> o’clock. What is the position of the clock after
+<span class="math inline">\(a\)</span> hours?</em></p>
+</div>
+<p>The key observation is that full movements around the clock (that is,
+multiples of 12) do not matter, as they leave the clock in the same
+position. Recall that the algorithm of integer division tells us how to
+compute <span class="math inline">\(q,r\in\mathbb{Z}\)</span> such that <span class="math display">\[a=12\cdot q + r.\]</span> We call <span class="math inline">\(q\)</span>
+the <em>quotient</em> and <span class="math inline">\(r&lt;12\)</span> the <em>remainder</em> of the division. In the
+context of our problem, notice that <span class="math inline">\(q\)</span> is the number of full circles
+around the clock that happen in <span class="math inline">\(a\)</span> hours. Then, the only real change of
+position in the clock is determined by <span class="math inline">\(r\)</span>, and <span class="math inline">\(q\)</span> does not matter at
+all.[^16]</p>
+<p>Generalizing this idea leads to the key concept of modular arithmetic,
+by replacing <span class="math inline">\(12\)</span> by any positive integer. Moreover, observe that there
+is no need for <span class="math inline">\(a\)</span> to be a positive integer, as a negative value of <span class="math inline">\(a\)</span>
+can be interpreted as moving counter-clockwise.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-19" class="definition"><strong>Definition 5.1  </strong></span><em>Let <span class="math inline">\(a, n\in \mathbb{Z}\)</span>, with <span class="math inline">\(n&gt;0\)</span>. We define the
+</em>remainder (or residue) of <span class="math inline">\(a\)</span> modulo <span class="math inline">\(n\)</span> <em>as the remainder of the
+integer division of <span class="math inline">\(a\)</span> by <span class="math inline">\(n\)</span>, and we denote it by</em> <span class="math display">\[a\bmod{n}.\]</span></p>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-20" class="exercise"><strong>Exercise 5.1  </strong></span><em>Compute the following values:
+<span class="math display">\[25\bmod 8, \qquad 1337\bmod 7, \qquad 7\bmod 13,\qquad -13\bmod 12.\]</span></em></p>
+</div>
+<p>Modular arithmetic behaves in a similar way to usual arithmetic, as
+reflected in the following result:</p>
 
+<div class="proposition">
+<p><span id="prp:arithmetic" class="proposition"><strong>Proposition 5.1  </strong></span><em>Let <span class="math inline">\(a,b,n\in\mathbb{Z}\)</span>, with <span class="math inline">\(n&gt;0\)</span>. Then:</em></p>
+<span class="math display">\[\begin{array}{rl}
+        (i) &amp; (a\bmod n) + (b\bmod n) = (a+b)\bmod n. \\
+        (ii) &amp; (a\bmod n) \cdot (b\bmod n) = (a\cdot b)\bmod n. \\
+        (iii) &amp; \text{If }b\geq0,\text{ then }(a\bmod n)^b=(a^b)\bmod{n}.\\
+    \end{array}\]</span>
+</div>
+<p>It is clear that, when working modulo <span class="math inline">\(n\)</span>, for some positive integer
+<span class="math inline">\(n\)</span>, the only numbers that matter are <span class="math inline">\(0,1,\dots, n-1\)</span>, since every
+other number can be linked to one of these when reduced modulo <span class="math inline">\(n\)</span>. For
+example, back to the clock example, we have that <span class="math inline">\(13\bmod12=1\)</span>,
+<span class="math inline">\(25\bmod{12}=1\)</span>, and so on. It is not chance that related numbers are
+precisely those that represent the same position!</p>
+<p>The above example seems to suggest that, modulo <span class="math inline">\(12\)</span>, the numbers
+<span class="math display">\[\phantom{a}\dotsc-23,-11,1,13,25\dotsc\]</span> are “the same”. This
+motivates the introduction of the idea of <em>congruence</em>.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-22" class="definition"><strong>Definition 5.2  </strong></span><em>Let <span class="math inline">\(a,b,n\in\mathbb{Z}\)</span>, with <span class="math inline">\(n&gt;0\)</span>. We say that
+<span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are</em> congruent <em>if</em> <span class="math display">\[(a-b)\bmod{n}=0.\]</span> <em>In this case, we
+represent this fact by</em> <span class="math display">\[a\equiv b\pmod{n}.\]</span></p>
+</div>
+<div class="definition">
+<p><span id="def:unlabeled-div-23" class="definition"><strong>Definition 5.3  </strong></span><em>Let <span class="math inline">\(n\in\mathbb{Z}\)</span>, with <span class="math inline">\(n&gt;0\)</span>. We define the</em> set
+of residue classes modulo <span class="math inline">\(n\)</span> <em>as the set</em>
+<span class="math display">\[\mathbb{Z}_n=\{0,1,\dotsc,n-1\},\]</span> <em>where the operations of addition
+and multiplication are reduced modulo <span class="math inline">\(n\)</span>, according to
+Proposition <a href="number-theory.html#prp:arithmetic">5.1</a>.</em></p>
+</div>
+<p>Then, the above discussion can be rephrased as follows. We can say that
+any <span class="math inline">\(a\in \mathbb{Z}\)</span> is congruent to its residue modulo <span class="math inline">\(n\)</span>, that is,
+<span class="math inline">\(a\bmod n\)</span>. Thus, to work with arithmetic modulo <span class="math inline">\(n\)</span>, we can restrict
+ourselves to the set <span class="math inline">\(\mathbb{Z}_n\)</span>.</p>
+
+<div class="proposition">
+<p><span id="prp:unnamed-chunk-6" class="proposition"><strong>Proposition 5.2  </strong></span><em>Let <span class="math inline">\(a,\alpha,b,n\in\mathbb{Z}\)</span>, with <span class="math inline">\(n&gt;0\)</span>. If
+<span class="math inline">\(a\equiv \alpha\pmod{n}\)</span>, then:</em></p>
+<ul>
+<li><p><em><span class="math inline">\(a+b\equiv \alpha+b\pmod{n}\)</span>.</em></p></li>
+<li><p><em><span class="math inline">\(a\cdot b\equiv \alpha\cdot b\pmod{n}\)</span>.</em></p></li>
+<li><p><em>If <span class="math inline">\(b\geq0\)</span>, then <span class="math inline">\(a^b\equiv \alpha^b\pmod{n}\)</span>.</em></p></li>
+</ul>
+<em>In particular, this is true when <span class="math inline">\(\alpha=a\bmod{n}\)</span>.</em>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-25" class="exercise"><strong>Exercise 5.2  </strong></span><em>Prove that the logic <span class="math inline">\(\mathsf{XOR}\)</span> operation and
+addition modulo <span class="math inline">\(2\)</span> are the same operation, by checking the four
+possible cases.</em></p>
+</div>
+
+</div>
 </div>
             </section>
 
@@ -227,7 +325,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["_main.pdf"],
+"download": null,
 "toc": {
 "collapse": "subsection"
 }

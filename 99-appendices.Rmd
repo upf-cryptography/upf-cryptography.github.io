@@ -1,5 +1,141 @@
 # (APPENDIX) Appendices {-} 
 
-# Set theory {#set_theory}
+# Refreshers {#refreshers}
 
-# Introduction to Sage
+## Set notation
+
+A *set* is a well-defined collection of objects. Such objects are said
+to be *elements* of the set, or that they *belong* to the set. For
+example, the set of the vowels is
+$$V=\{\text{a},\text{e},\text{i},\text{o},\text{u}\}.$$ In the above
+line we are giving a name to the set, $V$, and we are specifying the
+list of its elements: a, e, i, o and u. When describing a set
+explicitly, we write the list of its elements between braces
+$\{\hspace{0.1cm} \}$.
+
+Two sets are equal if they have exactly the same elements. An element
+cannot belong 'twice' to a set. Therefore, we can say that
+$$V=\{\text{a},\text{e},\text{i},\text{o},\text{u}\}=\{\text{u},\text{o},\text{i},\text{e},\text{a}\}=\{\text{a},\text{a},\text{e},\text{e},\text{e},\text{i},\text{o},\text{u}\}.$$
+The symbol $\in$ indicates membership of an element in a set. For
+example, we can write a $\in V$, because a belongs to the set $V$. On
+the other hand, we have that b $\not\in V$, since b is not any of the
+elements of $V$.
+
+There are some number sets that show up very frequently, so we give them
+special names.
+
+-   $\mathbb{N}$: set of natural numbers.
+
+-   $\mathbb{Z}$: set of integer numbers.
+
+-   $\mathbb{Q}$: set of rational numbers.
+
+-   $\mathbb{R}$: set of real numbers.
+
+-   $\mathbb{C}$: set of complex numbers.
+
+Observe that, unlike in the prior examples, all these sets are
+*infinite*, that is, they have an infinite number of elements. Obviously
+we cannot describe an infinite set explicitly, as we have done with the
+set of vowels. What we can do is refer to other sets that we have
+already defined and define restrictions on them. For example, we can
+define the set of even natural numbers as the set of natural numbers
+that are multiples of $2$. Formally, we write this set as
+$$\{n\in \mathbb{N}\mid  n=2k\text{ for some }k\in\mathbb{N}\}.$$ Here
+we have introduced some new notation. Instead of explicitly enumerating
+all the elements of a set, we give some conditions. We read the
+description above as 'the set of elements of the form indicated on the
+left of the vertical line, such that they verify the condition on the
+right'. In this case, the set of natural numbers such that they are of
+the form $2k$ for some natural value of $k$. Similarly, we can define
+the set of all real numbers greater than $5$ in the following way:
+$$\{x\in \mathbb{R}\mid  x>5\}.$$
+
+We denote the size (number of elements) of a set $S$ by $\#S$.
+
+We can produce new sets by considering the *product* of known sets:
+given two sets $S,T$, we define the set $S\times T$ as the set whose
+elements are the pairs $(s,t)$, where $s\in S$ and $t\in T$. For
+example,
+$$\{0,1\}\times\{0,1,2\}=\{(0,0),(0,1),(0,2),(1,0),(1,1),(1,2)\}.$$
+Observe that $\#(X\times Y)=\#X\cdot\#Y$. It is easy to generalize this
+definition to products of three or more sets. In particular, given a set
+$S$, we define
+$$S^n=\underbrace{S\times S\times \dots \times S}_{n\text{ times}}$$ In
+this course, we will often use the set $\{0,1\}$ of possible bits, the
+set $\{0,1\}^\ell$ of possible bitstrings of length $\ell$, and the set
+$\{0,1\}^*$ of bitstrings of any length. Observe that
+$$\#\{0,1\}=2,\qquad\#\{0,1\}^\ell=2^\ell,\qquad \#\{0,1\}^*=\infty.$$
+
+::: {.exercise}
+*Write these sets using implicit notation:*
+
+-   *The set of complex numbers with real part equal to $1$.*
+
+-   *The set of pairs, where the first component of the pair is a
+    rational number and the second component is an odd natural number.*
+
+-   *The set of bitstrings of length $10$ with exactly $5$ zeros.*
+:::
+
+## Probability theory
+
+We will deal with probability distributions over finite sets. In
+particular, recall that the *uniform distribution* over a set $S$ is the
+probability distribution that assigns the same probability $1/\#S$ to
+each element of $S$. We denote sampling an element $x$ from the uniform
+distribution over $S$ by $$x\gets S.$$ For example, the notation
+$$\mathbf b\gets \{0,1\}^{128}$$ means that $\mathbf b$ is a uniformly
+random bitstring of length $128$.
+
+Given an event $A$, we denote the *probability of $A$* by $\Pr[A]$.
+Given two events $A,B$, we denote the *probability of $A$ conditioned on
+$B$* by $\Pr[A|B]$, and if $\Pr[B]\neq0$ we have that
+$$\Pr[A|B]=\frac{\Pr[A\cap B]}{\Pr[B]},$$ where $\Pr[A\cap B]$ means the
+probability of both $A$ and $B$ happening. Recall that, if $A$ and $B$
+are independent events, then $$\Pr[A\cap B]=\Pr[A]\cdot\Pr[B].$$
+
+::: {.exercise}
+*Compute the probability of a random bitstring of
+length $4$ being the string $1110$.*
+:::
+
+## Asymptotic notation
+
+Asymptotic notation allows us to easily express the *asymptotic
+behaviour* of functions, that is, how the function changes for
+arbitrarily large inputs, with respect to some other function. For
+example, take the functions defined by $$f(x)=x,\qquad\qquad g(x)=x^2.$$
+Both tend to infinity as $x$ tends to infinity, but the second does it
+"faster". More precisely, let $$f,g:\mathbb{N}\rightarrow\mathbb{N}$$ be
+two functions. We write $$f(x)=O(g(x))$$ when there is some
+$N,M\in\mathbb{N}$ such that, for all $x>N$, we have
+$$f(x)\leq M\cdot g(x).$$ We read this as "$f$ is big-O of $g$". Then,
+back to the initial example, we can say write $$x=O(x^2).$$ Note that,
+because the big-O notation "absorbs" constants into $M$, we can write
+$$2x=O(x),$$ even though $2x\geq x$ for $x\in\mathbb{N}$.
+
+Big-O notation is useful for representing bounds on the growth speed of
+a function. By saying, for example, that a function $f$ satisfies
+$$f(x)=O(x^3),$$ we are saying that, at worst, the function $f$ grows as
+fast as a cubic polynomial. Therefore, in particular, it will not grow
+as fast as a polynomial of degree $4$, or an exponential function like
+$2^x$.
+
+We recall that logarithmic functions grow slower than polynomials of any
+degree, and polynomials of any degree grow slower than exponential
+functions. Given two polynomials of different degrees, the one with the
+higher degree grows faster.
+
+::: {.exercise}
+*Decide whether each of these statements is true or
+false.*
+
+-   *$10^{10}x^3=O(x^4)$.*
+
+-   *$10^x=O(x^4)$.*
+
+-   *$\log(x)=O(x\log x)$.*
+
+-   *$4^x=O(2^x)$.*
+:::

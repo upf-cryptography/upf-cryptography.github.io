@@ -1,3 +1,110 @@
 # (PART) Asymmetric cryptography {-} 
 
 # Elementary number theory {#number_theory}
+
+## Modular arithmetic {#modular-arithmetic}
+
+Modular arithmetic is, informally, clock arithmetic. Let us take the
+usual analog 12-hour clock, and say it is 11 o'clock now. After three
+hours, it is 2 o'clock. But wait a minute, shouldn't it be $11+3=14$?
+Furthermore, after a whole day, shouldn't the clock show $11+24=35$
+o'clock? But it is showing $11$ instead!
+
+This example shows that the usual integer arithmetic is not useful for
+modelling the behaviour of a clock. Let us see how we can modify it so
+that the passing of time makes sense again. We consider the following
+problem.
+
+::: {.problem}
+**Problem.** *Let $a\in\mathbb{N}$. Assume that the current position
+of the clock is $12$ o'clock. What is the position of the clock after
+$a$ hours?*
+:::
+
+The key observation is that full movements around the clock (that is,
+multiples of 12) do not matter, as they leave the clock in the same
+position. Recall that the algorithm of integer division tells us how to
+compute $q,r\in\mathbb{Z}$ such that $$a=12\cdot q + r.$$ We call $q$
+the *quotient* and $r<12$ the *remainder* of the division. In the
+context of our problem, notice that $q$ is the number of full circles
+around the clock that happen in $a$ hours. Then, the only real change of
+position in the clock is determined by $r$, and $q$ does not matter at
+all.[^16]
+
+Generalizing this idea leads to the key concept of modular arithmetic,
+by replacing $12$ by any positive integer. Moreover, observe that there
+is no need for $a$ to be a positive integer, as a negative value of $a$
+can be interpreted as moving counter-clockwise.
+
+::: {.definition}
+*Let $a, n\in \mathbb{Z}$, with $n>0$. We define the
+*remainder (or residue) of $a$ modulo $n$ *as the remainder of the
+integer division of $a$ by $n$, and we denote it by* $$a\bmod{n}.$$
+:::
+
+::: {.exercise}
+*Compute the following values:
+$$25\bmod 8, \qquad 1337\bmod 7, \qquad 7\bmod 13,\qquad -13\bmod 12.$$*
+:::
+
+Modular arithmetic behaves in a similar way to usual arithmetic, as
+reflected in the following result:
+
+```{proposition, label="arithmetic"}
+*Let $a,b,n\in\mathbb{Z}$, with $n>0$. Then:*
+
+$$\begin{array}{rl}
+        (i) & (a\bmod n) + (b\bmod n) = (a+b)\bmod n. \\
+        (ii) & (a\bmod n) \cdot (b\bmod n) = (a\cdot b)\bmod n. \\
+        (iii) & \text{If }b\geq0,\text{ then }(a\bmod n)^b=(a^b)\bmod{n}.\\
+    \end{array}$$
+```
+
+It is clear that, when working modulo $n$, for some positive integer
+$n$, the only numbers that matter are $0,1,\dots, n-1$, since every
+other number can be linked to one of these when reduced modulo $n$. For
+example, back to the clock example, we have that $13\bmod12=1$,
+$25\bmod{12}=1$, and so on. It is not chance that related numbers are
+precisely those that represent the same position!
+
+The above example seems to suggest that, modulo $12$, the numbers
+$$\phantom{a}\dotsc-23,-11,1,13,25\dotsc$$ are "the same". This
+motivates the introduction of the idea of *congruence*.
+
+::: {.definition}
+*Let $a,b,n\in\mathbb{Z}$, with $n>0$. We say that
+$a$ and $b$ are* congruent *if* $$(a-b)\bmod{n}=0.$$ *In this case, we
+represent this fact by* $$a\equiv b\pmod{n}.$$
+:::
+
+::: {.definition}
+*Let $n\in\mathbb{Z}$, with $n>0$. We define the* set
+of residue classes modulo $n$ *as the set*
+$$\mathbb{Z}_n=\{0,1,\dotsc,n-1\},$$ *where the operations of addition
+and multiplication are reduced modulo $n$, according to
+Proposition \@ref(prp:arithmetic).*
+:::
+
+Then, the above discussion can be rephrased as follows. We can say that
+any $a\in \mathbb{Z}$ is congruent to its residue modulo $n$, that is,
+$a\bmod n$. Thus, to work with arithmetic modulo $n$, we can restrict
+ourselves to the set $\mathbb{Z}_n$.
+
+```{proposition}
+*Let $a,\alpha,b,n\in\mathbb{Z}$, with $n>0$. If
+$a\equiv \alpha\pmod{n}$, then:*
+
+-   *$a+b\equiv \alpha+b\pmod{n}$.*
+
+-   *$a\cdot b\equiv \alpha\cdot b\pmod{n}$.*
+
+-   *If $b\geq0$, then $a^b\equiv \alpha^b\pmod{n}$.*
+
+*In particular, this is true when $\alpha=a\bmod{n}$.*
+```
+
+::: {.exercise}
+*Prove that the logic $\mathsf{XOR}$ operation and
+addition modulo $2$ are the same operation, by checking the four
+possible cases.*
+:::

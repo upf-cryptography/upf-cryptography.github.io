@@ -130,7 +130,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul class="summary">
 <li class="part"><span><b>I Introduction to modern cryptography</b></span></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Front page</a></li>
-<li class="chapter" data-level="1" data-path="introduction-to-security.html"><a href="introduction-to-security.html"><i class="fa fa-check"></i><b>1</b> Introduction to Security</a>
+<li class="chapter" data-level="1" data-path="introduction-to-security.html"><a href="introduction-to-security.html"><i class="fa fa-check"></i><b>1</b> Introduction to security</a>
 <ul>
 <li class="chapter" data-level="1.1" data-path="introduction-to-security.html"><a href="introduction-to-security.html#what-cryptography-is-and-is-not"><i class="fa fa-check"></i><b>1.1</b> What cryptography is and is not</a></li>
 <li class="chapter" data-level="1.2" data-path="introduction-to-security.html"><a href="introduction-to-security.html#fundamental-security-principles"><i class="fa fa-check"></i><b>1.2</b> Fundamental security principles</a></li>
@@ -148,7 +148,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="block-ciphers.html"><a href="block-ciphers.html"><i class="fa fa-check"></i><b>3</b> Block ciphers</a></li>
 <li class="chapter" data-level="4" data-path="hash-functions.html"><a href="hash-functions.html"><i class="fa fa-check"></i><b>4</b> Hash functions</a></li>
 <li class="part"><span><b>III Asymmetric cryptography</b></span></li>
-<li class="chapter" data-level="5" data-path="number-theory.html"><a href="number-theory.html"><i class="fa fa-check"></i><b>5</b> Elementary number theory</a></li>
+<li class="chapter" data-level="5" data-path="number-theory.html"><a href="number-theory.html"><i class="fa fa-check"></i><b>5</b> Elementary number theory</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="number-theory.html"><a href="number-theory.html#modular-arithmetic"><i class="fa fa-check"></i><b>5.1</b> Modular arithmetic</a></li>
+</ul></li>
 <li class="chapter" data-level="6" data-path="algebraic-structures.html"><a href="algebraic-structures.html"><i class="fa fa-check"></i><b>6</b> Algebraic structures</a></li>
 <li class="chapter" data-level="7" data-path="pke.html"><a href="pke.html"><i class="fa fa-check"></i><b>7</b> Public-key encryption</a></li>
 <li class="chapter" data-level="8" data-path="dh.html"><a href="dh.html"><i class="fa fa-check"></i><b>8</b> The Diffie–Hellman key exchange</a></li>
@@ -156,8 +159,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="part"><span><b>IV Other topics</b></span></li>
 <li class="chapter" data-level="10" data-path="cryptanalysis.html"><a href="cryptanalysis.html"><i class="fa fa-check"></i><b>10</b> Cryptanalysis</a></li>
 <li class="appendix"><span><b>Appendices</b></span></li>
-<li class="chapter" data-level="A" data-path="set-theory.html"><a href="set-theory.html"><i class="fa fa-check"></i><b>A</b> Set theory</a></li>
-<li class="chapter" data-level="B" data-path="introduction-to-sage.html"><a href="introduction-to-sage.html"><i class="fa fa-check"></i><b>B</b> Introduction to Sage</a></li>
+<li class="chapter" data-level="A" data-path="refreshers.html"><a href="refreshers.html"><i class="fa fa-check"></i><b>A</b> Refreshers</a>
+<ul>
+<li class="chapter" data-level="A.1" data-path="refreshers.html"><a href="refreshers.html#set-notation"><i class="fa fa-check"></i><b>A.1</b> Set notation</a></li>
+<li class="chapter" data-level="A.2" data-path="refreshers.html"><a href="refreshers.html#probability-theory"><i class="fa fa-check"></i><b>A.2</b> Probability theory</a></li>
+<li class="chapter" data-level="A.3" data-path="refreshers.html"><a href="refreshers.html#asymptotic-notation"><i class="fa fa-check"></i><b>A.3</b> Asymptotic notation</a></li>
+</ul></li>
 </ul>
 
       </nav>
@@ -180,10 +187,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="front-page" class="section level1 unnumbered">
 <h1>Front page</h1>
-<p>This page contains some useful information related to the course and the lecture notes.</p>
+<p><em>Latest update: 07/01/2021.</em></p>
+<p>This page contains some useful information related to the course and the lecture notes. Note that there are some useful buttons above the text, in particular one to download the notes as a well-formatted PDF, for offline use.</p>
 <div id="prerequisites" class="section level4 unnumbered">
 <h4>Prerequisites</h4>
-<p>The course assumes that you are familiar with previous maths courses from your degree. In particular, we will be using concepts from Discrete mathematics, and make extensive use of modular arithmetic. Refreshers for these topics will be uploaded soon.</p>
+<p>The course assumes that you are familiar with previous maths courses from your degree. In particular, we will be using concepts from Probability theory and Discrete mathematics, and make extensive use of modular arithmetic. Refreshers for these topics can be found in Appendix <a href="refreshers.html#refreshers">A</a> and Section <a href="number-theory.html#modular-arithmetic">5.1</a>.</p>
 </div>
 <div id="exercises" class="section level4 unnumbered">
 <h4>Exercises</h4>
@@ -198,6 +206,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Download it from <a href="https://www.sagemath.org/download.html" class="uri">https://www.sagemath.org/download.html</a>. This will allow you to run SageMath locally. It also comes packaged with a Jupyter-style notebook, for ease of use.</li>
 <li>Use it online at <a href="https://cocalc.com/app" class="uri">https://cocalc.com/app</a>. This also comes in both terminal and notebook flavors. CoCalc has a freemium model, and in the free version you will get an annoying message telling you that your code will run really slow. Nevertheless, the free version is more than enough for the purpose of this course.</li>
 </ul>
+<p>The documentation at <a href="https://doc.sagemath.org/" class="uri">https://doc.sagemath.org/</a> is pretty good, although most of the functions that we will use are self-explanatory.</p>
 </div>
 <div id="bibliography" class="section level4 unnumbered">
 <h4>Bibliography</h4>
@@ -213,6 +222,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="changelog" class="section level4 unnumbered">
 <h4>Changelog</h4>
 <ul>
+<li>07/01/2021. Refreshes on Appendix <a href="refreshers.html#refreshers">A</a> and Section <a href="number-theory.html#modular-arithmetic">5.1</a> added. Added code for a LFSR. Some typos fixed in Sections <a href="introduction-to-security.html#introduction-to-security">1</a> and <a href="randomness-in-cryptography.html#randomness-in-cryptography">2</a>.</li>
 <li>04/01/2021. Sections <a href="introduction-to-security.html#introduction-to-security">1</a> and <a href="randomness-in-cryptography.html#randomness-in-cryptography">2</a> uploaded.</li>
 </ul>
 <p>Notes written by Javier Silva, using <a href="https://bookdown.org/">Bookdown</a> and <a href="https://pandoc.org/">pandoc</a>.</p>
@@ -267,7 +277,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["_main.pdf"],
+"download": null,
 "toc": {
 "collapse": "subsection"
 }

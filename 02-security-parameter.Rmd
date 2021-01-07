@@ -1,4 +1,4 @@
-# Introduction to Security
+# Introduction to security
 
 We use cryptography on a daily basis: our wireless communications or web
 traffic are encrypted, companies protect their data with cryptographic
@@ -62,7 +62,7 @@ consider a few different scenarios:
     the Milky Way.
 
 ::: {.exercise}
-*A WiFi password is $10$ bits long. How long does it
+*A WiFi password is $10$ bits long. Assume that an attacker tries one password per second. How long does it
 take to find the key by brute force? What if the password is $\lambda$
 bits long?*
 :::
@@ -133,7 +133,7 @@ about both security and efficiency will be expressed in terms of the
 security parameter.
 
 ```{definition, label="efficiency"}
-*An algorithm $\mathcal{A}$ is said to be* efficient *(or* polynomial-time *if there exists a positive polynomial $p$ such
+*An algorithm $\mathcal{A}$ is said to be* efficient *(or* polynomial-time) *if there exists a positive polynomial $p$ such
 that, for any $\lambda\in\mathbb{N}$, when $\mathcal{A}$ receives as
 input a bitstring of length $\lambda$, it finishes in $p(\lambda)$
 steps.*
@@ -244,7 +244,7 @@ efficient algorithms:* $$(\mathsf{KeyGen},\mathsf{Enc},\mathsf{Dec}).$$
     $$\mathsf{c}=\mathsf{Enc}_{\mathsf{k}}(\mathsf{m}).$$*
 
 -   *The $\mathsf{Dec}$ algorithm uses the secret key $\mathsf{k}$ to
-    decrypt an encrypted message $\mathsf{c}$, recovering
+    decrypt an encrypted message $\mathsf{c}$, recovering $$\mathsf{m}$$ as
     $$\mathsf{Dec}_{\mathsf{k}}(\mathsf{c})=\mathsf{m}.$$*
 
 *In this context, $\mathsf{m}$ is called the *plaintext*, and

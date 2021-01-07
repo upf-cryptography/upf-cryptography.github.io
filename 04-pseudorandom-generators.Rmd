@@ -75,7 +75,7 @@ Otherwise Alice and Bob will not be able to communicate.
 :::
 
 ::: {.proof}
-*Proof.* Using the definitions of encryption and decryption, we have
+Using the definitions of encryption and decryption, we have
 that
 $$\mathsf{Dec}_{\mathsf{k}}(\mathsf{Enc}_{\mathsf{k}}(\mathsf{m}))=\mathsf{Dec}_{\mathsf{k}}(\mathsf{m}\oplus\mathsf{k})=(\mathsf{m}\oplus\mathsf{k})\oplus \mathsf{k}= \mathsf{m}\oplus (\mathsf{k}\oplus\mathsf{k})=\mathsf{m}\oplus\mathbf 0=\mathsf{m},$$
 where $\mathbf 0$ means the string of zeroes of size $\lambda$. In the
@@ -176,9 +176,9 @@ secrecy.*
 :::
 
 ::: {.proof}
-*Proof.* By the discussion above, we have that for any key $\mathsf{k}$,
+By the discussion above, we have that for any key $\mathsf{k}$,
 message $\mathsf{m}$ and ciphertext $\mathsf{c}$,
-$$\Pr[\mathsf{c}=\mathsf{Enc}_{\mathsf{k}}(\mathsf{m})]=\frac{\#\{\text{keys $\mathsf{k}$ such that } \mathsf{Enc}_{\mathsf{k}}(\mathsf{m})\}}{\#\{\text{possible keys}\}}=\frac{1}{2^\lambda}.$$
+$$\Pr[\mathsf{c}=\mathsf{Enc}_{\mathsf{k}}(\mathsf{m})]=\frac{\#\{\text{keys $\mathsf{k}$ such that } \mathsf{c}=\mathsf{Enc}_{\mathsf{k}}(\mathsf{m})\}}{\#\{\text{possible keys}\}}=\frac{1}{2^\lambda}.$$
 :::
 
 ::: {.exercise}
@@ -224,7 +224,7 @@ channel is the only medium for communication available:
     listening, and grab the key to decrypt everything that comes
     afterwards.
 
--   they cannot encrypt the key, since the don't have a shared key to
+-   they cannot encrypt the key, since they don't have a shared key to
     use encryption yet!
 
 Later in the course, we will see that there are ways to securely share a
@@ -287,7 +287,7 @@ enough for our purposes?
 *Consider the stream cipher presented above, with the
 following choices for the function $G$, for $h=2\ell$.*
 
-1.  *$G$ outputs a string or $2\ell$ zeroes.*
+1.  *$G$ outputs a string of $2\ell$ zeroes.*
 
 2.  *$G$ outputs the input, followed by a string of $\ell$ zeroes.*
 
@@ -375,12 +375,12 @@ but actually happens to any linear feedback shift register.
 Indeed, let us define a general *linear feedback shift register (LFSR)
 of length $\ell$*. It starts with a seed ${\mathsf{k}}$, expressed as a
 bitstring $${\mathsf{k}}=k_1k_2\dots k_\ell,$$ and derives each new
-element of the key stream according to the formula
+element of the key stream according to the following: for $$i>\ell$$:
 $$k_{i}=p_{1}k_{i-1}\oplus \dots \oplus p_\ell k_{i-\ell},$$ for some
 coefficients $p_j\in\{0,1\}$, for $j=1,\dots,\ell$.
 
 ::: {.proposition}
-*The output of a LFSR of length $\ell$ repeats
+*The output of an LFSR of length $\ell$ repeats
 periodically, with a period of at most $2^{\ell}-1$.*
 :::
 
@@ -395,7 +395,35 @@ uniformly random, and thus LFSRs are not suited for cryptography.
 
 Still, a clever combination of a few LFSRs, with a couple of extra
 details, seems to be enough to realize the stream cipher Trivium, which,
-to this date, is believed to be secure [@de2008trivium].
+to this date, is believed to be secure.
+
+Below is a direct implementation of an LFSR. You can try different sets of feedback coeffients, and see how this impacts the period of the key stream. 
+
+```{python, eval=FALSE}
+# Define the XOR operation:
+def xor(a,b):
+    return mod(int(a)+int(b),2)
+
+# Set a vector of feedback coefficients [p_1, ... , p_n]
+feedback_coeffs = [1, 1, 0, 0, 0, 0, 0, 0]
+seed_length = len(feedback_coeffs)
+
+# Sample a uniformly random seed of the same length.
+seed = list(random_vector(GF(2),seed_length))
+print(seed)
+
+# Choose the length of the required key stream
+k = 16
+
+# Run the LFSR
+key_stream=seed
+for i in range(seed_length,seed_length+k):
+    key_stream_temp=0
+    for j in range(seed_length):
+        key_stream_temp = xor(key_stream_temp,(feedback_coeffs[j]*key_stream[i-j-1]))
+    key_stream.append(key_stream_temp)
+print(key_stream)
+```
 
 ## True randomness
 

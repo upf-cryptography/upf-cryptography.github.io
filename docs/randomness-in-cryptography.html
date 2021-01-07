@@ -130,7 +130,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul class="summary">
 <li class="part"><span><b>I Introduction to modern cryptography</b></span></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Front page</a></li>
-<li class="chapter" data-level="1" data-path="introduction-to-security.html"><a href="introduction-to-security.html"><i class="fa fa-check"></i><b>1</b> Introduction to Security</a>
+<li class="chapter" data-level="1" data-path="introduction-to-security.html"><a href="introduction-to-security.html"><i class="fa fa-check"></i><b>1</b> Introduction to security</a>
 <ul>
 <li class="chapter" data-level="1.1" data-path="introduction-to-security.html"><a href="introduction-to-security.html#what-cryptography-is-and-is-not"><i class="fa fa-check"></i><b>1.1</b> What cryptography is and is not</a></li>
 <li class="chapter" data-level="1.2" data-path="introduction-to-security.html"><a href="introduction-to-security.html#fundamental-security-principles"><i class="fa fa-check"></i><b>1.2</b> Fundamental security principles</a></li>
@@ -148,7 +148,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="block-ciphers.html"><a href="block-ciphers.html"><i class="fa fa-check"></i><b>3</b> Block ciphers</a></li>
 <li class="chapter" data-level="4" data-path="hash-functions.html"><a href="hash-functions.html"><i class="fa fa-check"></i><b>4</b> Hash functions</a></li>
 <li class="part"><span><b>III Asymmetric cryptography</b></span></li>
-<li class="chapter" data-level="5" data-path="number-theory.html"><a href="number-theory.html"><i class="fa fa-check"></i><b>5</b> Elementary number theory</a></li>
+<li class="chapter" data-level="5" data-path="number-theory.html"><a href="number-theory.html"><i class="fa fa-check"></i><b>5</b> Elementary number theory</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="number-theory.html"><a href="number-theory.html#modular-arithmetic"><i class="fa fa-check"></i><b>5.1</b> Modular arithmetic</a></li>
+</ul></li>
 <li class="chapter" data-level="6" data-path="algebraic-structures.html"><a href="algebraic-structures.html"><i class="fa fa-check"></i><b>6</b> Algebraic structures</a></li>
 <li class="chapter" data-level="7" data-path="pke.html"><a href="pke.html"><i class="fa fa-check"></i><b>7</b> Public-key encryption</a></li>
 <li class="chapter" data-level="8" data-path="dh.html"><a href="dh.html"><i class="fa fa-check"></i><b>8</b> The Diffie–Hellman key exchange</a></li>
@@ -156,8 +159,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="part"><span><b>IV Other topics</b></span></li>
 <li class="chapter" data-level="10" data-path="cryptanalysis.html"><a href="cryptanalysis.html"><i class="fa fa-check"></i><b>10</b> Cryptanalysis</a></li>
 <li class="appendix"><span><b>Appendices</b></span></li>
-<li class="chapter" data-level="A" data-path="set-theory.html"><a href="set-theory.html"><i class="fa fa-check"></i><b>A</b> Set theory</a></li>
-<li class="chapter" data-level="B" data-path="introduction-to-sage.html"><a href="introduction-to-sage.html"><i class="fa fa-check"></i><b>B</b> Introduction to Sage</a></li>
+<li class="chapter" data-level="A" data-path="refreshers.html"><a href="refreshers.html"><i class="fa fa-check"></i><b>A</b> Refreshers</a>
+<ul>
+<li class="chapter" data-level="A.1" data-path="refreshers.html"><a href="refreshers.html#set-notation"><i class="fa fa-check"></i><b>A.1</b> Set notation</a></li>
+<li class="chapter" data-level="A.2" data-path="refreshers.html"><a href="refreshers.html#probability-theory"><i class="fa fa-check"></i><b>A.2</b> Probability theory</a></li>
+<li class="chapter" data-level="A.3" data-path="refreshers.html"><a href="refreshers.html#asymptotic-notation"><i class="fa fa-check"></i><b>A.3</b> Asymptotic notation</a></li>
+</ul></li>
 </ul>
 
       </nav>
@@ -264,7 +271,7 @@ Otherwise Alice and Bob will not be able to communicate.</p>
 <p><span id="prp:unlabeled-div-7" class="proposition"><strong>Proposition 2.1  </strong></span><em>The one-time pad is a correct encryption scheme.</em></p>
 </div>
 <div class="proof">
-<p><span id="unlabeled-div-8" class="proof"><em>Proof</em>. </span><em>Proof.</em> Using the definitions of encryption and decryption, we have
+<p><span id="unlabeled-div-8" class="proof"><em>Proof</em>. </span>Using the definitions of encryption and decryption, we have
 that
 <span class="math display">\[\mathsf{Dec}_{\mathsf{k}}(\mathsf{Enc}_{\mathsf{k}}(\mathsf{m}))=\mathsf{Dec}_{\mathsf{k}}(\mathsf{m}\oplus\mathsf{k})=(\mathsf{m}\oplus\mathsf{k})\oplus \mathsf{k}= \mathsf{m}\oplus (\mathsf{k}\oplus\mathsf{k})=\mathsf{m}\oplus\mathbf 0=\mathsf{m},\]</span>
 where <span class="math inline">\(\mathbf 0\)</span> means the string of zeroes of size <span class="math inline">\(\lambda\)</span>. In the
@@ -355,9 +362,9 @@ attacker!</p></li>
 secrecy.</em></p>
 </div>
 <div class="proof">
-<p><span id="unlabeled-div-11" class="proof"><em>Proof</em>. </span><em>Proof.</em> By the discussion above, we have that for any key <span class="math inline">\(\mathsf{k}\)</span>,
+<p><span id="unlabeled-div-11" class="proof"><em>Proof</em>. </span>By the discussion above, we have that for any key <span class="math inline">\(\mathsf{k}\)</span>,
 message <span class="math inline">\(\mathsf{m}\)</span> and ciphertext <span class="math inline">\(\mathsf{c}\)</span>,
-<span class="math display">\[\Pr[\mathsf{c}=\mathsf{Enc}_{\mathsf{k}}(\mathsf{m})]=\frac{\#\{\text{keys $\mathsf{k}$ such that } \mathsf{Enc}_{\mathsf{k}}(\mathsf{m})\}}{\#\{\text{possible keys}\}}=\frac{1}{2^\lambda}.\]</span></p>
+<span class="math display">\[\Pr[\mathsf{c}=\mathsf{Enc}_{\mathsf{k}}(\mathsf{m})]=\frac{\#\{\text{keys $\mathsf{k}$ such that } \mathsf{c}=\mathsf{Enc}_{\mathsf{k}}(\mathsf{m})\}}{\#\{\text{possible keys}\}}=\frac{1}{2^\lambda}.\]</span></p>
 </div>
 <div class="exercise">
 <p><span id="exr:unlabeled-div-12" class="exercise"><strong>Exercise 2.1  </strong></span><em>We said above that for every message <span class="math inline">\(\mathsf{m}\)</span> and any
@@ -397,7 +404,7 @@ channel is the only medium for communication available:</p>
 <li><p>they cannot share the key unencrypted, since an attacker could be
 listening, and grab the key to decrypt everything that comes
 afterwards.</p></li>
-<li><p>they cannot encrypt the key, since the don’t have a shared key to
+<li><p>they cannot encrypt the key, since they don’t have a shared key to
 use encryption yet!</p></li>
 </ul>
 <p>Later in the course, we will see that there are ways to securely share a
@@ -453,7 +460,7 @@ enough for our purposes?</p>
 <p><span id="exr:unlabeled-div-14" class="exercise"><strong>Exercise 2.2  </strong></span><em>Consider the stream cipher presented above, with the
 following choices for the function <span class="math inline">\(G\)</span>, for <span class="math inline">\(h=2\ell\)</span>.</em></p>
 <ol style="list-style-type: decimal">
-<li><p><em><span class="math inline">\(G\)</span> outputs a string or <span class="math inline">\(2\ell\)</span> zeroes.</em></p></li>
+<li><p><em><span class="math inline">\(G\)</span> outputs a string of <span class="math inline">\(2\ell\)</span> zeroes.</em></p></li>
 <li><p><em><span class="math inline">\(G\)</span> outputs the input, followed by a string of <span class="math inline">\(\ell\)</span> zeroes.</em></p></li>
 <li><p><em><span class="math inline">\(G\)</span> outputs two concatenated copies of the input.</em></p></li>
 </ol>
@@ -529,11 +536,11 @@ but actually happens to any linear feedback shift register.</p>
 <p>Indeed, let us define a general <em>linear feedback shift register (LFSR)
 of length <span class="math inline">\(\ell\)</span></em>. It starts with a seed <span class="math inline">\({\mathsf{k}}\)</span>, expressed as a
 bitstring <span class="math display">\[{\mathsf{k}}=k_1k_2\dots k_\ell,\]</span> and derives each new
-element of the key stream according to the formula
+element of the key stream according to the following: for <span class="math display">\[i&gt;\ell\]</span>:
 <span class="math display">\[k_{i}=p_{1}k_{i-1}\oplus \dots \oplus p_\ell k_{i-\ell},\]</span> for some
 coefficients <span class="math inline">\(p_j\in\{0,1\}\)</span>, for <span class="math inline">\(j=1,\dots,\ell\)</span>.</p>
 <div class="proposition">
-<p><span id="prp:unlabeled-div-18" class="proposition"><strong>Proposition 2.5  </strong></span><em>The output of a LFSR of length <span class="math inline">\(\ell\)</span> repeats
+<p><span id="prp:unlabeled-div-18" class="proposition"><strong>Proposition 2.5  </strong></span><em>The output of an LFSR of length <span class="math inline">\(\ell\)</span> repeats
 periodically, with a period of at most <span class="math inline">\(2^{\ell}-1\)</span>.</em></p>
 </div>
 <p>Note the “at most” in the statement. For some choices of the
@@ -546,7 +553,31 @@ are attacks that allow an adversary to distinguish the output from
 uniformly random, and thus LFSRs are not suited for cryptography.</p>
 <p>Still, a clever combination of a few LFSRs, with a couple of extra
 details, seems to be enough to realize the stream cipher Trivium, which,
-to this date, is believed to be secure <span class="citation">[@de2008trivium]</span>.</p>
+to this date, is believed to be secure.</p>
+<p>Below is a direct implementation of an LFSR. You can try different sets of feedback coeffients, and see how this impacts the period of the key stream.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="randomness-in-cryptography.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the XOR operation:</span></span>
+<span id="cb3-2"><a href="randomness-in-cryptography.html#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> xor(a,b):</span>
+<span id="cb3-3"><a href="randomness-in-cryptography.html#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> mod(<span class="bu">int</span>(a)<span class="op">+</span><span class="bu">int</span>(b),<span class="dv">2</span>)</span>
+<span id="cb3-4"><a href="randomness-in-cryptography.html#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="randomness-in-cryptography.html#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Set a vector of feedback coefficients [p_1, ... , p_n]</span></span>
+<span id="cb3-6"><a href="randomness-in-cryptography.html#cb3-6" aria-hidden="true" tabindex="-1"></a>feedback_coeffs <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>]</span>
+<span id="cb3-7"><a href="randomness-in-cryptography.html#cb3-7" aria-hidden="true" tabindex="-1"></a>seed_length <span class="op">=</span> <span class="bu">len</span>(feedback_coeffs)</span>
+<span id="cb3-8"><a href="randomness-in-cryptography.html#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="randomness-in-cryptography.html#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample a uniformly random seed of the same length.</span></span>
+<span id="cb3-10"><a href="randomness-in-cryptography.html#cb3-10" aria-hidden="true" tabindex="-1"></a>seed <span class="op">=</span> <span class="bu">list</span>(random_vector(GF(<span class="dv">2</span>),seed_length))</span>
+<span id="cb3-11"><a href="randomness-in-cryptography.html#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(seed)</span>
+<span id="cb3-12"><a href="randomness-in-cryptography.html#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="randomness-in-cryptography.html#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Choose the length of the required key stream</span></span>
+<span id="cb3-14"><a href="randomness-in-cryptography.html#cb3-14" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> <span class="dv">16</span></span>
+<span id="cb3-15"><a href="randomness-in-cryptography.html#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="randomness-in-cryptography.html#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the LFSR</span></span>
+<span id="cb3-17"><a href="randomness-in-cryptography.html#cb3-17" aria-hidden="true" tabindex="-1"></a>key_stream<span class="op">=</span>seed</span>
+<span id="cb3-18"><a href="randomness-in-cryptography.html#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(seed_length,seed_length<span class="op">+</span>k):</span>
+<span id="cb3-19"><a href="randomness-in-cryptography.html#cb3-19" aria-hidden="true" tabindex="-1"></a>    key_stream_temp<span class="op">=</span><span class="dv">0</span></span>
+<span id="cb3-20"><a href="randomness-in-cryptography.html#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(seed_length):</span>
+<span id="cb3-21"><a href="randomness-in-cryptography.html#cb3-21" aria-hidden="true" tabindex="-1"></a>        key_stream_temp <span class="op">=</span> xor(key_stream_temp,(feedback_coeffs[j]<span class="op">*</span>key_stream[i<span class="op">-</span>j<span class="op">-</span><span class="dv">1</span>]))</span>
+<span id="cb3-22"><a href="randomness-in-cryptography.html#cb3-22" aria-hidden="true" tabindex="-1"></a>    key_stream.append(key_stream_temp)</span>
+<span id="cb3-23"><a href="randomness-in-cryptography.html#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(key_stream)</span></code></pre></div>
 </div>
 <div id="true-randomness" class="section level2" number="2.4">
 <h2><span class="header-section-number">2.4</span> True randomness</h2>
@@ -627,7 +658,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["_main.pdf"],
+"download": null,
 "toc": {
 "collapse": "subsection"
 }
