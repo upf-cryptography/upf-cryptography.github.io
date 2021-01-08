@@ -145,7 +145,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.3" data-path="randomness-in-cryptography.html"><a href="randomness-in-cryptography.html#sec:examples"><i class="fa fa-check"></i><b>2.3</b> Linear feedback shift registers</a></li>
 <li class="chapter" data-level="2.4" data-path="randomness-in-cryptography.html"><a href="randomness-in-cryptography.html#true-randomness"><i class="fa fa-check"></i><b>2.4</b> True randomness</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="block-ciphers.html"><a href="block-ciphers.html"><i class="fa fa-check"></i><b>3</b> Block ciphers</a></li>
+<li class="chapter" data-level="3" data-path="block-ciphers.html"><a href="block-ciphers.html"><i class="fa fa-check"></i><b>3</b> Block ciphers</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="block-ciphers.html"><a href="block-ciphers.html#overview-of-block-ciphers"><i class="fa fa-check"></i><b>3.1</b> Overview of block ciphers</a></li>
+<li class="chapter" data-level="3.2" data-path="block-ciphers.html"><a href="block-ciphers.html#modes-of-operation"><i class="fa fa-check"></i><b>3.2</b> Modes of operation</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="block-ciphers.html"><a href="block-ciphers.html#electronic-codebook-ecb-mode"><i class="fa fa-check"></i><b>3.2.1</b> Electronic codebook (ECB) mode</a></li>
+<li class="chapter" data-level="3.2.2" data-path="block-ciphers.html"><a href="block-ciphers.html#cipher-block-chaining-cbc-mode"><i class="fa fa-check"></i><b>3.2.2</b> Cipher block chaining (CBC) mode</a></li>
+<li class="chapter" data-level="3.2.3" data-path="block-ciphers.html"><a href="block-ciphers.html#output-feedback-ofb-mode"><i class="fa fa-check"></i><b>3.2.3</b> Output feedback (OFB) mode</a></li>
+<li class="chapter" data-level="3.2.4" data-path="block-ciphers.html"><a href="block-ciphers.html#counter-ctr-mode"><i class="fa fa-check"></i><b>3.2.4</b> Counter (CTR) mode</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="block-ciphers.html"><a href="block-ciphers.html#des-and-aes"><i class="fa fa-check"></i><b>3.3</b> DES and AES</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="block-ciphers.html"><a href="block-ciphers.html#data-encryption-standard-des"><i class="fa fa-check"></i><b>3.3.1</b> Data Encryption Standard (DES)</a></li>
+<li class="chapter" data-level="3.3.2" data-path="block-ciphers.html"><a href="block-ciphers.html#advanced-encryption-standard-aes"><i class="fa fa-check"></i><b>3.3.2</b> Advanced Encryption Standard (AES)</a></li>
+</ul></li>
+</ul></li>
 <li class="chapter" data-level="4" data-path="hash-functions.html"><a href="hash-functions.html"><i class="fa fa-check"></i><b>4</b> Hash functions</a></li>
 <li class="part"><span><b>III Asymmetric cryptography</b></span></li>
 <li class="chapter" data-level="5" data-path="number-theory.html"><a href="number-theory.html"><i class="fa fa-check"></i><b>5</b> Elementary number theory</a>
@@ -182,9 +197,283 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="block_ciphers" class="section level1" number="3">
+<div id="block-ciphers" class="section level1" number="3">
 <h1><span class="header-section-number">3</span> Block ciphers</h1>
+<p>In this section, we focus on block ciphers, which are a more popular
+alternative to stream ciphers. Block ciphers are interesting not only
+for encryption, but they also have some interesting theoretical
+implications, since many other cryptographic primitives (like
+pseudorandom generators) can be built from block ciphers. In this
+section, we will learn:</p>
+<ol style="list-style-type: decimal">
+<li><p>What is a block cipher, and what are the properties of a good block
+cipher;</p></li>
+<li><p>The different modes of operation of a block cipher;</p></li>
+<li><p>Two prime examples of block ciphers: DES and AES.</p></li>
+</ol>
+<div id="overview-of-block-ciphers" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Overview of block ciphers</h2>
+<p>Recall that the one-time pad, and stream ciphers in general, encrypt
+bits one by one. In contrast, block ciphers will split our plaintext in
+blocks of fixed length, and encrypt each of this as a single unit.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-19" class="definition"><strong>Definition 3.1  </strong></span><em>A</em> block cipher of length <span class="math inline">\(\ell\)</span> <em>is an encryption
+scheme that encrypts a message of fixed length</em> <span class="math inline">\(\ell\)</span>.</p>
+</div>
+<p>When encrypting and arbitrarily large message, we will split it into
+blocks of length <span class="math inline">\(\ell\)</span> and encrypt each block, using the same key,
+unlike in the previous section where we tried to stretch the key.
+Because of this, we will require a good block cipher to satisfy two new
+properties, that we informally describe below:</p>
+<ul>
+<li><p><em>Confusion:</em> each bit of the ciphertext depends on several parts of
+the key. In other words, the relation between key and ciphertext
+must not be clear to any attacker.</p></li>
+<li><p><em>Diffusion:</em> small changes in the plaintext result in significant
+changes in the ciphertext. More precisely, in any modern block
+cipher, it is expected that a single bit change in the plaintext
+should result in at least half of the bits of the ciphertext
+changing.</p></li>
+</ul>
+<p>Later in this section, we will see some concrete examples of block
+ciphers used in practice. For now, let us assume that we already have
+some block cipher <span class="math display">\[(\mathsf{KeyGen},\mathsf{Enc},\mathsf{Dec}),\]</span> that
+we will use as a black box. That is, for now we do not know what happens
+inside each of the algorithms, only that they work and they are secure.
+For example, we assume that <span class="math inline">\(\mathsf{Enc}\)</span> takes as input a plaintext
+<span class="math inline">\(\mathsf{m}\)</span> of length <span class="math inline">\(\ell\)</span> and produces a ciphertext <span class="math inline">\(\mathsf{c}\)</span>
+corresponding to <span class="math inline">\(\mathsf{m}\)</span>. We represent this by the diagram</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>This will allow us to discuss block ciphers in a
+more general way.</p>
+</div>
+<div id="modes-of-operation" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Modes of operation</h2>
+<p>Assume that we want to encrypt a message <span class="math inline">\(\mathsf{m}\)</span> of length <span class="math inline">\(\ell n\)</span>
+with a block cipher. When the message length is not a multiple of the
+block length, some extra bytes are added to complete the last block.
+This is called <em>padding</em>.<a href="#fn10" class="footnote-ref" id="fnref10"><sup>10</sup></a> We start by splitting the message in
+blocks <span class="math display">\[\mathsf{m}_1,\dots,\mathsf{m}_n,\]</span> each of them of length
+<span class="math inline">\(\ell\)</span>, so that they can be fed into our block cipher. The question is:
+do we encrypt each block in parallel? Is that secure? Or should we
+somehow make the blocks influence each other? The way we proceed here is
+determined by the <em>mode of operation</em> that we choose.</p>
+<div id="electronic-codebook-ecb-mode" class="section level3" number="3.2.1">
+<h3><span class="header-section-number">3.2.1</span> Electronic codebook (ECB) mode</h3>
+<p>In ECB mode, we take the most straightforward approach, and encrypt each
+block on its own: <span class="math display">\[\mathsf{c}_i=\mathsf{Enc}_k(\mathsf{m}_i).\]</span> The ECB
+mode is represented in the following diagram:
+<img src="_main_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>The main advantage of this approach is that, since each block is
+independent, we can make the operations in parallel, potentially saving
+computation time.</p>
+<p>However, this mode presents several weaknesses. For example, since each
+block is encrypted in exactly the same way, two identical messages
+result in two identical ciphertexts. So an eavesdropper can see when the
+same message was sent twice. Even if he does not know the content, this
+provides the attacker with some partial information, which is something
+that we would like to avoid.</p>
+<p>Furthermore, the ECB mode is particularly bad when encrypting
+“meaningful” information. A very visual example comes from encrypting an
+image. Assume that we split the image into small squares of pixels, so
+that the bit length of each of these matches the length of our block
+cipher, and then use ECB-mode encryption on each square. Below you can
+see the result on an example image.<a href="#fn11" class="footnote-ref" id="fnref11"><sup>11</sup></a></p>
+<div class="center">
+<p><img src="Tux.jpg" alt="image" /><img src="Tux_ecb.jpg" alt="image" /></p>
+</div>
+<p>Because the blocks are encrypted independently, a human eye can still
+easily distinguish the underlying information. This illustrates ECB
+mode’s lack of diffusion.</p>
+</div>
+<div id="cipher-block-chaining-cbc-mode" class="section level3" number="3.2.2">
+<h3><span class="header-section-number">3.2.2</span> Cipher block chaining (CBC) mode</h3>
+<p>So we have seen that we want our blocks to interact in some way. To
+achieve this, the CBC mode takes the following approach: the idea is to
+create a <em>feedback loop</em>, in which each ciphertext produced by the block
+cipher is fed back into the input of the next iteration, by computing
+the <span class="math inline">\(\mathsf{XOR}\)</span> with the new input. More precisely:
+<span class="math display">\[\mathsf{c}_i=\mathsf{Enc}_k(\mathsf{m}_i\oplus \mathsf{c}_{i-1}).\]</span>
+The CBC mode is represented in the following diagram:
+<img src="_main_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Note that this does not work for the first block, since there is no
+previous ciphertext, and so we introduce something to replace it, which
+we call the <em>initialization vector</em> (often denoted by IV). By choosing
+the IV at random, we also introduce randomness in our scheme, making the
+procedure non-deterministic. Observe also that, due to the recursive
+nature of the definition, the encryption of a block is not only
+influenced by the previous block, but by <em>every</em> block that came before,
+and also the IV. There is no need for the IV to be secret, although it
+should not be reused, so if a new encryption sessions starts, a new IV
+should be chosen.</p>
+<p>With this approach, we achieve a much higher diffusion. Looking again at
+the same picture, the result is now very different:</p>
+<div class="center">
+<p><img src="Tux.jpg" alt="image" /><img src="Tux_secure.jpg" alt="image" /></p>
+</div>
+<p>This is due to the fact that the encryption of each block influences the
+next. Thus, two identical blocks (for example, two squares of white in
+the corner of the picture) do not produce the same output anymore. The
+downside of this approach is that, since we need a ciphertext before we
+can compute the next, we cannot parallelize the computations.</p>
+</div>
+<div id="output-feedback-ofb-mode" class="section level3" number="3.2.3">
+<h3><span class="header-section-number">3.2.3</span> Output feedback (OFB) mode</h3>
+<p>The next mode of operation actually turns a block cipher into a stream
+cipher, by recomputing a key each time through the <span class="math inline">\(\mathsf{Enc}\)</span>
+algorithm. That is, it is a stream cipher in which the key stream is
+produced in blocks of length <span class="math inline">\(\ell\)</span>: <span class="math display">\[\begin{aligned}
+&amp; \mathbf w_i = \mathsf{Enc}_k(\mathbf w_{i-1}), \\
+&amp; \mathsf{c}_i=\mathsf{m}_i\oplus \mathbf w_i. \\
+\end{aligned}\]</span> The OFB mode is represented in the following diagram:
+<img src="_main_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Again, we need an IV to feed into <span class="math inline">\(\mathsf{Enc}\)</span> in the first iteration.
+Observe that the block cipher and the feedback loop do not involve the
+message at all, which is simply <span class="math inline">\(\mathsf{XOR}\)</span>’ed with the result of
+each iteration of the loop to produce the ciphertext, as in any stream
+cipher.</p>
+<p>While, as the CBC mode, the computation cannot be performed in parallel,
+the fact that the loop does not depend on the message at all allows us
+to precompute a bunch of key blocks in advance, for later use with a
+message.</p>
+</div>
+<div id="counter-ctr-mode" class="section level3" number="3.2.4">
+<h3><span class="header-section-number">3.2.4</span> Counter (CTR) mode</h3>
+<p>Similarly to the OFB mode, the CTR mode produces a stream cipher from a
+block cipher. It works by keeping a public counter <span class="math inline">\(\mathsf{ctr}\)</span> that
+is chosen randomly, and is increased by <span class="math inline">\(1\)</span> after each iteration. The
+counter works as an IV that updates after encrypting each block.
+<span class="math display">\[\begin{aligned}
+    &amp; \mathsf{ctr}_i = \mathsf{ctr}_{i-1}+1, \\
+    &amp; \mathsf{c}_i=\mathsf{m}_i\oplus \mathsf{Enc}_k(\mathsf{ctr}_i). \\
+    \end{aligned}\]</span> After the last iteration, the current value of the
+counter is also sent, together with the ciphertext. The CTR mode is
+represented in the following diagram:
+<img src="_main_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-20" class="exercise"><strong>Exercise 3.1  </strong></span><em>We have not discussed the decryption procedure of any
+of the modes of operation. Given a <span class="math inline">\(\mathsf{Dec}\)</span> algorithm that
+recovers plaintexts encrypted with <span class="math inline">\(\mathsf{Enc}\)</span>, describe how
+decryption works for each mode of operation. Recall that the values of
+the IV and counter are public.</em></p>
+</div>
+</div>
+</div>
+<div id="des-and-aes" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> DES and AES</h2>
+<p>Now that we know how to use block ciphers, let us look a bit into some
+of the most famous ones: the <em>Data Encryption Standard (DES)</em>, and its
+successor the <em>Advanced Encryption Standard (AES)</em>. DES was designed by
+a team at IBM in 1974, and became the first official encryption standard
+in the US in 1977. It remained as the recommended encryption scheme
+until 1999, when it was replaced by AES.<a href="#fn12" class="footnote-ref" id="fnref12"><sup>12</sup></a></p>
+<div id="data-encryption-standard-des" class="section level3" number="3.3.1">
+<h3><span class="header-section-number">3.3.1</span> Data Encryption Standard (DES)</h3>
+<p>DES is a block cipher of length <span class="math inline">\(64\)</span>, which uses a key of <span class="math inline">\(56\)</span> bits.
+Essentially, it is composed of <span class="math inline">\(16\)</span> identical rounds, each of them
+consisting of the following. During each round, a <em>round key</em>
+<span class="math inline">\(\mathsf{k}_i\)</span> of 48 bits is derived from the master key. In round <span class="math inline">\(i\)</span>,
+the algorithm receives <span class="math inline">\(\mathsf{m}_{i-1}\)</span>, the output of the previous
+round (or the original message, for <span class="math inline">\(i=1\)</span>), and computes <span class="math inline">\(\mathsf{m}_i\)</span>,
+the output of the current round. In between, the following step happen:</p>
+<ol style="list-style-type: decimal">
+<li><p>Split <span class="math inline">\(\mathsf{m}_{i-1}\)</span> in two halves
+<span class="math inline">\(\mathbf L_{i-1}, \mathbf R_{i-1}\)</span> of 32 bits each.</p></li>
+<li><p>Derive the round key <span class="math inline">\(\mathsf{k}_i\)</span> from <span class="math inline">\(\mathsf{k}\)</span>.</p></li>
+<li><p>Set <span class="math inline">\(\mathbf L_{i}=R_{i-1}\)</span> and
+<span class="math inline">\(\mathbf R_{i}=L_{i-1}\oplus f(\mathbf R_{i-1},\mathsf{k}_i)\)</span>.</p></li>
+<li><p>Return <span class="math inline">\(\mathbf m_i=(\mathbf L_i, \mathbf R_i)\)</span></p></li>
+</ol>
+<p>After round <span class="math inline">\(16\)</span>, the end result <span class="math inline">\(\mathsf{m}_{16}\)</span> is the ciphertext.</p>
+<p>Decryption of DES is almost the same as encryption, starting from the
+last round key. Observe that one half of the input of each round is not
+encrypted, just moved around, and so in total each half of the plaintext
+is encrypted <span class="math inline">\(8\)</span> times by <span class="math inline">\(\mathsf{XOR}\)</span>’ing it with a function of the
+round key. There are a couple of details that we have not specified yet:</p>
+<ul>
+<li><p>How to derive round keys from the master key <span class="math inline">\(\mathsf{k}\)</span>. Without
+getting into much detail, the <span class="math inline">\(\mathsf{k}_i\)</span> is obtained from
+<span class="math inline">\(\mathsf{k}\)</span> by performing some rotations and permutations on the
+positions of the bits, and then some bits are ignored.</p></li>
+<li><p>How the function <span class="math inline">\(f\)</span> works. First, the function expands the 32-bit
+input <span class="math inline">\(\mathbf R_{i-1}\)</span> to a 48-bit string, by repeating some of the
+bits in specified positions. The result is then <span class="math inline">\(\mathsf{XOR}\)</span>’ed
+with the round key <span class="math inline">\(\mathsf{k}_i\)</span>. The result from this operation is
+then split into <span class="math inline">\(8\)</span> blocks of <span class="math inline">\(6\)</span> bits each, and fed into what is
+known as <em>substitution boxes (S-boxes)</em>, which are functions
+specified by a lookup table. Each box outputs a string of 4 bits, so
+in total we have a string of <span class="math inline">\(32\)</span> bits. Finally, the positions of
+the bits in this string are permuted, and the result is the output
+of the function <span class="math inline">\(f\)</span>.</p></li>
+</ul>
+<p>The design of the cipher, specially the function <span class="math inline">\(f\)</span>, might look arcane.
+Indeed, since the design and standardization of DES was not a public
+process, the reason behind some design choices is still not completely
+clear. What is known, however, is that the <span class="math inline">\(f\)</span> function and the
+<span class="math inline">\(S\)</span>-boxes were designed to thwart any attack known at the time (and even
+some that were not known to the public). The takeaway message here is
+that the <span class="math inline">\(S\)</span>-boxes and the final permutation play a big role in
+achieving a good level of diffusion, propagating change through the
+whole ciphertext in the following rounds. Indeed, we have the following
+result.</p>
+<div class="proposition">
+<p><span id="prp:unlabeled-div-21" class="proposition"><strong>Proposition 3.1  </strong></span><em>By the end of the fifth round of DES, every single
+bit of the current ciphertext depends on all the bits of the plaintext
+and all the bits of the key.</em></p>
+</div>
+<p>No sophisticated efficient attacks are known against DES to date.
+However, the key size is simply too small for today’s standards (look
+again at the table at the end of
+section <a href="introduction-to-security.html#introduction-to-security">1</a>), and so it was eventually
+replaced by AES. Some variants of DES, like 3DES, which essentially
+means applying DES three times in a row, are still in use, and have
+withstood any attacks so far.</p>
+</div>
+<div id="advanced-encryption-standard-aes" class="section level3" number="3.3.2">
+<h3><span class="header-section-number">3.3.2</span> Advanced Encryption Standard (AES)</h3>
+<p>AES is a block cipher with block length <span class="math inline">\(128\)</span> bits. Unlike DES, which
+used <span class="math inline">\(56\)</span>-bit keys, AES supports keys of bit length <span class="math inline">\(128\)</span>, <span class="math inline">\(192\)</span> and
+<span class="math inline">\(256\)</span>, and has between <span class="math inline">\(10\)</span> and <span class="math inline">\(14\)</span> rounds, depending on the key
+length. Moreover, while in DES only half of the block was encrypted in
+each round, the full block is encrypted in every round now. On a very
+high level, each round consists of the following steps, called <em>layers</em>:</p>
+<ol style="list-style-type: decimal">
+<li><p><em>Key addition layer:</em> a round key of length <span class="math inline">\(128\)</span> is derived from
+the master key, in a process called <em>key schedule</em>.</p></li>
+<li><p><em>Byte substitution layer:</em> similarly to DES, AES uses <span class="math inline">\(16\)</span> S-boxes
+defined by lookup tables, replacing each byte of the message by a
+new byte specified by the corresponding <span class="math inline">\(S\)</span>-box. This layer
+introduces confusion.</p></li>
+<li><p><em>Diffusion layer:</em> the position of the bytes are permuted. Then,
+blocks of four bytes are combined using some matrix operations.</p></li>
+</ol>
+<p>Regarding security, no attack more efficient than brute force is known
+to date. Thus, the security level provided by AES is <span class="math inline">\(\lambda\)</span>, where
+<span class="math inline">\(\lambda\in\{128,192,256\}\)</span> is the bit size of the key.</p>
+<p>The following video has a very clear and concise overview of the inner
+workings of AES.</p>
+<div>
+<iframe width="720" height="405" src="https://www.youtube-nocookie.com/embed/mlzxpkdXP58" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+</iframe>
+</div>
 
+</div>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="10">
+<li id="fn10"><p>One must be careful when choosing padding, as some choices are
+vulnerable to certain attacks in some modes of operation. An example
+of this is the padding oracle attack:
+<a href="https://en.wikipedia.org/wiki/Padding_oracle_attack" class="uri">https://en.wikipedia.org/wiki/Padding_oracle_attack</a>.<a href="block-ciphers.html#fnref10" class="footnote-back">↩︎</a></p></li>
+<li id="fn11"><p>Source:
+<a href="https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation" class="uri">https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation</a>.
+Images by Larry Ewing (<a href="lewing@isc.tamu.edu">lewing@isc.tamu.edu</a>)
+and GIMP (<a href="https://www.gimp.org/" class="uri">https://www.gimp.org/</a>).<a href="block-ciphers.html#fnref11" class="footnote-back">↩︎</a></p></li>
+<li id="fn12"><p>Some interesting bits of history around DES and NSA involvement
+can be found in Chapter 3 of Christof Paar and Jan Pelzl. <em>Understanding cryptography: a textbook for students and practitioners</em>. Springer Science &amp; Business Media, 2009..<a href="block-ciphers.html#fnref12" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
             </section>
 

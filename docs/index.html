@@ -145,7 +145,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.3" data-path="randomness-in-cryptography.html"><a href="randomness-in-cryptography.html#sec:examples"><i class="fa fa-check"></i><b>2.3</b> Linear feedback shift registers</a></li>
 <li class="chapter" data-level="2.4" data-path="randomness-in-cryptography.html"><a href="randomness-in-cryptography.html#true-randomness"><i class="fa fa-check"></i><b>2.4</b> True randomness</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="block-ciphers.html"><a href="block-ciphers.html"><i class="fa fa-check"></i><b>3</b> Block ciphers</a></li>
+<li class="chapter" data-level="3" data-path="block-ciphers.html"><a href="block-ciphers.html"><i class="fa fa-check"></i><b>3</b> Block ciphers</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="block-ciphers.html"><a href="block-ciphers.html#overview-of-block-ciphers"><i class="fa fa-check"></i><b>3.1</b> Overview of block ciphers</a></li>
+<li class="chapter" data-level="3.2" data-path="block-ciphers.html"><a href="block-ciphers.html#modes-of-operation"><i class="fa fa-check"></i><b>3.2</b> Modes of operation</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="block-ciphers.html"><a href="block-ciphers.html#electronic-codebook-ecb-mode"><i class="fa fa-check"></i><b>3.2.1</b> Electronic codebook (ECB) mode</a></li>
+<li class="chapter" data-level="3.2.2" data-path="block-ciphers.html"><a href="block-ciphers.html#cipher-block-chaining-cbc-mode"><i class="fa fa-check"></i><b>3.2.2</b> Cipher block chaining (CBC) mode</a></li>
+<li class="chapter" data-level="3.2.3" data-path="block-ciphers.html"><a href="block-ciphers.html#output-feedback-ofb-mode"><i class="fa fa-check"></i><b>3.2.3</b> Output feedback (OFB) mode</a></li>
+<li class="chapter" data-level="3.2.4" data-path="block-ciphers.html"><a href="block-ciphers.html#counter-ctr-mode"><i class="fa fa-check"></i><b>3.2.4</b> Counter (CTR) mode</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="block-ciphers.html"><a href="block-ciphers.html#des-and-aes"><i class="fa fa-check"></i><b>3.3</b> DES and AES</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="block-ciphers.html"><a href="block-ciphers.html#data-encryption-standard-des"><i class="fa fa-check"></i><b>3.3.1</b> Data Encryption Standard (DES)</a></li>
+<li class="chapter" data-level="3.3.2" data-path="block-ciphers.html"><a href="block-ciphers.html#advanced-encryption-standard-aes"><i class="fa fa-check"></i><b>3.3.2</b> Advanced Encryption Standard (AES)</a></li>
+</ul></li>
+</ul></li>
 <li class="chapter" data-level="4" data-path="hash-functions.html"><a href="hash-functions.html"><i class="fa fa-check"></i><b>4</b> Hash functions</a></li>
 <li class="part"><span><b>III Asymmetric cryptography</b></span></li>
 <li class="chapter" data-level="5" data-path="number-theory.html"><a href="number-theory.html"><i class="fa fa-check"></i><b>5</b> Elementary number theory</a>
@@ -187,7 +202,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="front-page" class="section level1 unnumbered">
 <h1>Front page</h1>
-<p><em>Latest update: 07/01/2021.</em></p>
+<p><em>Latest update: 08/01/2021.</em></p>
 <p>This page contains some useful information related to the course and the lecture notes. Note that there are some useful buttons above the text, in particular one to download the notes as a well-formatted PDF, for offline use.</p>
 <div id="prerequisites" class="section level4 unnumbered">
 <h4>Prerequisites</h4>
@@ -215,6 +230,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><p>Richard Crandall and Carl B Pomerance. <em>Prime numbers: a computational perspective</em>, volume 182. Springer Science &amp; Business Media, 2006.</p></li>
 <li><p>Christophe De Canniere and Bart Preneel. Trivium. In <em>New Stream Cipher Designs</em>, pages 244–266. Springer, 2008.</p></li>
 <li><p>Jonathan Katz and Yehuda Lindell. <em>Introduction to modern cryptography</em>. CRC press, 2020.</p></li>
+</ol>
+
+<ol start="5" style="list-style-type: decimal">
 <li><p>Christof Paar and Jan Pelzl. <em>Understanding cryptography: a textbook for students and practitioners</em>. Springer Science &amp; Business Media, 2009.</p></li>
 <li><p>Mike Rosulek. The Joy of Cryptography, 2017. Available freely from <a href="http://web.engr.oregonstate.edu/~rosulekm/crypto" class="uri">http://web.engr.oregonstate.edu/~rosulekm/crypto</a>.</p></li>
 </ol>
@@ -222,6 +240,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="changelog" class="section level4 unnumbered">
 <h4>Changelog</h4>
 <ul>
+<li>08/01/2021. Section <a href="block-ciphers.html#block-ciphers">3</a> uploaded.</li>
 <li>07/01/2021. Refreshes on Appendix <a href="refreshers.html#refreshers">A</a> and Section <a href="number-theory.html#modular-arithmetic">5.1</a> added. Added code for LFSR. Some typos fixed in Sections <a href="introduction-to-security.html#introduction-to-security">1</a> and <a href="randomness-in-cryptography.html#randomness-in-cryptography">2</a>.</li>
 <li>04/01/2021. Sections <a href="introduction-to-security.html#introduction-to-security">1</a> and <a href="randomness-in-cryptography.html#randomness-in-cryptography">2</a> uploaded.</li>
 </ul>

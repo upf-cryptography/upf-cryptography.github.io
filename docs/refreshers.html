@@ -145,7 +145,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.3" data-path="randomness-in-cryptography.html"><a href="randomness-in-cryptography.html#sec:examples"><i class="fa fa-check"></i><b>2.3</b> Linear feedback shift registers</a></li>
 <li class="chapter" data-level="2.4" data-path="randomness-in-cryptography.html"><a href="randomness-in-cryptography.html#true-randomness"><i class="fa fa-check"></i><b>2.4</b> True randomness</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="block-ciphers.html"><a href="block-ciphers.html"><i class="fa fa-check"></i><b>3</b> Block ciphers</a></li>
+<li class="chapter" data-level="3" data-path="block-ciphers.html"><a href="block-ciphers.html"><i class="fa fa-check"></i><b>3</b> Block ciphers</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="block-ciphers.html"><a href="block-ciphers.html#overview-of-block-ciphers"><i class="fa fa-check"></i><b>3.1</b> Overview of block ciphers</a></li>
+<li class="chapter" data-level="3.2" data-path="block-ciphers.html"><a href="block-ciphers.html#modes-of-operation"><i class="fa fa-check"></i><b>3.2</b> Modes of operation</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="block-ciphers.html"><a href="block-ciphers.html#electronic-codebook-ecb-mode"><i class="fa fa-check"></i><b>3.2.1</b> Electronic codebook (ECB) mode</a></li>
+<li class="chapter" data-level="3.2.2" data-path="block-ciphers.html"><a href="block-ciphers.html#cipher-block-chaining-cbc-mode"><i class="fa fa-check"></i><b>3.2.2</b> Cipher block chaining (CBC) mode</a></li>
+<li class="chapter" data-level="3.2.3" data-path="block-ciphers.html"><a href="block-ciphers.html#output-feedback-ofb-mode"><i class="fa fa-check"></i><b>3.2.3</b> Output feedback (OFB) mode</a></li>
+<li class="chapter" data-level="3.2.4" data-path="block-ciphers.html"><a href="block-ciphers.html#counter-ctr-mode"><i class="fa fa-check"></i><b>3.2.4</b> Counter (CTR) mode</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="block-ciphers.html"><a href="block-ciphers.html#des-and-aes"><i class="fa fa-check"></i><b>3.3</b> DES and AES</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="block-ciphers.html"><a href="block-ciphers.html#data-encryption-standard-des"><i class="fa fa-check"></i><b>3.3.1</b> Data Encryption Standard (DES)</a></li>
+<li class="chapter" data-level="3.3.2" data-path="block-ciphers.html"><a href="block-ciphers.html#advanced-encryption-standard-aes"><i class="fa fa-check"></i><b>3.3.2</b> Advanced Encryption Standard (AES)</a></li>
+</ul></li>
+</ul></li>
 <li class="chapter" data-level="4" data-path="hash-functions.html"><a href="hash-functions.html"><i class="fa fa-check"></i><b>4</b> Hash functions</a></li>
 <li class="part"><span><b>III Asymmetric cryptography</b></span></li>
 <li class="chapter" data-level="5" data-path="number-theory.html"><a href="number-theory.html"><i class="fa fa-check"></i><b>5</b> Elementary number theory</a>
@@ -241,7 +256,7 @@ set <span class="math inline">\(\{0,1\}^\ell\)</span> of possible bitstrings of 
 <span class="math inline">\(\{0,1\}^*\)</span> of bitstrings of any length. Observe that
 <span class="math display">\[\#\{0,1\}=2,\qquad\#\{0,1\}^\ell=2^\ell,\qquad \#\{0,1\}^*=\infty.\]</span></p>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-26" class="exercise"><strong>Exercise A.1  </strong></span><em>Write these sets using implicit notation:</em></p>
+<p><span id="exr:unlabeled-div-29" class="exercise"><strong>Exercise A.1  </strong></span><em>Write these sets using implicit notation:</em></p>
 <ul>
 <li><p><em>The set of complex numbers with real part equal to <span class="math inline">\(1\)</span>.</em></p></li>
 <li><p><em>The set of pairs, where the first component of the pair is a
@@ -266,7 +281,7 @@ Given two events <span class="math inline">\(A,B\)</span>, we denote the <em>pro
 probability of both <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> happening. Recall that, if <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>
 are independent events, then <span class="math display">\[\Pr[A\cap B]=\Pr[A]\cdot\Pr[B].\]</span></p>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-27" class="exercise"><strong>Exercise A.2  </strong></span><em>Compute the probability of a random bitstring of
+<p><span id="exr:unlabeled-div-30" class="exercise"><strong>Exercise A.2  </strong></span><em>Compute the probability of a random bitstring of
 length <span class="math inline">\(4\)</span> being the string <span class="math inline">\(1110\)</span>.</em></p>
 </div>
 </div>
@@ -295,7 +310,7 @@ degree, and polynomials of any degree grow slower than exponential
 functions. Given two polynomials of different degrees, the one with the
 higher degree grows faster.</p>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-28" class="exercise"><strong>Exercise A.3  </strong></span><em>Decide whether each of these statements is true or
+<p><span id="exr:unlabeled-div-31" class="exercise"><strong>Exercise A.3  </strong></span><em>Decide whether each of these statements is true or
 false.</em></p>
 <ul>
 <li><p><em><span class="math inline">\(10^{10}x^3=O(x^4)\)</span>.</em></p></li>
@@ -307,6 +322,16 @@ false.</em></p>
 
 </div>
 </div>
+
+
+
+
+
+
+
+
+
+
 
 
 

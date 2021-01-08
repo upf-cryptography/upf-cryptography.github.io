@@ -11,7 +11,7 @@ output:
 
 # Front page {-}
 
-*Latest update: 07/01/2021.*
+*Latest update: 08/01/2021.*
 
 This page contains some useful information related to the course and the lecture notes. Note that there are some useful buttons above the text, in particular one to download the notes as a well-formatted PDF, for offline use. 
 
@@ -46,12 +46,15 @@ The documentation at <https://doc.sagemath.org/> is pretty good, although most o
 
 4. Jonathan Katz and Yehuda Lindell. *Introduction to modern cryptography*. CRC press, 2020.
 
-5. Christof Paar and Jan Pelzl. *Understanding cryptography: a textbook for students and practitioners*. Springer Science & Business Media, 2009.
+(ref:paar) Christof Paar and Jan Pelzl. *Understanding cryptography: a textbook for students and practitioners*. Springer Science & Business Media, 2009.
+
+5. (ref:paar)
 
 6. Mike Rosulek. The Joy of Cryptography, 2017. Available freely from <http://web.engr.oregonstate.edu/~rosulekm/crypto>.
 
 #### Changelog {-}
 
+-   08/01/2021. Section \@ref(block-ciphers) uploaded. 
 -   07/01/2021. Refreshes on Appendix \@ref(refreshers) and Section \@ref(modular-arithmetic) added. Added code for LFSR. Some typos fixed in Sections \@ref(introduction-to-security) and \@ref(randomness-in-cryptography).
 -   04/01/2021. Sections \@ref(introduction-to-security) and \@ref(randomness-in-cryptography) uploaded.
 
