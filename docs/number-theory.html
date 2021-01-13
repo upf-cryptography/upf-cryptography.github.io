@@ -161,7 +161,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.3.2" data-path="block-ciphers.html"><a href="block-ciphers.html#advanced-encryption-standard-aes"><i class="fa fa-check"></i><b>3.3.2</b> Advanced Encryption Standard (AES)</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="hash-functions.html"><a href="hash-functions.html"><i class="fa fa-check"></i><b>4</b> Hash functions</a></li>
+<li class="chapter" data-level="4" data-path="hash-functions.html"><a href="hash-functions.html"><i class="fa fa-check"></i><b>4</b> Hash functions</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="hash-functions.html"><a href="hash-functions.html#some-issues-in-cryptocurrencies"><i class="fa fa-check"></i><b>4.1</b> Some issues in cryptocurrencies</a></li>
+<li class="chapter" data-level="4.2" data-path="hash-functions.html"><a href="hash-functions.html#sec:hash_def"><i class="fa fa-check"></i><b>4.2</b> Hash functions</a></li>
+<li class="chapter" data-level="4.3" data-path="hash-functions.html"><a href="hash-functions.html#birthday-attacks"><i class="fa fa-check"></i><b>4.3</b> Birthday attacks</a></li>
+<li class="chapter" data-level="4.4" data-path="hash-functions.html"><a href="hash-functions.html#the-merkle-damgård-transformation"><i class="fa fa-check"></i><b>4.4</b> The Merkle-Damgård transformation</a></li>
+</ul></li>
 <li class="part"><span><b>III Asymmetric cryptography</b></span></li>
 <li class="chapter" data-level="5" data-path="number-theory.html"><a href="number-theory.html"><i class="fa fa-check"></i><b>5</b> Elementary number theory</a>
 <ul>
@@ -223,18 +229,18 @@ the <em>quotient</em> and <span class="math inline">\(r&lt;12\)</span> the <em>r
 context of our problem, notice that <span class="math inline">\(q\)</span> is the number of full circles
 around the clock that happen in <span class="math inline">\(a\)</span> hours. Then, the only real change of
 position in the clock is determined by <span class="math inline">\(r\)</span>, and <span class="math inline">\(q\)</span> does not matter at
-all.<a href="#fn13" class="footnote-ref" id="fnref13"><sup>13</sup></a></p>
+all.<a href="#fn18" class="footnote-ref" id="fnref18"><sup>18</sup></a></p>
 <p>Generalizing this idea leads to the key concept of modular arithmetic,
 by replacing <span class="math inline">\(12\)</span> by any positive integer. Moreover, observe that there
 is no need for <span class="math inline">\(a\)</span> to be a positive integer, as a negative value of <span class="math inline">\(a\)</span>
 can be interpreted as moving counter-clockwise.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-22" class="definition"><strong>Definition 5.1  </strong></span><em>Let <span class="math inline">\(a, n\in \mathbb{Z}\)</span>, with <span class="math inline">\(n&gt;0\)</span>. We define the
+<p><span id="def:unlabeled-div-27" class="definition"><strong>Definition 5.1  </strong></span><em>Let <span class="math inline">\(a, n\in \mathbb{Z}\)</span>, with <span class="math inline">\(n&gt;0\)</span>. We define the
 </em>remainder (or residue) of <span class="math inline">\(a\)</span> modulo <span class="math inline">\(n\)</span> <em>as the remainder of the
 integer division of <span class="math inline">\(a\)</span> by <span class="math inline">\(n\)</span>, and we denote it by</em> <span class="math display">\[a\bmod{n}.\]</span></p>
 </div>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-23" class="exercise"><strong>Exercise 5.1  </strong></span><em>Compute the following values:
+<p><span id="exr:unlabeled-div-28" class="exercise"><strong>Exercise 5.1  </strong></span><em>Compute the following values:
 <span class="math display">\[25\bmod 8, \qquad 1337\bmod 7, \qquad 7\bmod 13,\qquad -13\bmod 12.\]</span></em></p>
 </div>
 <p>Modular arithmetic behaves in a similar way to usual arithmetic, as
@@ -258,12 +264,12 @@ precisely those that represent the same position!</p>
 <span class="math display">\[\phantom{a}\dotsc-23,-11,1,13,25\dotsc\]</span> are “the same”. This
 motivates the introduction of the idea of <em>congruence</em>.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-25" class="definition"><strong>Definition 5.2  </strong></span><em>Let <span class="math inline">\(a,b,n\in\mathbb{Z}\)</span>, with <span class="math inline">\(n&gt;0\)</span>. We say that
+<p><span id="def:unlabeled-div-30" class="definition"><strong>Definition 5.2  </strong></span><em>Let <span class="math inline">\(a,b,n\in\mathbb{Z}\)</span>, with <span class="math inline">\(n&gt;0\)</span>. We say that
 <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are</em> congruent <em>if</em> <span class="math display">\[(a-b)\bmod{n}=0.\]</span> <em>In this case, we
 represent this fact by</em> <span class="math display">\[a\equiv b\pmod{n}.\]</span></p>
 </div>
 <div class="definition">
-<p><span id="def:unlabeled-div-26" class="definition"><strong>Definition 5.3  </strong></span><em>Let <span class="math inline">\(n\in\mathbb{Z}\)</span>, with <span class="math inline">\(n&gt;0\)</span>. We define the</em> set
+<p><span id="def:unlabeled-div-31" class="definition"><strong>Definition 5.3  </strong></span><em>Let <span class="math inline">\(n\in\mathbb{Z}\)</span>, with <span class="math inline">\(n&gt;0\)</span>. We define the</em> set
 of residue classes modulo <span class="math inline">\(n\)</span> <em>as the set</em>
 <span class="math display">\[\mathbb{Z}_n=\{0,1,\dotsc,n-1\},\]</span> <em>where the operations of addition
 and multiplication are reduced modulo <span class="math inline">\(n\)</span>, according to
@@ -275,7 +281,7 @@ any <span class="math inline">\(a\in \mathbb{Z}\)</span> is congruent to its res
 ourselves to the set <span class="math inline">\(\mathbb{Z}_n\)</span>.</p>
 
 <div class="proposition">
-<p><span id="prp:unnamed-chunk-11" class="proposition"><strong>Proposition 5.2  </strong></span><em>Let <span class="math inline">\(a,\alpha,b,n\in\mathbb{Z}\)</span>, with <span class="math inline">\(n&gt;0\)</span>. If
+<p><span id="prp:unnamed-chunk-13" class="proposition"><strong>Proposition 5.2  </strong></span><em>Let <span class="math inline">\(a,\alpha,b,n\in\mathbb{Z}\)</span>, with <span class="math inline">\(n&gt;0\)</span>. If
 <span class="math inline">\(a\equiv \alpha\pmod{n}\)</span>, then:</em></p>
 <ul>
 <li><p><em><span class="math inline">\(a+b\equiv \alpha+b\pmod{n}\)</span>.</em></p></li>
@@ -285,7 +291,7 @@ ourselves to the set <span class="math inline">\(\mathbb{Z}_n\)</span>.</p>
 <em>In particular, this is true when <span class="math inline">\(\alpha=a\bmod{n}\)</span>.</em>
 </div>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-28" class="exercise"><strong>Exercise 5.2  </strong></span><em>Prove that the logic <span class="math inline">\(\mathsf{XOR}\)</span> operation and
+<p><span id="exr:unlabeled-div-33" class="exercise"><strong>Exercise 5.2  </strong></span><em>Prove that the logic <span class="math inline">\(\mathsf{XOR}\)</span> operation and
 addition modulo <span class="math inline">\(2\)</span> are the same operation, by checking the four
 possible cases.</em></p>
 </div>
@@ -294,8 +300,8 @@ possible cases.</em></p>
 </div>
 <div class="footnotes">
 <hr />
-<ol start="13">
-<li id="fn13"><p>The only small caveat is that, when <span class="math inline">\(a\)</span> is a multiple of <span class="math inline">\(12\)</span>, the remainder will be <span class="math inline">\(0\)</span>, not <span class="math inline">\(12\)</span>, although both of these represent the same position. So, to be precise, let us assume that our clock has a <span class="math inline">\(0\)</span> instead of <span class="math inline">\(12\)</span>, so that it perfectly aligns with the remainders.<a href="number-theory.html#fnref13" class="footnote-back">↩︎</a></p></li>
+<ol start="18">
+<li id="fn18"><p>The only small caveat is that, when <span class="math inline">\(a\)</span> is a multiple of <span class="math inline">\(12\)</span>, the remainder will be <span class="math inline">\(0\)</span>, not <span class="math inline">\(12\)</span>, although both of these represent the same position. So, to be precise, let us assume that our clock has a <span class="math inline">\(0\)</span> instead of <span class="math inline">\(12\)</span>, so that it perfectly aligns with the remainders.<a href="number-theory.html#fnref18" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>

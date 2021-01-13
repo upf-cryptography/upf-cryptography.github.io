@@ -161,7 +161,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.3.2" data-path="block-ciphers.html"><a href="block-ciphers.html#advanced-encryption-standard-aes"><i class="fa fa-check"></i><b>3.3.2</b> Advanced Encryption Standard (AES)</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="hash-functions.html"><a href="hash-functions.html"><i class="fa fa-check"></i><b>4</b> Hash functions</a></li>
+<li class="chapter" data-level="4" data-path="hash-functions.html"><a href="hash-functions.html"><i class="fa fa-check"></i><b>4</b> Hash functions</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="hash-functions.html"><a href="hash-functions.html#some-issues-in-cryptocurrencies"><i class="fa fa-check"></i><b>4.1</b> Some issues in cryptocurrencies</a></li>
+<li class="chapter" data-level="4.2" data-path="hash-functions.html"><a href="hash-functions.html#sec:hash_def"><i class="fa fa-check"></i><b>4.2</b> Hash functions</a></li>
+<li class="chapter" data-level="4.3" data-path="hash-functions.html"><a href="hash-functions.html#birthday-attacks"><i class="fa fa-check"></i><b>4.3</b> Birthday attacks</a></li>
+<li class="chapter" data-level="4.4" data-path="hash-functions.html"><a href="hash-functions.html#the-merkle-damgård-transformation"><i class="fa fa-check"></i><b>4.4</b> The Merkle-Damgård transformation</a></li>
+</ul></li>
 <li class="part"><span><b>III Asymmetric cryptography</b></span></li>
 <li class="chapter" data-level="5" data-path="number-theory.html"><a href="number-theory.html"><i class="fa fa-check"></i><b>5</b> Elementary number theory</a>
 <ul>
@@ -197,13 +203,370 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="hash_functions" class="section level1" number="4">
+<div id="hash-functions" class="section level1" number="4">
 <h1><span class="header-section-number">4</span> Hash functions</h1>
+<p>In this section, we take a detour from encryption to look at other
+cryptographic primitives. You might have encountered hash functions
+before, in a different field. However, we will see that hash functions
+in cryptography require some special properties. We will:</p>
+<ol style="list-style-type: decimal">
+<li><p>Briefly discuss some issues in cryptocurrencies, and how they can be
+solved with hash functions.</p></li>
+<li><p>Define hash functions and their main properties.</p></li>
+<li><p>Learn about the birthday paradox attack on hash functions.</p></li>
+<li><p>Learn how to extend the domain of a hash function through the
+Merkle-Damgärd transformation.</p></li>
+</ol>
+<div id="some-issues-in-cryptocurrencies" class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> Some issues in cryptocurrencies</h2>
+<p>Traditional currency is centralized, which means that there is an
+authority that dictates money policy, establishes ownership, and manages
+the whole system. On the other hand, in recent decades there has been a
+substantial effort in using cryptographic tools to build what we know as
+<em>cryptocurrencies</em>, which aim to be completely decentralized.</p>
+<p>In this section, we discuss some issues that arise in decentralized
+systems. This is a very high level overview, based on the Bitcoin<a href="#fn13" class="footnote-ref" id="fnref13"><sup>13</sup></a>
+approach, and omits many technicalities for the sake of the exposition.
+Nevertheless, it will be enough to motivate the use of hash functions.</p>
+<p>A <em>coin</em>, the monetary unit of a cryptocurrency, is nothing more than a
+unique bitstring <span class="math inline">\(ID\)</span> that identifies is, and is accordingly called its
+<em>identifier</em>. An immediate problem arises regarding transferring
+ownership of a coin.</p>
+<div class="problem">
+<p><strong>Problem 1</strong> (Double-spending). <em>Suppose that <span class="math inline">\(A\)</span> buys something from
+<span class="math inline">\(B\)</span> on the internet and pays with a coin <span class="math inline">\(ID\)</span>. What prevents <span class="math inline">\(A\)</span> from
+using the same coin <span class="math inline">\(ID\)</span> to buy something else from a different party
+<span class="math inline">\(C\)</span>?</em></p>
+</div>
+<p>On very general terms, the solution is to publish every transaction that
+happens, so that the journey of each coin can be traced and thus its
+ownership can be established. In the problem above this means that, when
+<span class="math inline">\(A\)</span> buys from <span class="math inline">\(B\)</span>, the message “<span class="math inline">\(A\)</span> transfers the coin <span class="math inline">\(ID\)</span> to <span class="math inline">\(B\)</span>” is
+added to the <em>public ledger</em>. Then, after the ledger awards <span class="math inline">\(B\)</span>
+ownership of the coin, they can send whatever <span class="math inline">\(A\)</span> bought. Moreover, if
+<span class="math inline">\(A\)</span> tries to spend the same coin again, <span class="math inline">\(C\)</span> will notice in the ledger
+that the coin no longer belongs to <span class="math inline">\(A\)</span>, and the transaction will be
+denied. So, ignoring the logistics of checking and storing and
+increasingly large ledger, we would have solved the issue. But we still
+have to deal with the following problem.</p>
+<div class="problem">
+<p><strong>Problem 2</strong>. <em>Who keeps track of this public ledger? Who adds the new
+transactions? If there is no central authority, how do users agree on
+which transactions happened?</em></p>
+</div>
+<p>More concretely, imagine that there is a ledger of transactions
+<span class="math display">\[t_1,t_2,\dots,t_n,\]</span> and two different options <span class="math inline">\(t_{n+1},t_{n+1}&#39;\)</span> are
+claimed to be the next transaction by different parties:</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>This situation is called a <em>fork</em>. The system is
+designed in such a way that users are encouraged to keep a <em>consensus</em>
+on a ledger of valid transactions. The general idea is that you have
+more of a say if you have more computational power, or more precisely if
+you have spent more CPU cycles in adding transactions to the ledger. So
+we need a way to “prove” that you have spent these cycles.</p>
+<p>Let <span class="math display">\[H:\{0,1\}^k\rightarrow\{0,1\}^\ell,\]</span> for some
+<span class="math inline">\(k,\ell\in\mathbb{N}\)</span>, where in general <span class="math inline">\(k\)</span> is much larger than <span class="math inline">\(\ell\)</span>,
+be an efficiently computable function. Suppose that we are interested in
+the problem of finding <span class="math inline">\(\mathbf x\)</span> such that <span class="math inline">\(H(\mathbf x)=\mathbf 0\)</span>,
+where <span class="math inline">\(\mathbf 0\)</span> is the string of zeros of length <span class="math inline">\(\ell\)</span>. If we know
+nothing about <span class="math inline">\(H\)</span>, the best we can do is try random inputs until we find
+a good one. On average, it would require <span class="math inline">\(2^\ell\)</span> attempts to find such
+<span class="math inline">\(\mathbf x\)</span>. That is, whoever shows a solution <span class="math inline">\(\mathbf x\)</span> has “proven”
+that he spent <span class="math inline">\(O(2^\ell)\)</span> evaluations of <span class="math inline">\(H\)</span> in solving the problem.
+This concept is known as a <em>proof of work</em>.</p>
+<p>But back to transactions and the ledger: assume that the transaction
+<span class="math inline">\(t_{n+1}\)</span>, involving coin <span class="math inline">\(ID\)</span>, is to be added to the ledger. Then, our
+proof of work consists of producing <span class="math inline">\(\mathbf x\)</span> such that the first <span class="math inline">\(T\)</span>
+bits of <span class="math inline">\(H(ID|\mathbf x)\)</span> are <span class="math inline">\(0\)</span>, for some <span class="math inline">\(T\)</span>. Once you have the
+solution, you can add the transaction, including <span class="math inline">\(ID\)</span> and <span class="math inline">\(\mathbf x\)</span>,
+to the ledger. Note that solving the problem takes time <span class="math inline">\(O(2^T)\)</span>,
+whereas checking a solution is efficient, as it amounts to evaluating
+the function <span class="math inline">\(H\)</span> just once with the transaction as input.</p>
+<p>But isn’t this a lot of trouble to get someone’s transaction up in the
+ledger? The solution here is extremely simple: motivate the users of the
+network by awarding them newly mint coins when they successfully add a
+new transaction to the ledger. These users are the so-called <em>miners</em>,
+and the act of mining a cryptocurrency is just finding the right
+preimages of the function <span class="math inline">\(H\)</span>.</p>
+<p>Thus, each addition to the ledger has two outcomes: transferring
+ownership of existing money and minting new money. And here’s the catch:
+as a miner, your new money is just valid a hundred transactions after
+your contribution to the ledger. Give a fork, honest users are
+encouraged to look at the longest ledger and ignore the rest. This
+encourages miners to work on the single longest ledger too, because the
+alternatives will be rejected by the users and thus the transactions in
+them virtually never happened. Therefore, miners might spend CPU cycles
+for nothing if they decide to work on shorter ledgers of a fork.</p>
+<p>Another issue is that we want each new transaction to be “bound” to the
+previous ones. If the new transaction did not depend on the previous,
+nothing would prevent a malicious user from double-spending. This is
+also achieved through the function <span class="math inline">\(H\)</span>. Given previous transactions
+<span class="math inline">\(t_1,\dots,t_n\)</span>, the new transaction <span class="math inline">\(t_{n+1}\)</span> will include its own
+<em>transaction identifier</em> <span class="math inline">\(H(t_1,\dots,t_n)\)</span> besides <span class="math inline">\(ID\)</span> and
+<span class="math inline">\(\mathbf x\)</span>. However, the ledger gets larger and larger, and we want the
+identifier to be small to keep things efficient. So <span class="math inline">\(H\)</span> is mapping a
+very large set into a smaller one. The upshot is that there is no way
+for transaction identifiers to be unique.</p>
+<div class="problem">
+<p><strong>Problem 3</strong>. <em>What if there are two sets of transactions
+<span class="math inline">\(t_1,\dots,t_n\)</span> and <span class="math inline">\(t_1&#39;,\dots,t_n&#39;\)</span> with the same identifier
+<span class="math inline">\(H(t_1,\dots,t_n)=H(t_1&#39;,\dots,t_n&#39;)\)</span>?</em></p>
+</div>
+<p>Fortunately, although it is clear that there is no possible function <span class="math inline">\(H\)</span>
+such that the outputs are unique, it will be enough if it is <em>hard</em> to
+find a pair of inputs with the same output, so that this issue with the
+identifiers cannot be exploited in practice.</p>
+</div>
+<div id="sec:hash_def" class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> Hash functions</h2>
+<p>The central piece of this whole apparatus seems to be the function <span class="math inline">\(H\)</span>,
+which we have not looked into yet. Clearly we will require some
+unconventional properties from this function. Let us summarize what we
+discussed about it:</p>
+<ul>
+<li><p>The input is larger than the output, possibly by much.</p></li>
+<li><p>Given <span class="math inline">\(\mathbf y\)</span>, it should be hard to find <span class="math inline">\(\mathbf x\)</span> such that
+<span class="math inline">\(H(\mathbf x)=\mathbf y\)</span>.</p></li>
+<li><p>It is hard to find <span class="math inline">\(\mathbf x,\mathbf x&#39;\)</span> such that
+<span class="math inline">\(\mathbf x\neq \mathbf x&#39;\)</span> and <span class="math inline">\(H(\mathbf x)=H(\mathbf x&#39;)\)</span>.</p></li>
+</ul>
+<p>With this intuition in mind, let us introduce the solution to all of our
+problems: <em>hash functions</em>. At their core, hash functions are nothing
+more than functions that take an arbitrarily-long bitstring and output a
+bitstring of fixed length.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-22" class="definition"><strong>Definition 4.1  </strong></span><em>A</em> hash function <em>is an efficiently computable<a href="#fn14" class="footnote-ref" id="fnref14"><sup>14</sup></a>
+function</em> <span class="math display">\[H:\{0,1\}^*\rightarrow\{0,1\}^\ell,\]</span> <em>for some
+<span class="math inline">\(\ell\in\mathbb{N}\)</span>, and where <span class="math inline">\(\{0,1\}^*\)</span> denotes the set of all
+bitstrings of any length. The process of computing a hash function is
+often called</em> hashing<em>, and the output is referred to as the</em> hash.</p>
+</div>
+<p>Note that, unlike encryption, hash functions do not use any secret key.
+From a functionality point of view, this is all we need: a function that
+compresses bitstrings and is efficient enough to compute. However, to
+ensure the security of our arbitrary-length MAC, we will need an extra
+property.</p>
+<p>We observe that hash functions must be public and deterministic, because
+different parties need to be able to arrive to the same result to verify
+a transaction.</p>
+<p>The hash function is taking arbitrarily-large messages and producing
+fixed-length ones. That it, it is mapping a larger set into a smaller
+set. Therefore, there must be different strings that produce the same
+hash. Given a bitstring <span class="math inline">\(\mathbf b\)</span>, there might exist
+<span class="math inline">\(\mathbf b&#39;\neq\mathbf b\)</span> such that <span class="math display">\[H(\mathbf b)=H(\mathbf b&#39;).\]</span></p>
+<p>Nevertheless, we want this pair of bitstrings to be hard to find. This,
+and the observations at the beginning of
+Section <a href="hash-functions.html#sec:hash_def" reference-type="ref" reference="sec:hash_def">4.2</a>, motivate the following set of definitions.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-23" class="definition"><strong>Definition 4.2  </strong></span><em>Let <span class="math inline">\(H\)</span> be a hash function. We say that <span class="math inline">\(H\)</span> is:</em></p>
+<ul>
+<li><p><em>collision-resistant</em> if it is hard to find two bitstrings
+<span class="math inline">\(\mathbf b, \mathbf b&#39;\)</span> such that <span class="math inline">\(\mathbf b\neq \mathbf b&#39;\)</span> and
+<span class="math inline">\(H(\mathbf b)= H(\mathbf b&#39;)\)</span>. In this case, the pair
+<span class="math inline">\((\mathbf b, \mathbf b&#39;)\)</span> is called a <em>collision</em> of <span class="math inline">\(H\)</span>.*</p></li>
+<li><p><em>second preimage-resistant</em> if, given <span class="math inline">\(\mathbf b\)</span>, it is hard to
+find <span class="math inline">\(\mathbf b&#39;\neq \mathbf b\)</span> such that they form a collision.*</p></li>
+<li><p><em>preimage-resistant</em> if, given <span class="math inline">\(h\)</span> sampled uniformly at random, it
+is hard to find a bitstring <span class="math inline">\(\mathbf b\)</span> such that <span class="math inline">\(H(\mathbf b)=h\)</span>.*</p></li>
+</ul>
+</div>
+<p>These properties are related by the following result.</p>
+<div class="proposition">
+<p><span id="prp:unlabeled-div-24" class="proposition"><strong>Proposition 4.1  </strong></span><em>Let <span class="math inline">\(H\)</span> be a hash function</em> <span class="math display">\[H:\{0,1\}^*\rightarrow\{0,1\}^\ell.\]</span></p>
+<ul>
+<li><p><em>If <span class="math inline">\(H\)</span> is collision-resistant, then it is second
+preimage-resistant.</em></p></li>
+<li><p><em>If <span class="math inline">\(H\)</span> is second preimage-resistant, then it is
+preimage-resistant.</em></p></li>
+</ul>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-25" class="exercise"><strong>Exercise 4.1  </strong></span><em>Try to prove the two statements in the proposition above.</em></p>
+<ul>
+<li><p><em>For part (a), prove the contrapositive. Assume that you can break
+second preimage resistance, and show how to use that to break
+collision resistance.</em></p></li>
+<li><p><em>You can also think about part (b), although this one has a subtlety
+that makes it significantly harder. Don’t worry too much if you get
+stuck.</em></p></li>
+</ul>
+</div>
+<p>The intuition is that collision resistance makes hashes of different
+strings look “unrelated” and “random”, so an adversary cannot gain any
+information from seeing hashes of other strings.</p>
+</div>
+<div id="birthday-attacks" class="section level2" number="4.3">
+<h2><span class="header-section-number">4.3</span> Birthday attacks</h2>
+<p>Assume that we are an adversary trying to attack a hash function
+<span class="math display">\[H:\{0,1\}^*\rightarrow \{0,1\}^\ell,\]</span> that is, we are trying to find
+a collision. The straightforward approach is the following: we choose
+random strings and compute their hashes, until two strings return the
+same hash. In the worst case, this requires <span class="math inline">\(2^\ell+1\)</span> tries, since
+there are at most <span class="math inline">\(2^\ell\)</span> different outputs. Therefore, it looks like
+the brute-force attack takes time <span class="math inline">\(O(2^\ell)\)</span> to succeed. This would
+suggest that a hash function with output length <span class="math inline">\(\ell\)</span> gives us a
+security level of <span class="math inline">\(\ell\)</span>.</p>
+<p>In this section, we look into a generic attack that works for any hash
+function, which is based on the well-known <em>birthday paradox</em> from
+probability theory, and greatly improves over the above estimation.
+Consider the following problem.</p>
+<div id="prob:birthday" class="problem">
+<p><strong>Problem 4</strong>. <em>There is a room with <span class="math inline">\(40\)</span> independent students. How
+likely is that any two of them share the same birthday?</em></p>
+</div>
+<p>On first sight, one might think that this probability is quite low.
+After all, there are <span class="math inline">\(356\)</span> days in the year, and only <span class="math inline">\(40\)</span> students. Let
+us compute the actual probability, by solving a related problem: what is
+the probability of none of the <span class="math inline">\(40\)</span> students sharing their birthday?</p>
+<p>We start by numbering the students from <span class="math inline">\(1\)</span> to <span class="math inline">\(40\)</span>, according to any
+criterion. To be able to reason more formally about the problem, we
+introduce the function
+<span class="math display">\[\mathsf{bd}:\{1,\dots,40\}\rightarrow\{1,\dots,365\},\]</span> which
+associates to each student its birthday. Then, the probability of
+student <span class="math inline">\(\#2\)</span> not sharing a birthday with student <span class="math inline">\(\#1\)</span> is
+<span class="math display">\[\Pr[\mathsf{bd}(1),\mathsf{bd}(2)\text{ are different}]=\frac{364}{365},\]</span>
+since there are <span class="math inline">\(364\)</span> days of the year that are not the birthday of
+student <span class="math inline">\(\#1\)</span>. Let’s introduce student <span class="math inline">\(\#3\)</span> into the picture, and let
+us consider the events:</p>
+<ul>
+<li><p><span class="math inline">\(\mathsf{A}\)</span>: <span class="math inline">\(\mathsf{bd}(3)\)</span> is different from <span class="math inline">\(\mathsf{bd}(1)\)</span>
+and <span class="math inline">\(\mathsf{bd}(2)\)</span>.</p></li>
+<li><p><span class="math inline">\(\mathsf{B}: \mathsf{bd}(1),\mathsf{bd}(2)\)</span> are different.</p></li>
+</ul>
+<p>Clearly, the intersection event is</p>
+<ul>
+<li><span class="math inline">\(\mathsf{A}\cap\mathsf{B}: \mathsf{bd}(1),\mathsf{bd}(2),\mathsf{bd}(3)\)</span>
+are pairwise different.</li>
+</ul>
+<p>Then, using conditional probabilities, we have that
+<span class="math display">\[\Pr[\mathsf{A}\cap\mathsf{B}]=\Pr[\mathsf{B}]\cdot\Pr[\mathsf{A}|\mathsf{B}]\]</span>
+We already know <span class="math inline">\(\Pr[\mathsf{B}]\)</span>, so we are just missing the second
+term. If the birthdays of students <span class="math inline">\(\#1\)</span> and <span class="math inline">\(\#2\)</span> are different, then
+the probability of <span class="math inline">\(\#3\)</span> having a different birthday from them is
+<span class="math display">\[\Pr[\mathsf{A}|\mathsf{B}]=\frac{363}{365},\]</span> since there are <span class="math inline">\(363\)</span>
+days that are neither the birthday of <span class="math inline">\(\#1\)</span> or <span class="math inline">\(\#2\)</span>. Thus, the
+probability of the three students having different birthdays is
+<span class="math display">\[\Pr[\mathsf{A}\cap\mathsf{B}]=\frac{364}{365}\cdot\frac{363}{365}.\]</span>
+By iterating this process for each student, we arrive at the conclusion
+that the probabilities of all <span class="math inline">\(40\)</span> students having different birthdays
+is
+<span class="math display">\[\frac{364}{365}\cdot\frac{363}{365}\cdot \dots \cdot\frac{326}{365} \approx 0.108768.\]</span>
+In conclusion, the probability of two students sharing a birthday is
+approximately <span class="math display">\[1-0.108768= 0.891232.\]</span> This is actually a pretty high
+probability. This discrepancy between what one might naively expect and
+what actually happens is known as the <em>birthday paradox</em>. Below, you can
+find the solutions to <a href="hash-functions.html#prob:birthday" reference-type="ref" reference="prob:birthday">Problem 4</a> for different numbers of students (rounded to
+six decimal positions).</p>
+<div class="center">
+<table>
+<thead>
+<tr class="header">
+<th align="center"><span class="smallcaps">Students</span></th>
+<th align="center"><span class="smallcaps">Probability</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><span class="math inline">\(10\)</span></td>
+<td align="center"><span class="math inline">\(0.116948\)</span></td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(20\)</span></td>
+<td align="center"><span class="math inline">\(0.411438\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math inline">\(40\)</span></td>
+<td align="center"><span class="math inline">\(0.891232\)</span></td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(80\)</span></td>
+<td align="center"><span class="math inline">\(0.999914\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math inline">\(128\)</span></td>
+<td align="center"><span class="math inline">\(0.999999\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>So what does any of this have to do with breaking a hash function? What
+we have just done is computing the probability of finding two students
+such that the birthday function returns the same value on them. That is,
+we have found a collision of the birthday function! In doing so, we have
+assumed that the output of the birthday function behaves as the uniform
+distribution on <span class="math inline">\(\{1,\dots,365\}\)</span>. But, isn’t that exactly the effect
+that we want from a good hash function? That outputs look random and
+unrelated? So the moral of the story is that finding collisions in a
+hash function is actually much more likely that expected. More
+precisely, it can be proven with some careful probabilities analysis
+that, for any hash function <span class="math inline">\(H\)</span> which outputs bitstrings of length
+<span class="math inline">\(\ell\)</span>, there is a decent probability of finding a collision after
+<span class="math inline">\(\sqrt{2^\ell}\)</span> evaluations.</p>
+<p>Compare this with our initial estimation. At the beginning of the
+section, we bounded a brute force attack by <span class="math inline">\(O(2^\ell)\)</span>. However, we now
+see that an attacker has a good probability of finding a collision in
+time <span class="math inline">\(O(2^{\frac{\ell}2})\)</span>. Thus, we conclude that a hash function with
+output length <span class="math inline">\(\ell\)</span> gives us <span class="math inline">\(\ell/2\)</span> bits of security. Or the other
+way around, if we want <span class="math inline">\(\ell\)</span> bits of security, we need our hash
+function to have output length <span class="math inline">\(2\ell\)</span>.</p>
+</div>
+<div id="the-merkle-damgård-transformation" class="section level2" number="4.4">
+<h2><span class="header-section-number">4.4</span> The Merkle-Damgård transformation</h2>
+<p>As was the case for encryption and MACs, we often build hash functions
+in two steps. First, we build a hash function for fixed-length inputs,
+e.g. <span class="math display">\[H:\{0,1\}^{2\ell}\rightarrow\{0,1\}^\ell,\]</span> and then we extend
+them to arbitrarily-large input. We will not get into the details of
+concrete constructions, but will simply mention the SHA family of hash
+functions, which is the standard used in practice most of the time.<a href="#fn15" class="footnote-ref" id="fnref15"><sup>15</sup></a></p>
+<p>A common way to realize this second step is to use the <em>Merkle-Damgård
+transformation</em>,<a href="#fn16" class="footnote-ref" id="fnref16"><sup>16</sup></a> which describes how to build from <span class="math inline">\(H\)</span> another hash
+function <span class="math inline">\(\mathbf{H}\)</span> that takes as input any string of length at most
+<span class="math inline">\(2^\ell-1\)</span>, and outputs a hash of length <span class="math inline">\(\ell\)</span>. It is clear that
+repeated applications of the transformation can make the input go as
+large as we want.</p>
+<p>Similar to modes of operations in block ciphers, the Merkle-Damgård
+transformation starts by splitting the string <span class="math inline">\(\mathbf x\)</span> of length
+<span class="math inline">\(L\leq 2^\ell\)</span> to be hashed into blocks
+<span class="math display">\[\mathbf x_1, \dots, \mathbf x_n,\]</span> each of them of length <span class="math inline">\(\ell\)</span>.<a href="#fn17" class="footnote-ref" id="fnref17"><sup>17</sup></a>
+An additional block <span class="math inline">\(\mathbf x_{n+1}\)</span> is added, containing a binary
+encoding of <span class="math inline">\(L\)</span>. Note that, because <span class="math inline">\(L\leq 2^n-1\)</span>, we can fit the
+encoding of <span class="math inline">\(L\)</span> in <span class="math inline">\(n\)</span> bits. Then, we recursively compute
+<span class="math display">\[\mathbf z_i=H(\mathbf z_{i-1}|\mathbf x_i),\]</span> for <span class="math inline">\(i=1,\dots,n+1\)</span>, and
+where <span class="math inline">\((\mathbf z_{i-1}|\mathbf x_i)\)</span> means the concatenation of the
+bitstrings <span class="math inline">\(\mathbf z_{i-1}\)</span> and <span class="math inline">\(\mathbf x_i\)</span>. Then, the hash of
+<span class="math inline">\(\mathbf x\)</span> is <span class="math display">\[\mathbf{H}(\mathbf x)=\mathbf z_{n+1}.\]</span> As in modes of
+operation, there is no “previous block” in the first iteration, and so
+again we introduce an initialization vector <span class="math inline">\(\mathbf z_0\)</span>, which can be
+set to the string of <span class="math inline">\(0\)</span>’s of length <span class="math inline">\(n\)</span>, or any other bitstring. There
+is no need for the IV to be secret.</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="proposition">
+<p><span id="prp:unlabeled-div-26" class="proposition"><strong>Proposition 4.2  </strong></span><em>If <span class="math inline">\(H\)</span> is a collision-resistant hash function, then
+<span class="math inline">\(\mathbf{H}\)</span>, produced with the Merkle-Damgård transformation, as
+described above, is also collision-resistant.</em></p>
+</div>
 
+</div>
 </div>
 
 
 
+<div class="footnotes">
+<hr />
+<ol start="13">
+<li id="fn13"><p><a href="https://bitcoin.org/bitcoin.pdf" class="uri">https://bitcoin.org/bitcoin.pdf</a>.<a href="hash-functions.html#fnref13" class="footnote-back">↩︎</a></p></li>
+<li id="fn14"><p><em>You might wonder what “efficiently computable” means in this
+case, if the input size could be anything. To be precise, we say
+that the function is efficiently computable if it can be evaluated
+in time polynomial in <span class="math inline">\(\ell\)</span> when the input is of length polynomial
+in <span class="math inline">\(\ell\)</span>.</em><a href="hash-functions.html#fnref14" class="footnote-back">↩︎</a></p></li>
+<li id="fn15"><p><a href="https://en.wikipedia.org/wiki/Secure_Hash_Algorithms" class="uri">https://en.wikipedia.org/wiki/Secure_Hash_Algorithms</a>.<a href="hash-functions.html#fnref15" class="footnote-back">↩︎</a></p></li>
+<li id="fn16"><p>You might also see the same concept named the Merkle-Damgård
+transform, or the Merkle-Damgård construction.<a href="hash-functions.html#fnref16" class="footnote-back">↩︎</a></p></li>
+<li id="fn17"><p>As before, use some padding if the length of <span class="math inline">\(\mathbf x\)</span> is not a
+multiple of <span class="math inline">\(\ell\)</span>.<a href="hash-functions.html#fnref17" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
             </section>
 
           </div>

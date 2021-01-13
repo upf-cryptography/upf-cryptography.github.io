@@ -29,7 +29,7 @@ the *quotient* and $r<12$ the *remainder* of the division. In the
 context of our problem, notice that $q$ is the number of full circles
 around the clock that happen in $a$ hours. Then, the only real change of
 position in the clock is determined by $r$, and $q$ does not matter at
-all.[^16]
+all.[^18]
 
 Generalizing this idea leads to the key concept of modular arithmetic,
 by replacing $12$ by any positive integer. Moreover, observe that there
@@ -109,4 +109,4 @@ addition modulo $2$ are the same operation, by checking the four
 possible cases.*
 :::
 
-[^16]: The only small caveat is that, when $a$ is a multiple of $12$, the remainder will be $0$, not $12$, although both of these represent the same position. So, to be precise, let us assume that our clock has a $0$ instead of $12$, so that it perfectly aligns with the remainders.
+[^18]: The only small caveat is that, when $a$ is a multiple of $12$, the remainder will be $0$, not $12$, although both of these represent the same position. So, to be precise, let us assume that our clock has a $0$ instead of $12$, so that it perfectly aligns with the remainders.
