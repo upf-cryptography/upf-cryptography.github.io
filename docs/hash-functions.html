@@ -30,7 +30,7 @@
   
   
 <link rel="prev" href="block-ciphers.html"/>
-<link rel="next" href="number-theory.html"/>
+<link rel="next" href="elementary-number-theory.html"/>
 <script src="libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -169,9 +169,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.4" data-path="hash-functions.html"><a href="hash-functions.html#the-merkle-damgård-transformation"><i class="fa fa-check"></i><b>4.4</b> The Merkle-Damgård transformation</a></li>
 </ul></li>
 <li class="part"><span><b>III Asymmetric cryptography</b></span></li>
-<li class="chapter" data-level="5" data-path="number-theory.html"><a href="number-theory.html"><i class="fa fa-check"></i><b>5</b> Elementary number theory</a>
+<li class="chapter" data-level="5" data-path="elementary-number-theory.html"><a href="elementary-number-theory.html"><i class="fa fa-check"></i><b>5</b> Elementary number theory</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="number-theory.html"><a href="number-theory.html#modular-arithmetic"><i class="fa fa-check"></i><b>5.1</b> Modular arithmetic</a></li>
+<li class="chapter" data-level="5.1" data-path="elementary-number-theory.html"><a href="elementary-number-theory.html#integer-arithmetic"><i class="fa fa-check"></i><b>5.1</b> Integer arithmetic</a></li>
+<li class="chapter" data-level="5.2" data-path="elementary-number-theory.html"><a href="elementary-number-theory.html#the-euclidean-algorithm"><i class="fa fa-check"></i><b>5.2</b> The euclidean algorithm</a></li>
+<li class="chapter" data-level="5.3" data-path="elementary-number-theory.html"><a href="elementary-number-theory.html#modular-arithmetic"><i class="fa fa-check"></i><b>5.3</b> Modular arithmetic</a></li>
+<li class="chapter" data-level="5.4" data-path="elementary-number-theory.html"><a href="elementary-number-theory.html#modular-arithmetic-but-efficient"><i class="fa fa-check"></i><b>5.4</b> Modular arithmetic, but efficient</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="algebraic-structures.html"><a href="algebraic-structures.html"><i class="fa fa-check"></i><b>6</b> Algebraic structures</a></li>
 <li class="chapter" data-level="7" data-path="pke.html"><a href="pke.html"><i class="fa fa-check"></i><b>7</b> Public-key encryption</a></li>
@@ -344,8 +347,7 @@ often called</em> hashing<em>, and the output is referred to as the</em> hash.</
 <p>Note that, unlike encryption, hash functions do not use any secret key.
 From a functionality point of view, this is all we need: a function that
 compresses bitstrings and is efficient enough to compute. However, to
-ensure the security of our arbitrary-length MAC, we will need an extra
-property.</p>
+ensure the security of the cryptocurrency model described above, we will need an extra property.</p>
 <p>We observe that hash functions must be public and deterministic, because
 different parties need to be able to arrive to the same result to verify
 a transaction.</p>
@@ -360,14 +362,14 @@ Section <a href="hash-functions.html#sec:hash_def" reference-type="ref" referen
 <div class="definition">
 <p><span id="def:unlabeled-div-23" class="definition"><strong>Definition 4.2  </strong></span><em>Let <span class="math inline">\(H\)</span> be a hash function. We say that <span class="math inline">\(H\)</span> is:</em></p>
 <ul>
-<li><p><em>collision-resistant</em> if it is hard to find two bitstrings
+<li><p>collision-resistant <em>if it is hard to find two bitstrings
 <span class="math inline">\(\mathbf b, \mathbf b&#39;\)</span> such that <span class="math inline">\(\mathbf b\neq \mathbf b&#39;\)</span> and
 <span class="math inline">\(H(\mathbf b)= H(\mathbf b&#39;)\)</span>. In this case, the pair
-<span class="math inline">\((\mathbf b, \mathbf b&#39;)\)</span> is called a <em>collision</em> of <span class="math inline">\(H\)</span>.*</p></li>
-<li><p><em>second preimage-resistant</em> if, given <span class="math inline">\(\mathbf b\)</span>, it is hard to
-find <span class="math inline">\(\mathbf b&#39;\neq \mathbf b\)</span> such that they form a collision.*</p></li>
-<li><p><em>preimage-resistant</em> if, given <span class="math inline">\(h\)</span> sampled uniformly at random, it
-is hard to find a bitstring <span class="math inline">\(\mathbf b\)</span> such that <span class="math inline">\(H(\mathbf b)=h\)</span>.*</p></li>
+<span class="math inline">\((\mathbf b, \mathbf b&#39;)\)</span> is called a</em> collision <em>of</em> <span class="math inline">\(H\)</span>.</p></li>
+<li><p>second preimage-resistant <em>if, given <span class="math inline">\(\mathbf b\)</span>, it is hard to
+find <span class="math inline">\(\mathbf b&#39;\neq \mathbf b\)</span> such that they form a collision.</em></p></li>
+<li><p>preimage-resistant <em>if, given <span class="math inline">\(h\)</span> sampled uniformly at random, it
+is hard to find a bitstring <span class="math inline">\(\mathbf b\)</span> such that <span class="math inline">\(H(\mathbf b)=h\)</span>.</em></p></li>
 </ul>
 </div>
 <p>These properties are related by the following result.</p>
@@ -512,7 +514,7 @@ function to have output length <span class="math inline">\(2\ell\)</span>.</p>
 </div>
 <div id="the-merkle-damgård-transformation" class="section level2" number="4.4">
 <h2><span class="header-section-number">4.4</span> The Merkle-Damgård transformation</h2>
-<p>As was the case for encryption and MACs, we often build hash functions
+<p>As was the case for encryption, we often build hash functions
 in two steps. First, we build a hash function for fixed-length inputs,
 e.g. <span class="math display">\[H:\{0,1\}^{2\ell}\rightarrow\{0,1\}^\ell,\]</span> and then we extend
 them to arbitrarily-large input. We will not get into the details of
@@ -573,7 +575,7 @@ multiple of <span class="math inline">\(\ell\)</span>.<a href="hash-functions.ht
         </div>
       </div>
 <a href="block-ciphers.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="number-theory.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="elementary-number-theory.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

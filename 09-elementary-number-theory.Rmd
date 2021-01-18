@@ -1,6 +1,240 @@
 # (PART) Asymmetric cryptography {-} 
 
-# Elementary number theory {#number_theory}
+# Elementary number theory
+
+The second half of the course relies strongly on some ideas from number
+theory, which is the branch of mathematics that deals with integer
+numbers and their properties. This section and the next contain
+mathematical background that we will require to build some asymmetric
+cryptography. In this section, we will:
+
+1.  Review integer and modular arithmetic.
+
+2.  Discuss algorithmic aspects of modular arithmetic.
+
+**Note.** In these notes, we use the convention that $\mathbb{N}$ does
+not include $0$. We will refer to the set of non-negative integers by
+$\mathbb{Z}_{\geq0}$.
+
+## Integer arithmetic
+
+Consider the set $\mathbb{Z}$ of integer numbers. A key concept to the
+whole section is that of *divisibility*.
+
+::: {.definition}
+*Let $a,b\in\mathbb{Z}$. We say that $b$* divides *$a$
+if there exists $m\in \mathbb{Z}$ such that $$bm=a.$$ We denote that $b$
+divides $a$ by $b\mid a$. In this case, we also say that $b$ is a* divisor *or* factor *of $a$, or that $a$ is* divisible *by $b$, or that
+$a$ is a* multiple *of* $b$.
+:::
+
+Note that it is crucial that $m\in\mathbb{Z}$ in the definition above.
+Otherwise, any number $b$ would divide any other number $a$, since
+$$b\frac{a}{b}=a,$$ and then this notion would be pretty meaningless.
+Divisibility is related to the notion of *integer division*.
+
+```{proposition, name="Integer division"}
+*Let $a,b\in \mathbb{Z}$, with
+$b\neq0$. Then, there exists a unique pair $q,r\in\mathbb{Z}$ such that
+$0\leq r<b$ and $$a=bq+r.$$ The integer $q$ is called the* quotient *of
+the division, and $r$ is called the* remainder.
+```
+
+By looking at the above proposition and the definition of divisibility,
+it is easy to see that $a\mid b$ if and only if the remainder of the
+division of $a$ by $b$ is $0$.
+
+Divisibility allows us to identify a special type of integers that are
+the building blocks of any other integer number. Clearly, any integer
+$n\in\mathbb{Z}$ is always divisible by $1,-1,n$ and $-n$, which are
+called its *trivial divisors*. Some numbers have more divisors, and some
+do not.
+
+::: {.definition}
+*An integer $p>1$ is said to be a* prime number *if
+its only divisors are the trivial divisors. A positive integer that is
+not prime is said to be* composite.
+:::
+
+::: {.exercise}
+*Decide whether each of these statements is true or
+false:*
+
+1.  *$35$ is a divisor of $7$.*
+
+2.  *$4$ is a factor of $16$.*
+
+3.  *$99$ is divisible by $9$.*
+
+4.  *The remainder of dividing $-21$ by $8$ is $-5$.*
+
+5.  *$19$ is a prime number.*
+
+6.  *$41$ is a composite number.*
+:::
+
+The following two results show some interesting properties of prime
+numbers. Informally, the first states that any number can be decomposed
+into its prime factors, and that this decomposition is essentially
+unique, and the second states that, asymptotically, the chance of
+choosing a random number smaller than $n$ and finding a prime is
+$\log(n)/n$.
+
+```{proposition, name="Fundamental theorem of arithmetic", label="fta"}
+*Let $n\in\mathbb{Z}$. Then there exist prime numbers $p_1,\dots,p_\ell$ and integers $e_1,\dots,e_\ell$ such that
+$$n=\pm p_1^{e_1}\dots p_\ell^{e_\ell}.$$ Moreover, this *decomposition*
+(or *factorization*) is unique, up to reordering of the factors.*
+```
+
+```{proposition, name="Prime number theorem"}
+*Let $n\in\mathbb{N}$, and
+let us denote by $\pi(n)$ the number of prime numbers smaller than $n$.
+Then $$\lim_{n\rightarrow\infty}\frac{\pi(n)}{n/\log(n)}=1.$$*
+```
+
+On a computational level, one might think that the problem of
+determining whether a number is prime or composite and the problem of
+finding the factorization of said number are close problems. However,
+the surprising truth is that the second is believed to be much harder
+than the first! More precisely, there exist efficient algorithms for
+determining whether a number is prime, but no efficient factorization
+algorithm is known for numbers that are a product of two large primes,
+despite decades of huge efforts in finding one.[^18]
+
+Sage contains implementations of the best algorithms known for each
+case. Try increasing the size of the numbers, and observe that the first
+algorithm is still very fast, but factorization becomes much slower.
+
+```{python, eval=FALSE}
+    from sage.misc.prandom import randrange
+
+    # Choose a security parameter, which will determine the size of our numbers.
+    sec_param = 160
+
+    ### Primality testing
+    # Pick a random number of bitlength sec_param
+    n = randrange(2^(sec_param-1),2^(sec_param))
+    # Run a primality test
+    %time print(n in Primes())             # Sage contains the class Primes(). 
+                                           # By checking whether n is in Primes(),
+                                           # it is actually running a primality test internally.
+
+
+    ### Factorization
+    # Pick two primes of bitlength half of sec_param.
+    # This is so that their product has bitlength sec_param.
+    p = random_prime(2^((sec_param/2)-1),2^(sec_param/2))
+    q = random_prime(2^((sec_param/2)-1),2^(sec_param/2))
+    # Compute their product
+    n = p*q
+    %time print(factor(n))
+```
+
+## The euclidean algorithm
+
+With Proposition \@ref(prp:fta) in mind, we observe that two integers $a,b$ can
+have some factors in common in its prime factorization. This gives rise
+to the following notion.
+
+::: {.definition}
+*Let $a,b\in\mathbb{Z}$ different from $0$. The* greatest common divisor *of $a$ and $b$, denoted by $$\gcd(a,b),$$ is
+the largest positive integer $k$ such that $k\mid a$ and $k\mid b$. Two
+integers $a,b$ are said to be* coprime *(or* relatively prime*) when*
+$$\gcd(a,b)=1.$$
+:::
+
+Think about the relation between the notions of primality and
+coprimality. In particular, observe that being prime is a property of a
+single integer, whereas being coprime refers to a *pair* of integers.
+
+::: {.exercise}
+*Find a pair $a,b\in\mathbb{Z}$ for each of the
+following cells in this table:*
+
+::: {.center}
+                         *$a,b$ prime*   *$a$ prime, $b$ composite*   *$a,b$ composite*
+  --------------------- --------------- ---------------------------- -------------------
+        *$a,b$ coprime*                                              
+    *$a,b$ not coprime*                                              
+:::
+:::
+
+Computing the greatest common divisor of two integers can be achieved
+easily using the *Euclidean algorithm*, which we describe next. Let
+$a,b\in\mathbb{Z}$ different from $0$. The following procedure outputs
+$\gcd(a,b)$:
+
+1.  Compute the integer division of $a$ by $b$, obtaining $q,r$ such
+    that $0\leq r<b$ and $$a=bq+r.$$
+
+2.  If $r=0$, then output $b$. Otherwise, return to the previous step,
+    replacing $a$ by $b$ and $b$ by $r$.
+
+We show an example for the numbers $375$ and $99$. We start by
+performing the integer division of $375$ by $99$, obtaining
+$$375=99\cdot3+78.$$ Since the remainder is not $0$, we compute the
+integer division of $99$ by $78$, obtaining $$99=78\cdot1+21.$$ We
+continue with this process until the remainder is $0$: $$\begin{aligned}
+    & 78=21\cdot3+15.\\
+    & 21=15\cdot1+6. \\
+    & 15=6\cdot2+3. \\
+    & 6=3\cdot 2+0.\\
+\end{aligned}$$ Since the remainder is $0$, the Euclidean algorithm
+outputs $\gcd(375,99)=3$.
+
+The greatest common divisor satisfies the following property.
+
+```{proposition}
+*Let $a,b\in\mathbb{Z}$ different from $0$. There
+exist $x,y\in\mathbb{Z}$ such that $$ax+by=\gcd(a,b).$$*
+```
+
+It turns out that we can slightly tweak the Euclidean algorithm to
+compute the integers $x,y$ in the proposition above. This is called the
+*extended Euclidean algorithm*. The key idea is to use the Euclidean
+algorithm to compute the greatest common divisor, and then "walk back"
+through the computations. We illustrate it with the example of $375$ and
+$99$ from above.
+
+We got the sequence of remainders $78,21,15,6,3,0$, so the last one
+before $0$, in this case $3$, was our greatest common divisor. We
+proceed by arranging the relations between them obtained above to write
+each in terms of the previous two. We start with $$3=15-6\cdot 2.$$ We
+now write $6$ in terms of the two previous remainders, $15$ and $21$:
+$$6=21-15\cdot1.$$ Combining these two expressions, we can obtain an
+expression of $3$ in terms of $15$ and $21$:
+$$3=15-(21-15\cdot1)\cdot2=-21\cdot 2+  15\cdot 3.$$ Iterating this
+process, we can work our way back through the sequence of remainders,
+until we arrive at the beginning, that is, an expression depending only
+on $375$ and $99$: $$\begin{aligned}
+3 &= -21\cdot 2+ 15\cdot 3 = -21\cdot 2 + (78 - 21\cdot 3)\cdot 3 =  \\
+& = 78\cdot 3 - 21\cdot 11 = 78\cdot 3 - (99 - 78)\cdot 11 = \\
+& = -99\cdot 11 + 78\cdot 14 = -99\cdot 11 + (375 - 99\cdot 3)\cdot 14 = \\
+& = 375\cdot 14 + 99\cdot (-53).
+\end{aligned}$$ Thus, we have found that
+$$3=375\cdot 14+ 99\cdot(-53).$$
+
+From a computational point of view, both versions of the Euclidean
+algorithm are very efficient, even for large numbers, as you can check
+with the following Sage code.
+
+```{python, eval=FALSE}
+    from sage.misc.prandom import randrange
+
+    # Choose a security parameter, which will determine the size of our numbers.
+    sec_param = 128
+
+    # Choose a pair of integers of bitlength sec_param
+    a = randrange(2^(sec_param-1),2^(sec_param))
+    b = randrange(2^(sec_param-1),2^(sec_param))
+
+    # Euclidean algorithm
+    %time print(gcd(a,b))
+
+    # Extended euclidean algorithm. The three outputs correspond
+    # to gcd(a,b), and the two numbers x,y such that gcd(a,b)=ax+by.
+    %time print(xgcd(a,b))
+```
 
 ## Modular arithmetic {#modular-arithmetic}
 
@@ -16,7 +250,7 @@ that the passing of time makes sense again. We consider the following
 problem.
 
 ::: {.problem}
-**Problem.** *Let $a\in\mathbb{N}$. Assume that the current position
+*Let $a\in\mathbb{N}$. Assume that the current position
 of the clock is $12$ o'clock. What is the position of the clock after
 $a$ hours?*
 :::
@@ -24,12 +258,10 @@ $a$ hours?*
 The key observation is that full movements around the clock (that is,
 multiples of 12) do not matter, as they leave the clock in the same
 position. Recall that the algorithm of integer division tells us how to
-compute $q,r\in\mathbb{Z}$ such that $$a=12\cdot q + r.$$ We call $q$
-the *quotient* and $r<12$ the *remainder* of the division. In the
-context of our problem, notice that $q$ is the number of full circles
-around the clock that happen in $a$ hours. Then, the only real change of
-position in the clock is determined by $r$, and $q$ does not matter at
-all.[^18]
+compute $q,r\in\mathbb{Z}$ such that $$a=12\cdot q + r.$$ In the context
+of our problem, notice that $q$ is the number of full circles around the
+clock that happen in $a$ hours. Then, the only real change of position
+in the clock is determined by $r$, and $q$ does not matter at all.[^19]
 
 Generalizing this idea leads to the key concept of modular arithmetic,
 by replacing $12$ by any positive integer. Moreover, observe that there
@@ -37,8 +269,7 @@ is no need for $a$ to be a positive integer, as a negative value of $a$
 can be interpreted as moving counter-clockwise.
 
 ::: {.definition}
-*Let $a, n\in \mathbb{Z}$, with $n>0$. We define the
-*remainder (or residue) of $a$ modulo $n$ *as the remainder of the
+*Let $a, n\in \mathbb{Z}$, with $n>0$. We define the* remainder *(or* residue*) of $a$ modulo $n$ as the remainder of the
 integer division of $a$ by $n$, and we denote it by* $$a\bmod{n}.$$
 :::
 
@@ -50,20 +281,19 @@ $$25\bmod 8, \qquad 1337\bmod 7, \qquad 7\bmod 13,\qquad -13\bmod 12.$$*
 Modular arithmetic behaves in a similar way to usual arithmetic, as
 reflected in the following result:
 
-```{proposition, label="arithmetic"}
-*Let $a,b,n\in\mathbb{Z}$, with $n>0$. Then:*
-
+```{proposition, label="modular"}
+*Let $a,b,n\in\mathbb{Z}$, with $n>0$. Then:
 $$\begin{array}{rl}
         (i) & (a\bmod n) + (b\bmod n) = (a+b)\bmod n. \\
         (ii) & (a\bmod n) \cdot (b\bmod n) = (a\cdot b)\bmod n. \\
         (iii) & \text{If }b\geq0,\text{ then }(a\bmod n)^b=(a^b)\bmod{n}.\\
-    \end{array}$$
+    \end{array}$$*
 ```
 
 It is clear that, when working modulo $n$, for some positive integer
 $n$, the only numbers that matter are $0,1,\dots, n-1$, since every
-other number can be linked to one of these when reduced modulo $n$. For
-example, back to the clock example, we have that $13\bmod12=1$,
+other number can be identified with one of these by reducing modulo $n$.
+For example, back to the clock example, we have that $13\bmod12=1$,
 $25\bmod{12}=1$, and so on. It is not chance that related numbers are
 precisely those that represent the same position!
 
@@ -74,15 +304,11 @@ motivates the introduction of the idea of *congruence*.
 ::: {.definition}
 *Let $a,b,n\in\mathbb{Z}$, with $n>0$. We say that
 $a$ and $b$ are* congruent *if* $$(a-b)\bmod{n}=0.$$ *In this case, we
-represent this fact by* $$a\equiv b\pmod{n}.$$
-:::
-
-::: {.definition}
-*Let $n\in\mathbb{Z}$, with $n>0$. We define the* set
-of residue classes modulo $n$ *as the set*
+represent this fact by* $$a\equiv b\pmod{n}.$$ *We define the* set of
+residue classes modulo $n$ *as the set*
 $$\mathbb{Z}_n=\{0,1,\dotsc,n-1\},$$ *where the operations of addition
 and multiplication are reduced modulo $n$, according to
-Proposition \@ref(prp:arithmetic).*
+Proposition \@ref(prp:modular).*
 :::
 
 Then, the above discussion can be rephrased as follows. We can say that
@@ -93,14 +319,13 @@ ourselves to the set $\mathbb{Z}_n$.
 ```{proposition}
 *Let $a,\alpha,b,n\in\mathbb{Z}$, with $n>0$. If
 $a\equiv \alpha\pmod{n}$, then:*
-
--   *$a+b\equiv \alpha+b\pmod{n}$.*
-
--   *$a\cdot b\equiv \alpha\cdot b\pmod{n}$.*
-
--   *If $b\geq0$, then $a^b\equiv \alpha^b\pmod{n}$.*
-
-*In particular, this is true when $\alpha=a\bmod{n}$.*
+  
+  $$\begin{array}{rl}
+        (i) & a+b\equiv \alpha+b\pmod{n}. \\
+        (ii) & a\cdot b\equiv \alpha\cdot b\pmod{n}. \\
+        (iii) & \text{If }b\geq0,\text{ then }a^b\equiv \alpha^b\pmod{n}.\\
+    \end{array}$$*
+*In particular, this is true when* $\alpha=a\bmod{n}$.
 ```
 
 ::: {.exercise}
@@ -109,4 +334,133 @@ addition modulo $2$ are the same operation, by checking the four
 possible cases.*
 :::
 
-[^18]: The only small caveat is that, when $a$ is a multiple of $12$, the remainder will be $0$, not $12$, although both of these represent the same position. So, to be precise, let us assume that our clock has a $0$ instead of $12$, so that it perfectly aligns with the remainders.
+We now introduce *modular inverses*. Let $a\neq0$ be a number, and
+consider the meaning of $b$ being the inverse of $a$. Over the real
+numbers, we say that the inverse of $3$ is $1/3$, because
+$$3\cdot \frac{1}{3}=1.$$ That is, every nonzero number $a\in\mathbb{R}$
+has an inverse $1/a\in\mathbb{R}$. Consider now the same idea, but over
+$\mathbb{Z}$. That is, given $a\in\mathbb{Z}$, is there any other
+integer $b\in\mathbb{Z}$ such that $ab=1$? It is clear that, unless
+$a=\pm1$, there is no such thing as an "integer inverse". However, the
+answer changes when we consider $\mathbb{Z}_n$ instead of $\mathbb{Z}$.
+
+::: {.definition}
+*Let $n\in\mathbb{N}$, and $a\in\mathbb{Z}_n$. We say
+that $b\in\mathbb{Z}_n$ is the *inverse of $a$ modulo $n$* if
+$$ab\bmod n = 1.$$ If the inverse of $a$ modulo $n$ exists, we say that
+$a$ is *invertible*. We also say that $a$ is a *unit*.*
+:::
+
+As an example, observe that in $\mathbb{Z}_5$ we have
+$$(2\cdot 3)\bmod{5}=6\bmod{5}=1.$$ Therefore, $2$ and $3$ are inverses
+modulo $5$. In $\mathbb{Z}_3$, we have
+$$(2\cdot 2)\bmod{3}=4\bmod{3}=1.$$ That is, $2$ is its own inverse
+modulo $3$.
+
+::: {.exercise}
+*Consider $\mathbb{Z}_4$. Find which of its elements
+are invertible, and which are not.*
+:::
+
+The above examples and exercise highlight that, given some $n$, some
+elements of $\mathbb{Z}_n$ have an inverse, and some do not. This
+motivates the following definition.
+
+::: {.definition}
+*Let $n\in\mathbb{N}$. We denote by $\mathbb{Z}_n^*$
+the subset of $\mathbb{Z}_n$ formed by all the invertible elements of
+$\mathbb{Z}_n$. We define the function $\varphi$ that, on input $n$,
+returns the size of $\mathbb{Z}_n^*$. This function is called *Euler's
+totient (or phi) function*.*
+:::
+
+The value of the totient function, and thus the size of
+$\mathbb{Z}_n^*$, is determined by the prime factorization of $n$. More
+precisely, we have the following result.
+
+```{proposition}
+*Let $n\in\mathbb{N}$. Then:*
+
+*If $n=p^e$, where $p$ is a prime and $e\in\mathbb{N}$, we have
+    $$\varphi(n)=(p-1)p^{e-1}.$$*
+
+*If $n=pq$, where $p,q$ are coprime, then
+    $$\varphi(n)=\varphi(p)\varphi(q).$$*
+```
+
+::: {.exercise}
+*Use the result above to deduce a formula for
+$\varphi(n)$, when $n$ is the product of two different prime numbers.*
+:::
+
+## Modular arithmetic, but efficient
+
+There are different approaches to actually do computations modulo $n$.
+The end result will not change, but some ways involve easier
+computations than others. As an example, say that we want to compute
+$$3^{75}\bmod{191}.$$
+
+The straightforward approach is to compute $3^{75}$, which is
+$$608266787713357709119683992618861307,$$ by performing $74$
+multiplications by $3$, and then perform the division by $191$. But
+clearly this is a lot of work. A better approach is to perform the
+exponentiation in smaller increments, and reduce modulo $191$ before
+numbers get too big. More precisely, let us write the base-2 expansion
+of $75$: 
+\begin{equation}
+        75=2^6+2^3+2^1+2^0.
+        (\#eq:1)
+\end{equation}
+Then, we can rewrite
+\begin{equation}
+        3^{75}=3^{2^6}\cdot3^{2^3}\cdot3^{2^1}\cdot3^{2^0}.
+        (\#eq:2)
+\end{equation} Now
+observe that, for any $i\in\mathbb{N}$, we have that
+$$3^{2^i}=\left(3^{2^{i-1}}\right)^2,$$ and thus each of these terms can
+be recursively computed from the previous by squaring. We also perform
+the reductions modulo $191$ at each step, to prevent the numbers from
+blowing-up in size. Note that this reduction can be done due to point
+(iii) in
+Proposition \@ref(prp:modular). $$\begin{aligned}
+    & 3^{2^0}\equiv 3\pmod{191}, \\
+    & 3^{2^1}\equiv \left(3^{2^0}\right)^2\equiv 9\pmod{191}, \\
+    & 3^{2^2}\equiv \left(3^{2^1}\right)^2\equiv 81\pmod{191}, \\
+    & 3^{2^3}\equiv \left(3^{2^2}\right)^2\equiv 6561\equiv 67\pmod{191},\\
+    & 3^{2^4}\equiv \left(3^{2^3}\right)^2\equiv (67)^2\equiv 4489\equiv 96\pmod{191},\\
+    & 3^{2^5}\equiv \left(3^{2^4}\right)^2\equiv (96)^2\equiv 9216 \equiv 48\pmod{191},\\
+    & 3^{2^6}\equiv \left(3^{2^5}\right)^2\equiv (48)^2\equiv 2304 \equiv 12\pmod{191}.\\
+    \end{aligned}$$ Now it simply remains to multiply the four factors
+of
+equation \@ref(eq:2). Again, to avoid big
+numbers, we reduce modulo 191 after each factor is multiplied:
+$$\begin{aligned}
+    & 3^{2^0}\cdot 3^{2^1}\equiv 9\cdot 81\equiv 729 \equiv 156 \pmod{191}, \\
+    & \left(3^{2^0}\cdot 3^{2^1}\right)\cdot 3^{2^3}\equiv 156\cdot 67\equiv 10452 \equiv 138\pmod{191},\\
+    & \left(3^{2^0}\cdot 3^{2^1}\cdot 3^{2^3}\right)\cdot 3^{2^6}\equiv 138\cdot 12\equiv 1656\equiv 128.\\
+    \end{aligned}$$ Therefore, we conclude that
+$$3^{75}\bmod{191}=128\qquad\text{(or, equivalently, that $3^{75}\equiv 128\pmod{191}$).}$$
+
+This algorithm is known as *square-and-multiply*, and the reason behind
+the name is clear once we take a step back and slightly rewrite our
+solution. Observe that, from
+equation \@ref(eq:1), we directly deduce that the binary expression of
+$75$ is $$[75]_2=1001010.$$ Then, from the base number, in this case
+$3$, and for each bit in $[75]_2$, starting from the right, we
+
+-   *Squaring step:* compute the square of the previous power of $3$.
+
+-   *Multiplication step:* if the bit is $1$, multiply the product so
+    far by the new power of $3$. Otherwise, skip this step.
+
+Take a moment to review the example above, and convince yourself that it
+matches the steps described.
+
+[^18]: For those with a background in complexity theory, primality is a
+    problem in P and factorization is a problem in NP.
+
+[^19]: The only small caveat is that, when $a$ is a multiple of $12$,
+    the remainder will be $0$, not $12$, although both of these
+    represent the same position. So, to be precise, let us assume that
+    our clock has a $0$ instead of $12$, so that it perfectly aligns
+    with the remainders.

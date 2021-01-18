@@ -173,8 +173,7 @@ often called* hashing*, and the output is referred to as the* hash.
 Note that, unlike encryption, hash functions do not use any secret key.
 From a functionality point of view, this is all we need: a function that
 compresses bitstrings and is efficient enough to compute. However, to
-ensure the security of our arbitrary-length MAC, we will need an extra
-property.
+ensure the security of the cryptocurrency model described above, we will need an extra property.
 
 We observe that hash functions must be public and deterministic, because
 different parties need to be able to arrive to the same result to verify
@@ -194,15 +193,15 @@ reference="sec:hash_def"}, motivate the following set of definitions.
 ::: {.definition}
 *Let $H$ be a hash function. We say that $H$ is:*
 
--   *collision-resistant* if it is hard to find two bitstrings
+-   collision-resistant *if it is hard to find two bitstrings
     $\mathbf b, \mathbf b'$ such that $\mathbf b\neq \mathbf b'$ and
     $H(\mathbf b)= H(\mathbf b')$. In this case, the pair
-    $(\mathbf b, \mathbf b')$ is called a *collision* of $H$.*
+    $(\mathbf b, \mathbf b')$ is called a* collision *of* $H$.
 
--   *second preimage-resistant* if, given $\mathbf b$, it is hard to
+-   second preimage-resistant *if, given $\mathbf b$, it is hard to
     find $\mathbf b'\neq \mathbf b$ such that they form a collision.*
 
--   *preimage-resistant* if, given $h$ sampled uniformly at random, it
+-   preimage-resistant *if, given $h$ sampled uniformly at random, it
     is hard to find a bitstring $\mathbf b$ such that $H(\mathbf b)=h$.*
 :::
 
@@ -337,7 +336,7 @@ function to have output length $2\ell$.
 
 ## The Merkle-Damgård transformation
 
-As was the case for encryption and MACs, we often build hash functions
+As was the case for encryption, we often build hash functions
 in two steps. First, we build a hash function for fixed-length inputs,
 e.g. $$H:\{0,1\}^{2\ell}\rightarrow\{0,1\}^\ell,$$ and then we extend
 them to arbitrarily-large input. We will not get into the details of

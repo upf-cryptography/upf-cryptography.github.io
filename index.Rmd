@@ -11,7 +11,7 @@ output:
 
 # Front page {-}
 
-*Latest update: 13/01/2021.*
+*Latest update: 18/01/2021.*
 
 This page contains some useful information related to the course and the lecture notes. Note that there are some useful buttons above the text, in particular one to download the notes as a well-formatted PDF, for offline use. 
 
@@ -54,6 +54,7 @@ The documentation at <https://doc.sagemath.org/> is pretty good, although most o
 
 #### Changelog {-}
 
+-   18/01/2021. Remainder of Section \@ref(elementary-number-theory) uploaded. Some typos fixed in Sections \@ref(block-ciphers) and \@ref(hash-functions).
 -   13/01/2021. Section \@ref(hash-functions) uploaded. 
 -   08/01/2021. Section \@ref(block-ciphers) uploaded. 
 -   07/01/2021. Refreshes on Appendix \@ref(refreshers) and Section \@ref(modular-arithmetic) added. Added code for LFSR. Some typos fixed in Sections \@ref(introduction-to-security) and \@ref(randomness-in-cryptography).

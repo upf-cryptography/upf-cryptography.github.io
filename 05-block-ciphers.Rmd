@@ -25,7 +25,7 @@ blocks of fixed length, and encrypt each of this as a single unit.
 scheme that encrypts a message of fixed length* $\ell$.
 :::
 
-When encrypting and arbitrarily large message, we will split it into
+When encrypting an arbitrarily large message, we will split it into
 blocks of length $\ell$ and encrypt each block, using the same key,
 unlike in the previous section where we tried to stretch the key.
 Because of this, we will require a good block cipher to satisfy two new
