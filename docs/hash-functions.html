@@ -374,28 +374,12 @@ is hard to find a bitstring <span class="math inline">\(\mathbf b\)</span> such 
 </div>
 <p>These properties are related by the following result.</p>
 <div class="proposition">
-<p><span id="prp:unlabeled-div-24" class="proposition"><strong>Proposition 4.1  </strong></span><em>Let <span class="math inline">\(H\)</span> be a hash function</em> <span class="math display">\[H:\{0,1\}^*\rightarrow\{0,1\}^\ell.\]</span></p>
-<ul>
-<li><p><em>If <span class="math inline">\(H\)</span> is collision-resistant, then it is second
-preimage-resistant.</em></p></li>
-<li><p><em>If <span class="math inline">\(H\)</span> is second preimage-resistant, then it is
-preimage-resistant.</em></p></li>
-</ul>
+<p><span id="prp:unlabeled-div-24" class="proposition"><strong>Proposition 4.1  </strong></span><em>Let <span class="math inline">\(H\)</span> be a hash function</em> <span class="math display">\[H:\{0,1\}^*\rightarrow\{0,1\}^\ell.\]</span> <em>If <span class="math inline">\(H\)</span> is collision-resistant, then it is second preimage-resistant.</em></p>
 </div>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-25" class="exercise"><strong>Exercise 4.1  </strong></span><em>Try to prove the two statements in the proposition above.</em></p>
-<ul>
-<li><p><em>For part (a), prove the contrapositive. Assume that you can break
-second preimage resistance, and show how to use that to break
-collision resistance.</em></p></li>
-<li><p><em>You can also think about part (b), although this one has a subtlety
-that makes it significantly harder. Don’t worry too much if you get
-stuck.</em></p></li>
-</ul>
+<p><span id="exr:unlabeled-div-25" class="exercise"><strong>Exercise 4.1  </strong></span><em>Try to prove the proposition above by proving the contrapositive: assume that you can break second preimage resistance, and show how to use that to break collision resistance.</em></p>
 </div>
-<p>The intuition is that collision resistance makes hashes of different
-strings look “unrelated” and “random”, so an adversary cannot gain any
-information from seeing hashes of other strings.</p>
+<p>Informally, second-preimage resistance implies preimage resistance for any hash function that performs some “meaningful” compression of the input. This means that, for any hash function used in practice, if it is second-preimage resistant then it its preimage resistant, although the statement cannot be formally proven, due to some pathological counterexamples.</p>
 </div>
 <div id="birthday-attacks" class="section level2" number="4.3">
 <h2><span class="header-section-number">4.3</span> Birthday attacks</h2>

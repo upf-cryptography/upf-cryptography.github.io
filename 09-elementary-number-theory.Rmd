@@ -40,6 +40,9 @@ $0\leq r<b$ and $$a=bq+r.$$ The integer $q$ is called the* quotient *of
 the division, and $r$ is called the* remainder.
 ```
 
+In Sage, quotient and remainder can easily be computed with the commands
+`a // b` and `a % b`, (or `mod(a,b)`) respectively.
+
 By looking at the above proposition and the definition of divisibility,
 it is easy to see that $a\mid b$ if and only if the remainder of the
 division of $a$ by $b$ is $0$.
@@ -362,6 +365,28 @@ modulo $3$.
 are invertible, and which are not.*
 :::
 
+When working with modular residues in Sage, one nice thing is that we
+can specify that we are working modulo some $n$, and Sage will take care
+of the modular reductions for us, without having to specify every time
+that we want each operation reduced modulo $n$. In the example below,
+you can see that, when asked about $a+b$, we get $7$ because the
+operation is automatically reduced modulo $17$, since we have specified
+that we want our operations involving $a,b$ to be reduced modulo $n$.
+Similarly, the inverse of $a$ is automatically computed modulo $n$,
+otherwise we would obtain $1/11$ instead of $14$.
+
+```{python, eval=FALSE}
+n=17
+G=Integers(n)
+G
+
+a = G(11)
+b = G(13)
+a,b
+a+b
+a^(-1)
+```
+
 The above examples and exercise highlight that, given some $n$, some
 elements of $\mathbb{Z}_n$ have an inverse, and some do not. This
 motivates the following definition.
@@ -373,6 +398,15 @@ $\mathbb{Z}_n$. We define the function $\varphi$ that, on input $n$,
 returns the size of $\mathbb{Z}_n^*$. This function is called *Euler's
 totient (or phi) function*.*
 :::
+
+In Sage, Euler's function on input $n$ can be computed by
+`euler_phi(n)`.
+
+```{proposition, label="units"}
+*Let $n\in\mathbb{N}$. Then $\mathbb{Z}_n^*$ is
+composed of all the elements $a\in\mathbb{Z}_n$ such that are coprime to
+$n$.*
+```
 
 The value of the totient function, and thus the size of
 $\mathbb{Z}_n^*$, is determined by the prime factorization of $n$. More
@@ -392,6 +426,18 @@ precisely, we have the following result.
 *Use the result above to deduce a formula for
 $\varphi(n)$, when $n$ is the product of two different prime numbers.*
 :::
+
+To actually find the inverse of an element $a$ modulo $n$, we can use
+the extended Euclidean algorithm. The key idea is to run the extended
+Euclidean algorithm on $a$ and $n$. The algorithm produces
+$x,y\in\mathbb{Z}_n$ such that $$ax+ny=\gcd(a,n).$$ By reducing both
+sides of the equation above modulo $n$, we get that
+$$ax\equiv\gcd(a,n)\pmod{n}.$$ Due to
+Proposition \@ref(prp:units), we know that $a$ will be invertible modulo $n$
+if and only if $\gcd(a,n)=1$. Thus, if this is the case, we would have
+$$ax\equiv1\pmod{n},$$ which means that $x$ is the inverse of $a$ modulo
+$n$. If we find that $\gcd(a,n)\neq1$, then $a$ is not invertible modulo
+$n$.
 
 ## Modular arithmetic, but efficient
 

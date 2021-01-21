@@ -208,30 +208,14 @@ reference="sec:hash_def"}, motivate the following set of definitions.
 These properties are related by the following result.
 
 ::: {.proposition}
-*Let $H$ be a hash function* $$H:\{0,1\}^*\rightarrow\{0,1\}^\ell.$$
-
--   *If $H$ is collision-resistant, then it is second
-    preimage-resistant.*
-
--   *If $H$ is second preimage-resistant, then it is
-    preimage-resistant.*
+*Let $H$ be a hash function* $$H:\{0,1\}^*\rightarrow\{0,1\}^\ell.$$ *If $H$ is collision-resistant, then it is second preimage-resistant.*
 :::
 
 ::: {.exercise}
-*Try to prove the two statements in the proposition above.*
-
--   *For part (a), prove the contrapositive. Assume that you can break
-    second preimage resistance, and show how to use that to break
-    collision resistance.*
-
--   *You can also think about part (b), although this one has a subtlety
-    that makes it significantly harder. Don't worry too much if you get
-    stuck.*
+*Try to prove the proposition above by proving the contrapositive: assume that you can break second preimage resistance, and show how to use that to break collision resistance.*
 :::
 
-The intuition is that collision resistance makes hashes of different
-strings look "unrelated" and "random", so an adversary cannot gain any
-information from seeing hashes of other strings.
+Informally, second-preimage resistance implies preimage resistance for any hash function that performs some "meaningful" compression of the input. This means that, for any hash function used in practice, if it is second-preimage resistant then it its preimage resistant, although the statement cannot be formally proven, due to some pathological counterexamples. 
 
 ## Birthday attacks
 

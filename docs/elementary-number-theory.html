@@ -241,6 +241,8 @@ Divisibility is related to the notion of <em>integer division</em>.</p>
 <span class="math inline">\(0\leq r&lt;b\)</span> and <span class="math display">\[a=bq+r.\]</span> The integer <span class="math inline">\(q\)</span> is called the</em> quotient <em>of
 the division, and <span class="math inline">\(r\)</span> is called the</em> remainder.
 </div>
+<p>In Sage, quotient and remainder can easily be computed with the commands
+<code>a // b</code> and <code>a % b</code>, (or <code>mod(a,b)</code>) respectively.</p>
 <p>By looking at the above proposition and the definition of divisibility,
 it is easy to see that <span class="math inline">\(a\mid b\)</span> if and only if the remainder of the
 division of <span class="math inline">\(a\)</span> by <span class="math inline">\(b\)</span> is <span class="math inline">\(0\)</span>.</p>
@@ -538,6 +540,24 @@ modulo <span class="math inline">\(3\)</span>.</p>
 <p><span id="exr:unlabeled-div-43" class="exercise"><strong>Exercise 5.5  </strong></span><em>Consider <span class="math inline">\(\mathbb{Z}_4\)</span>. Find which of its elements
 are invertible, and which are not.</em></p>
 </div>
+<p>When working with modular residues in Sage, one nice thing is that we
+can specify that we are working modulo some <span class="math inline">\(n\)</span>, and Sage will take care
+of the modular reductions for us, without having to specify every time
+that we want each operation reduced modulo <span class="math inline">\(n\)</span>. In the example below,
+you can see that, when asked about <span class="math inline">\(a+b\)</span>, we get <span class="math inline">\(7\)</span> because the
+operation is automatically reduced modulo <span class="math inline">\(17\)</span>, since we have specified
+that we want our operations involving <span class="math inline">\(a,b\)</span> to be reduced modulo <span class="math inline">\(n\)</span>.
+Similarly, the inverse of <span class="math inline">\(a\)</span> is automatically computed modulo <span class="math inline">\(n\)</span>,
+otherwise we would obtain <span class="math inline">\(1/11\)</span> instead of <span class="math inline">\(14\)</span>.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="elementary-number-theory.html#cb6-1" aria-hidden="true" tabindex="-1"></a>n<span class="op">=</span><span class="dv">17</span></span>
+<span id="cb6-2"><a href="elementary-number-theory.html#cb6-2" aria-hidden="true" tabindex="-1"></a>G<span class="op">=</span>Integers(n)</span>
+<span id="cb6-3"><a href="elementary-number-theory.html#cb6-3" aria-hidden="true" tabindex="-1"></a>G</span>
+<span id="cb6-4"><a href="elementary-number-theory.html#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="elementary-number-theory.html#cb6-5" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> G(<span class="dv">11</span>)</span>
+<span id="cb6-6"><a href="elementary-number-theory.html#cb6-6" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> G(<span class="dv">13</span>)</span>
+<span id="cb6-7"><a href="elementary-number-theory.html#cb6-7" aria-hidden="true" tabindex="-1"></a>a,b</span>
+<span id="cb6-8"><a href="elementary-number-theory.html#cb6-8" aria-hidden="true" tabindex="-1"></a>a<span class="op">+</span>b</span>
+<span id="cb6-9"><a href="elementary-number-theory.html#cb6-9" aria-hidden="true" tabindex="-1"></a>a<span class="op">^</span>(<span class="op">-</span><span class="dv">1</span>)</span></code></pre></div>
 <p>The above examples and exercise highlight that, given some <span class="math inline">\(n\)</span>, some
 elements of <span class="math inline">\(\mathbb{Z}_n\)</span> have an inverse, and some do not. This
 motivates the following definition.</p>
@@ -548,21 +568,40 @@ the subset of <span class="math inline">\(\mathbb{Z}_n\)</span> formed by all th
 returns the size of <span class="math inline">\(\mathbb{Z}_n^*\)</span>. This function is called </em>Euler’s
 totient (or phi) function<em>.</em></p>
 </div>
+<p>In Sage, Euler’s function on input <span class="math inline">\(n\)</span> can be computed by
+<code>euler_phi(n)</code>.</p>
+
+<div class="proposition">
+<span id="prp:units" class="proposition"><strong>Proposition 5.7  </strong></span><em>Let <span class="math inline">\(n\in\mathbb{N}\)</span>. Then <span class="math inline">\(\mathbb{Z}_n^*\)</span> is
+composed of all the elements <span class="math inline">\(a\in\mathbb{Z}_n\)</span> such that are coprime to
+<span class="math inline">\(n\)</span>.</em>
+</div>
 <p>The value of the totient function, and thus the size of
 <span class="math inline">\(\mathbb{Z}_n^*\)</span>, is determined by the prime factorization of <span class="math inline">\(n\)</span>. More
 precisely, we have the following result.</p>
 
 <div class="proposition">
-<p><span id="prp:unnamed-chunk-19" class="proposition"><strong>Proposition 5.7  </strong></span><em>Let <span class="math inline">\(n\in\mathbb{N}\)</span>. Then:</em></p>
+<p><span id="prp:unnamed-chunk-20" class="proposition"><strong>Proposition 5.8  </strong></span><em>Let <span class="math inline">\(n\in\mathbb{N}\)</span>. Then:</em></p>
 <p><em>If <span class="math inline">\(n=p^e\)</span>, where <span class="math inline">\(p\)</span> is a prime and <span class="math inline">\(e\in\mathbb{N}\)</span>, we have
 <span class="math display">\[\varphi(n)=(p-1)p^{e-1}.\]</span></em></p>
 <em>If <span class="math inline">\(n=pq\)</span>, where <span class="math inline">\(p,q\)</span> are coprime, then
 <span class="math display">\[\varphi(n)=\varphi(p)\varphi(q).\]</span></em>
 </div>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-46" class="exercise"><strong>Exercise 5.6  </strong></span><em>Use the result above to deduce a formula for
+<p><span id="exr:unlabeled-div-47" class="exercise"><strong>Exercise 5.6  </strong></span><em>Use the result above to deduce a formula for
 <span class="math inline">\(\varphi(n)\)</span>, when <span class="math inline">\(n\)</span> is the product of two different prime numbers.</em></p>
 </div>
+<p>To actually find the inverse of an element <span class="math inline">\(a\)</span> modulo <span class="math inline">\(n\)</span>, we can use
+the extended Euclidean algorithm. The key idea is to run the extended
+Euclidean algorithm on <span class="math inline">\(a\)</span> and <span class="math inline">\(n\)</span>. The algorithm produces
+<span class="math inline">\(x,y\in\mathbb{Z}_n\)</span> such that <span class="math display">\[ax+ny=\gcd(a,n).\]</span> By reducing both
+sides of the equation above modulo <span class="math inline">\(n\)</span>, we get that
+<span class="math display">\[ax\equiv\gcd(a,n)\pmod{n}.\]</span> Due to
+Proposition <a href="elementary-number-theory.html#prp:units">5.7</a>, we know that <span class="math inline">\(a\)</span> will be invertible modulo <span class="math inline">\(n\)</span>
+if and only if <span class="math inline">\(\gcd(a,n)=1\)</span>. Thus, if this is the case, we would have
+<span class="math display">\[ax\equiv1\pmod{n},\]</span> which means that <span class="math inline">\(x\)</span> is the inverse of <span class="math inline">\(a\)</span> modulo
+<span class="math inline">\(n\)</span>. If we find that <span class="math inline">\(\gcd(a,n)\neq1\)</span>, then <span class="math inline">\(a\)</span> is not invertible modulo
+<span class="math inline">\(n\)</span>.</p>
 </div>
 <div id="modular-arithmetic-but-efficient" class="section level2" number="5.4">
 <h2><span class="header-section-number">5.4</span> Modular arithmetic, but efficient</h2>
