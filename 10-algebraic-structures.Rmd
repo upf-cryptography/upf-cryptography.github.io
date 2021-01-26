@@ -1,1 +1,647 @@
-# Algebraic structures {#algebraic_structures}
+# Algebraic structures
+
+We complete our exposition of the mathematical background by discussing
+some common algebraic structures, which generalize what we have seen in
+the previous section. Informally, an algebraic structure is a set with
+one or more operations on the elements of the set. The properties of
+these operations determine the kind of structure that we have. In this
+section, we will learn about two of these:
+
+1.  Groups.
+
+2.  Finite fields.
+
+## Groups
+
+Groups are the simplest algebraic structure that we will study, since
+they only have one operation.
+
+::: {.definition}
+*A* group *is a pair $(\mathbb{G},\circ)$, where
+$\mathbb{G}$ is a set and $\circ$ is an operation on $\mathbb{G}$, that
+is, a function $$\begin{aligned}
+        \circ : \phantom{a} & \mathbb{G}\times \mathbb{G}& \rightarrow & \phantom{a}\mathbb{G}\\
+                & (x,y) & \mapsto & \phantom{a} x\circ y,
+    \end{aligned}$$ which additionally satisfies the following
+properties:*
+
+1.  Associative law: $(x\circ y)\circ z = x\circ(y\circ z)$ *for all*
+    $x,y,z\in \mathbb{G}$.
+
+2.  Existence of identity: *there exists $e\in \mathbb{G}$ such that
+    $e\circ x=x\circ e=x$ for all $x\in \mathbb{G}$. Such element $e$ is
+    called the *identity element.
+
+3.  Existence of inverse: *for any $x\in \mathbb{G}$, there exists
+    $y\in \mathbb{G}$ such that $x\circ y = y\circ x = e$, where $e$ is
+    the identity element. Such $y$ is called the* inverse *of* $x$.
+
+*A group is said to be* commutative *(or* abelian*) if it satisfies the
+following additional property:*
+
+1.  Commutativity: $x\circ y=y \circ x$ *for all* $x,y\in \mathbb{G}$.
+
+*The* order *of a group is the number of elements in $\mathbb{G}$, if
+the set is finite, and infinite otherwise, and is denoted by*
+$ord(\mathbb{G})$.
+:::
+
+When there is no ambiguity about the operation, we will refer to the
+group $\mathbb{G}$, instead of $(\mathbb{G},\circ)$, for simplicity.
+Most of the time, the group operation will be (possibly modular)
+addition or multiplication, although these are not the only possible
+cases. Let us consider some examples, and see whether they are groups or
+not.
+
+-   $(\mathbb{Z}_{\geq0},+)$, where $\mathbb{Z}_{\geq0}$ is the set of
+    non-negative elements of $\mathbb{Z}$, and $+$ is integer addition.
+    Integer addition is associative, and there is an identity element
+    $0$. However, there is no $x\in\mathbb{Z}_{\geq0}$ such that
+    $$1+x=0,$$ and therefore $(\mathbb{Z}_{\geq0},+)$ is not a group.
+
+-   $(\mathbb{Z},+)$ is a group of infinite order, since the operation
+    is still associative, there is an identity element $0$, and for any
+    $x\in\mathbb{Z}$, there exists $y=-x\in\mathbb{Z}$ such that
+    $$x+y=y+x=0.$$ For similar reasons, the pair $(\mathbb{Z}_n,+)$, for
+    $n\in\mathbb{N}$, is also a group, of order $n$.
+
+-   For $n\in\mathbb{N}$, the pair $(\mathbb{Z}_n^*,\cdot)$, where
+    $\cdot$ is multiplication modulo $n$, is a group of order
+    $\varphi(n)$. The operation is clearly associative, $1$ is an
+    identity element for multiplication, and every element
+    $x\in\mathbb{Z}_n^*$ has an inverse $x^{-1}\in\mathbb{Z}_n^*$, by
+    definition of $\mathbb{Z}_n^*$.
+
+-   The pair $(\mathbb{Z}_2\times\mathbb{Z}_3,+)$, where $+$ means
+    component-wise addition in their respective moduli, is a group of
+    order $6$. Indeed, it is easy to see that a product of two groups is
+    a group.
+
+Moreover, since the operations are commutative, all of these groups are
+commutative.
+
+::: {.exercise}
+*Explain why none of the following is a group:*
+
+1.  *$(\mathbb{Z},\cdot)$, where $\cdot$ is integer multiplication.*
+
+2.  *$(\mathbb{Z}_n,\cdot)$, where $\cdot$ is multiplication modulo $n$,
+    for $n\in \mathbb{N}$.*
+:::
+
+**Group notation.** In the above examples, you can observe that the
+notation differs from case to case, depending on the nature of the
+operation. For example, given some element $x$, we denote its inverse
+with respect to addition by $-x$, and its inverse with respect to
+multiplication by $x^{-1}$. Applying the operation to $n$ copies of the
+same element $x$ is represented by $nx$ in additive notation, and by
+$x^n$ in multiplicative notation. Even though not all group operations
+are addition or multiplication, it is common to adopt their notation for
+a generic group operation.[^20] In these notes, we will often use
+multiplicative notation for generic groups. That is, we denote the
+identity element by $1$, the inverse of $x$ by $x^{-1}$, and the
+operation of $x$ and $y$ by $x\cdot y$ or simply $xy$.
+
+Observe that, if a group $\mathbb{G}$ contains an element $g$, then the
+fact that $g^2=gg$ implies that $g^2\in\mathbb{G}$ too. Similarly,
+$g^3=g^2g\in \mathbb{G}$, and so on. It is easy to generalize this idea,
+and conclude that, if $g\in \mathbb{G}$, then $g^n\in \mathbb{G}$ for
+all $n\in\mathbb{N}$. That is, a single element $g$ *generates* many
+elements of a group. This leads us to the concept of *cyclic groups*,
+which are those that contain only the powers of a single element.
+
+::: {.definition}
+*A group $\mathbb{G}$ is said to be* cyclic *if there
+exists $g\in \mathbb{G}$ such that
+$$\mathbb{G}=\{g^n\mid n\in\mathbb{Z}_{\geq0}\}.$$ This group is also
+denoted by $\langle g \rangle$, and is called the group* generated *(or* spanned*) by $g$, and $g$ is called a* generator *of $\mathbb{G}$. Note
+that, in a group with additive notation, we would write instead
+$$\mathbb{G}=\{nx\mid n\in\mathbb{Z}_{\geq0}\}.$$*
+:::
+
+The name of these groups come from their often cyclic nature. We
+illustrate this with the example of the group $\mathbb{Z}_5$ with
+addition modulo $5$. We claim that $\mathbb{Z}_5$ is generated by $2$.
+Indeed, $$\begin{aligned}
+    & 2\cdot 0\bmod 5 = 0\\
+    & 2\cdot 1\bmod 5 = 2\\
+    & 2\cdot 2\bmod 5 = 4\\
+    & 2\cdot 3\bmod 5 = 6 \bmod 5 = 1\\
+    & 2\cdot 4\bmod 5 = 8 \bmod 5 = 3\\
+    & 2\cdot 5\bmod 5 = 10 \bmod 5 = 0\\
+    & 2\cdot 6\bmod 5 = 12 \bmod 5 = 2\\
+    & 2\cdot 7\bmod 5 = 14 \bmod 5 = 4\\
+    & \vdots
+\end{aligned}$$
+
+We make two observations: the first is that all the elements of
+$\mathbb{Z}_5$ are reached through powers of $2$, thus we have proven
+that it is generated by $2$. The second is that, after $2\cdot 5$, it is
+clear that the numbers start to repeat in a fixed order. That is, the
+powers of $2$ cycle through $\mathbb{Z}_5$ in the order $0,2,4,1,3$.
+Note that generators are not unique. For example, $\mathbb{Z}_5$ could
+be generated by $1$ as well, although not by $0$.
+
+Moreover, although we will not get into the technical details, we
+informally mention that any cyclic group of finite order $n$ behaves
+like the additive group $\mathbb{Z}_n$, and any cyclic group of infinite
+order behaves like $\mathbb{Z}$.
+
+```{proposition}
+*For any $n\in\mathbb{N}$, we have that
+$(\mathbb{Z}_n,+)$, where $+$ is addition modulo $n$, is a cyclic
+group.*
+```
+
+::: {.exercise}
+*Decide whether the group
+$\mathbb{Z}_2\times\mathbb{Z}_3$, with component-wise modular addition,
+is a cyclic group.*
+:::
+
+Groups might contain smaller groups inside, that are consistent with the
+same operation.
+
+::: {.definition}
+*Let $\mathbb{G}$ be a group. A* subgroup $\mathbb{H}$
+*of $\mathbb{G}$ is a subset of $\mathbb{G}$ that contains the identity
+element and is closed under the group operation, that is, for any
+$x,y\in \mathbb{H}$, we have that $xy\in \mathbb{H}$.*
+:::
+
+For example, the set of even integers is a subgroup of $(\mathbb{Z},+)$,
+since the addition of even numbers is even. It is easy to see that
+subgroups are groups too.
+
+::: {.exercise}
+*Decide which of these subsets are subgroups of
+$(\mathbb{Z}_4,+)$:
+$$\{0\},\quad\qquad\{0,2\},\quad\qquad\{1,3\},\quad\qquad\{0,1,3\}.$$*
+:::
+
+It is easy to see that, for any $x\in\mathbb{G}$, the group
+$\langle x\rangle$ is a subgroup of $\mathbb{G}$. Note that this might
+not be the whole $\mathbb{G}$. This allows us to define the order of an
+element as follows.
+
+::: {.definition}
+*Let $\mathbb{G}$ be a group, and $x\in\mathbb{G}$.
+We define the* order *of $x$ as the order of $\langle x\rangle$, and
+denote it by $ord(x)$.*
+:::
+
+The following Sage code defines the additive group $(\mathbb{Z}_9,+)$,
+computes a generator, and then computes the order of each element, also
+explicitly providing the cycle that corresponds to that element.
+
+```{python, eval=FALSE}
+  G = AdditiveAbelianGroup([9])
+  g = G_add.gens()[0]           # The [0] is necessary because, technically,
+                                # .gens() returns a list.
+  print(str(G)+", generator: "+str(g))
+  for x in G:
+      print("x = "+str(x)+", ord(x) = "+str(x.order()))
+      for i in range(x.order()+1):
+          print(i*x)
+```
+
+If $\mathbb{H}$ is a subgroup of $\mathbb{G}$, it is clear that the
+order of $\mathbb{H}$ will be smaller than the order of $\mathbb{G}$,
+since the former is contained in the latter. But even more, it will
+necessarily be a divisor, which is something you may have observed after
+running the above code.
+
+```{proposition, name="Lagrange's theorem"}
+*Let $\mathbb{G}$ be a finite
+group.*
+
+*For any subgroup $\mathbb{H}$ of $\mathbb{G}$,
+$ord(\mathbb{H})\mid ord(\mathbb{G})$.*
+
+*For any $x\in\mathbb{G}$, $ord(x)\mid ord(\mathbb{G})$.*
+```
+
+The order of a group plays an important role in the group operation.
+
+```{proposition, name="Euler's theorem"}
+*Let $\mathbb{G}$ be a group of
+finite order. Then, for any $x\in \mathbb{G}$, we have that
+$$x^{ord(\mathbb{G})}=1.$$*
+```
+
+::: {.exercise}
+*Verify that Euler's theorem holds for the group
+$\mathbb{Z}_7^*$, with the operation multiplication modulo $7$.*
+:::
+
+The exercise can also be solved with Sage, using the following code.
+
+```{python, eval=FALSE}
+G = Integers(7).unit_group()    # Multiplicative group Z_7^*.
+for x in G:
+    print(x^(G.order()))
+```
+
+These propositions give us an easy way to check whether an element
+$x\in\mathbb{G}$ is a generator. Recall that the order of $x$ tells us
+how many elements there are in
+$$\langle x\rangle = \{x^n\mid n\in\mathbb{Z}_{\geq0}\},$$ that is, the
+number of steps in the cycle of powers of $x$ before going back to $1$
+and repeating elements. If it were the case that
+$ord(x)=ord(\mathbb{G})$, this would mean that a the cycle is as big as
+$\mathbb{G}$, and therefore it must be that
+$\langle x\rangle = \mathbb{G}$. On the other hand, if
+$ord(x)<ord(\mathbb{G})$, this would mean that not all elements of
+$\mathbb{G}$ can be obtained as powers of $x$, and thus $x$ would not
+generate $\mathbb{G}$.
+
+Hence, we can check whether $x$ generates $\mathbb{G}$ by computing
+$ord(x)$ and comparing it with $ord(\mathbb{G})$. To do so, a naive
+approach would be to iteratively compute $$x,x^2,x^3,x^4,x^5,\dots$$
+until some $n$ is found such that $$x^n=1,$$ and we would have that
+$n=ord(x)$. However, note that this approach takes time linear in
+$ord(\mathbb{G})$. When $ord(\mathbb{G})$ is easy to factor, a more
+sensible approach is to use Lagrange's theorem, which tells us that
+$$ord(x)\mid ord(\mathbb{G}).$$ This allows us to drastically reduce the
+candidates to the powers $$x^{\frac{ord(\mathbb{G})}{d}},$$ for all
+$d\mid ord(\mathbb{G})$. The smallest exponent that produces a $1$ will
+be the order of $x$. In particular, if $ord(G)$ is prime, then there are
+only two candidates: $x$ and $x^{ord(\mathbb{G})}$. Hence in this case,
+if $x\neq1$, necessarily $x$ is a generator. That is, we have proven the
+following result.
+
+```{proposition}
+*Let $\mathbb{G}$ be a cyclic group of prime order.
+If $g\in\mathbb{G}$ is not the identity element, then $g$ generates
+$\mathbb{G}$.*
+```
+
+We conclude the section on groups by looking at some specific properties
+of the groups $\mathbb{Z}_n$ and $\mathbb{Z}_n^*$.
+
+```{proposition}
+*Let $p$ be a prime number. The multiplicative group
+$\mathbb{Z}_p^*$ is a cyclic group of order $p-1$, and it has
+$\varphi(p-1)$ generators. These generators are called *primitive roots*
+modulo $p$.*
+```
+
+Moreover, a direct consequence of Euler's theorem and the proposition
+above is known as *Fermat's little theorem*.[^21]
+
+```{proposition, name="Fermat's little theorem"}
+*Let $p$ be a prime
+number. Then, for any $x\in\mathbb{Z}$, we have that
+$$x^{p-1}\equiv1\pmod{p}.$$*
+```
+
+We also introduce the *Chinese remainder theorem (CRT)*, which, in its
+simplest form, states the following.
+
+```{proposition, name="Chinese remainder theorem"}
+*Let $a,b\in\mathbb{N}$
+be coprime, and let $n=ab$. Then, for each $x\in\mathbb{Z}_n$, there
+exists a unique pair $(y,z)\in\mathbb{Z}_a\times\mathbb{Z}_b$ such that
+$$\begin{aligned}
+        & x\equiv y\pmod{a}, \\
+        & x\equiv z\pmod{b}. \\
+    \end{aligned}$$ Moreover, given
+$(y,z)\in\mathbb{Z}_a\times\mathbb{Z}_b$, we can explicitly recover the
+corresponding $x$ by computing
+$$x=\left(by\left(b^{-1}\bmod{a}\right)+az\left(a^{-1}\bmod{b}\right)\right)\bmod{n}.$$*
+```
+
+With the notations of the proposition above, the Sage command that
+computes the value $x$ given by the Chinese remainder theorem is
+`crt(y, z, a, b)`.
+
+The legend says that this theorem was used in ancient China to count
+troops, proceeding as follows. Say that you had $200$ troops before
+battle, and you want to count your losses.
+
+1.  Choose a pair of coprime numbers such that their product is at least
+    the upper bound on the number of troops. In this case, we can use
+    $11\cdot19=209$.
+
+2.  Order the troops to stand in columns of length $11$. The last column
+    (possibly incomplete) tells us the remainder modulo $11$, say it is
+    $8$.
+
+3.  Reorganize the troops in columns of length $19$. Again, the last
+    column tells us the remainder $z$ modulo $19$, say it is $2$.
+
+4.  Using the Chinese remainder theorem, we know that there is a unique
+    number $x<209$ such that $$\begin{aligned}
+            & x\bmod 11 = 9, \\
+            & x\bmod 19 = 2, \\
+        \end{aligned}$$ and the second part of the theorem allows us to
+    explicitly compute this number. Since $$\begin{aligned}
+            & 19^{-1}\bmod 11 = 7, \\
+            & 11^{-1}\bmod 19 = 7, \\
+        \end{aligned}$$ we have that
+    $$x=\left(11\cdot 9\cdot 7+19\cdot 2\cdot 7\right)\bmod{209}=97.$$
+
+Higher factors, or more than two of them, can be used to deal with
+larger numbers.
+
+## Finite fields
+
+A *field* is a more complex algebraic structure, since it is equipped
+with two operations, both of which work similarly to a group
+operation.[^22]
+
+::: {.definition}
+*A* field *is a triple $(\mathbb{F},\circ,\ast)$,
+where $\mathbb{F}$ is a set and $\circ$ and $\ast$ are operations on
+$\mathbb{K}$, that is, functions $$\begin{aligned}
+        \circ : \phantom{a} & \mathbb{K}\times \mathbb{K}& \rightarrow & \phantom{a}\mathbb{K}& \qquad\qquad & \ast :& \mathbb{K}\times\mathbb{K}& \rightarrow & \mathbb{K}\\
+                & (x,y) & \mapsto & \phantom{a} x\circ y, & & & (x,y) & \mapsto & x\ast y,
+    \end{aligned}$$ which additionally satisfy the following
+properties:*
+
+1.  *$(\mathbb{F},\circ)$ is a commutative group, with identity element
+    denoted by $0$.*
+
+2.  *$(\mathbb{F}\setminus\{0\},\ast)$ is a commutative group, where
+    $\mathbb{F}\setminus\{0\}$ is the set $\mathbb{F}$ except for the
+    identity element of $\circ$.*
+
+3.  Distributive law: $x\ast(y\circ z)=(x\ast y)\circ(x\ast z)$ *for
+    all* $x,y,z\in\mathbb{F}.$
+:::
+
+Since we have two operations at the same time, we will adopt the
+additive and multiplicative notation from groups to represent each of
+them, respectively. That is, we will think of the first operation of a
+field as a form of *addition* and the second as a form of
+*multiplication*. On input $x,y$, we write the result of the first
+operation by $x+y$, and the result of the second by $xy$. The identity
+elements of each operation are denoted by $0$ and $1$, respectively. The
+inverse of $x$ with respect to the first operation is denoted by $-x$.
+The inverse of $x$ with respect to the second operation is denoted by
+$x^{-1}$. The following table summarizes the notation:
+
+::: {.center}
+   Operation   Operation on input $x,y$   Identity element   Inverse of $x$
+  ----------- -------------------------- ------------------ ----------------
+      $+$               $x+y$                   $0$               $-x$
+    $\cdot$              $xy$                   $1$             $x^{-1}$
+:::
+
+We consider some examples:
+
+-   $\mathbb{Q}$, $\mathbb{R}$ and $\mathbb{C}$, with usual addition and
+    multiplication, are fields. The properties are easy to check.
+    Identity elements are $0$ and $1$. The additive inverse of $x$ is
+    $-x$, and the multiplicative inverse of $x$ is $1/x$.
+
+-   Consider $\mathbb{Z}_9$, with addition and multiplication modulo
+    $9$. It satisfies most of the properties of a field, but we will see
+    that some elements have no inverse with respect to the second
+    operation. The following table gives the multiplicative inverses of
+    each element:
+
+    ::: {.center}
+             $x$  $0$   $1$   $2$   $3$   $4$   $5$   $6$   $7$   $8$
+      ---------- ----- ----- ----- ----- ----- ----- ----- ----- -----
+        $x^{-1}$  $-$   $1$   $5$   $-$   $7$   $2$   $-$   $4$   $8$
+    :::
+
+    Note that some elements are not invertible, in this case $0$, $3$
+    and $6$. Therefore, $\mathbb{Z}_9$ is not a field.
+
+In Sage, the following code can be used to check whether an element of
+$\mathbb{Z}_n$ has a multiplicative inverse.
+
+```{python, eval=FALSE}
+R = Integers(n)     # Z_n with addition and 
+                    # multiplication modulo n.
+for x in R:
+    print(x,x.is_unit())
+```
+
+In this course we will be interested in *finite fields*,[^23] so what
+are some examples of those? Could it be, for example, that
+$\mathbb{Z}_n$ is a field for some $n\in\mathbb{N}$? We already know
+that this will not be true for all $n\in\mathbb{N}$, since we saw that
+some elements of $\mathbb{Z}_9$ do not have an inverse.
+
+```{proposition}
+*The $\mathbb{Z}_n$, with addition and
+multiplication modulo $n$, is a field if and only if $n$ is a prime
+number.*
+```
+
+The only finite fields that exist have a number of elements that is
+either a prime number or a power of a prime number.
+
+```{proposition}
+*Let $\mathbb{F}$ be a finite field. Then
+$\mathbb{F}$ has $p^k$ elements, where $p$ is a prime number and
+$k\in\mathbb{N}$. We denote such a finite field by $\mathbb{F}_{p^k}$.
+If $k=1$, the field is called a* prime field*, otherwise it is known as
+an* extension field*. We call $p$ the* characteristic *of the field.*
+```
+
+Moreover, given a prime $p$ and $k\in\mathbb{N}$, there is essentially
+only one field with $p^k$ elements, although this same field can have
+different representations.
+
+One might think that these extension fields $\mathbb{F}_{p^k}$
+correspond to $\mathbb{Z}_{p^k}$, but actually this is not true. Again,
+we recall the example in which we showed that
+$\mathbb{Z}_9=\mathbb{Z}_{3^2}$ is not a field, because some elements
+are not invertible. So, if $\mathbb{F}_{p^k}$ is not $\mathbb{Z}_{p^k}$,
+what is it?
+
+It turns out that we need some more involved tools to describe these. An
+element of the field $\mathbb{F}_{p^k}$ is not represented by an
+integer. Instead, we use a polynomial
+$$a_{k-1}x^{k-1}+\dots +a_1x+a_0,$$ for some coefficients
+$a_{k-1},\dots,a_0\in\mathbb{F}_p$. Note that the degree of the
+polynomial is $k-1$ for representing an element of $\mathbb{F}_{p^k}$.
+Since there are $k$ coefficients, and each of these has $p$ possible
+values, we see that there are in total $p^k$ possible polynomials, and
+thus so far it makes sense to try to associate these with the $p^k$
+elements of $\mathbb{F}_{p^k}$.
+
+But we still need to specify how the operations work. For addition, we
+use usual polynomial addition, that is, $$\begin{split}
+    A(X)+B(X)& =(a_{k-1}X^{k-1}+\dots +a_1X+a_0)+(b_{k-1}X^{k-1}+\dots +b_1X+b_0) = \\
+    & =(a_{k-1}+b_{k-1})X^{k-1}+\dots +(a_1+b_1)X+(a_0+b_0),
+\end{split}$$ which is also a polynomial of degree at most $k-1$, and it
+is easy to see that it verifies the conditions of a group operation.
+Note that the coefficients are in $\mathbb{F}_p$, so the additions of
+the coefficients are reduced modulo $p$ if necessary.
+
+For multiplication, we consider multiplying the two polynomials.
+However, note that, in general, multiplying two polynomials $A(X)$ and
+$B(X)$ of degree $k-1$ produces a polynomial $A(X)B(X)$ of degree
+$2k-2$, which is not in $\mathbb{F}_{p^k}$ anymore. Our trick then is
+analogous to what we did in $\mathbb{F}_p=\mathbb{Z}_p$. In that case,
+we reduced the result modulo a prime number $p$. Now, we will reduce the
+result modulo a certain polynomial $T(X)$ of degree $k$. This means that
+we compute the polynomial division of $A(X)B(X)$ by $T(X)$, and keep the
+remainder, so that the result has degree at most $k-1$.[^24] Since this
+is analogous to the case of integers, we extend the notation
+$$A(X)\bmod{T(X)}$$ to denote the remainder of the polynomial division
+$A(X)$ by $T(X)$, and the notation $$A(X)\equiv B(X)\pmod{T(X)}$$ to
+denote that $$(A(X)-B(X))\bmod{T(X)}=0,$$ that is, $A(X)-B(X)$ is a
+multiple of $T(X)$.
+
+But which polynomial $T(X)$ should we use? Not every polynomial will
+yield a multiplication law of a field. We require an *irreducible
+polynomial*, that is, a polynomial that cannot be written as a product
+of two non-trivial polynomials with coefficients in $\mathbb{F}_p$.
+
+At first, this might seem like an obscure condition, but if you think
+about it, it is actually analogous to what happened for prime fields. In
+that case, we started from $\mathbb{Z}_n$, and concluded that it is only
+a field when $n$ is a prime, which is precisely a number that cannot be
+factored in a non-trivial way. In extension fields, we are representing
+elements by polynomials instead of integers, and so we look for the
+analogue of a prime number in this sense of lack of factorization. This
+leads us to irreducible polynomials, although a formal proof of this
+statement is beyond the scope of this course.
+
+```{proposition}
+*Let $p$ be a prime number and $k\in\mathbb{N}$. Let
+$T(X)$ be an irreducible polynomial of degree $k$ with coefficients in
+$\mathbb{F}_p$. The set of polynomials of degree at most $k-1$ and
+coefficients over $\mathbb{F}_p$, together with the operations
+polynomial addition and multiplication modulo $T(X)$, is a field of
+$p^k$ elements.*
+```
+
+The choice of irreducible polynomial $T(X)$ determines the
+multiplication law, but any of the outcomes can be seen as different
+representations of the same finite field of size $p^k$.
+
+Finally, inversion of elements in $\mathbb{F}_{p^k}$ can be handled with
+the extended Euclidean algorithm por polynomials, similarly to the way
+it was used to invert integers modulo $n$. We describe this algorithm
+below.
+
+::: {.definition}
+*Given a polynomial
+$$a_kX^k+a_{k-1}X^{k-1}+\dots+a_1X+a_0,$$ we define its* leading
+coefficient *as the coefficient of the highest-degree monomial, in this
+case $a_k$. A polynomial with leading coefficient $1$ is called* monic.
+:::
+
+::: {.definition}
+*Given two polynomials $A(X)$ and $B(X)$, we define
+their* greatest common divisor *as the highest-degree monic polynomial
+that divides both.*
+:::
+
+```{proposition, label="polyeuclid"}
+*Let $p$ be a prime number and let $k\in\mathbb{N}$.
+Let $\mathbb{F}_{p^k}$ be the finite field of $p^k$ elements, with
+irreducible polynomial $T(X)$. Let $A(X),B(X)$ be two elements of
+$\mathbb{F}_{p^k}$. Then, there exist $U(X),V(X)$ in $\mathbb{F}_{p^k}$
+such that $$A(X)U(X)+B(X)V(X)=\gcd(A(X),B(X)).$$*
+```
+
+The Euclidean algorithm for polynomials is very similar to the analogous
+algorithm for integers, with an additional step to ensure that the
+output is a monic polynomial.
+
+1.  Compute the polynomial division of $A(X)$ by $B(X)$, obtaining
+    $Q(X),R(X)$ such that the $0\leq \deg R<\deg B$ and
+    $$A(X)=B(X)Q(X)+R(X).$$
+
+2.  If $R(X)=0$, go to step 3. Otherwise, return to the previous step,
+    replacing $A(X)$ by $B(X)$ and $B(X)$ by $R(X)$.
+
+3.  Multiply $B(X)$ by the inverse of its leading coefficient, and
+    output the result.
+
+This will produce $\gcd(A(X),B(X))$, from which we can go back through
+the procedure to find the expression in the proposition above. We show
+an example in $\mathbb{F}_{5^4}$, with irreducible polynomial
+$T(X)=X^4+4X^2+4X+2$. $$A(X)=X^3+3X^2+4, \qquad\qquad B(X)=X^2+2X+2.$$
+Note that coefficients are in $\mathbb{F}_5$, and thus all the
+operations performed on coefficients must be carried out modulo $5$. We
+start by dividing $A(X)$ by $B(X)$, obtaining
+$$X^3+3X^2+4=(X^2+2X+2)(X+1)+(X+2)$$ Since the remainder is not $0$, we
+compute the next polynomial division, obtaining $$X^2+2X+2=(X+2)X+2.$$
+Finally, $$(X+2)=2(3X+1)+0.$$ Since the last remainder is $0$, we
+conclude that the greatest common divisor of $A(X)$ and $B(X)$ is $2$
+multiplied by the inverse of its leading coefficient, so in this case
+$$\gcd(A(X),B(X))=2\cdot2^{-1}=1.$$ Again, by undoing these steps, we
+can find the expression in
+Proposition \@ref(prp:polyeuclid): $$2=(X^2+2X+2)-(X+2)X.$$ We also have
+that $$X+2=(X^3+3X^2+4)-(X^2+2X+2)(X+1),$$ and thus, combining the two
+expressions, $$\begin{aligned}
+2 & = (X^2+2X+2)-\left((X^3+3X^2+4)-(X^2+2X+2)(X-1)\right)X = \\
+  & = (X^2+2X+2)-(X^3+3X^2+4)X + (X^2+2X+2)(X^2+X) = \\
+  & = (-X)(X^3+3X^2+4)+(X^2+X+1)(X^2+2X+2).
+\end{aligned}$$ Multiplying both sides by $2^{-1}\bmod{5}=3$, we have
+that $$\begin{aligned}
+1 & \equiv (-3X)(X^3+3X^2+4)+(3X^2+3X+3)(X^2+2X+2) \equiv \\
+  & \equiv (2X)(X^2+3X^2+4)+(3X^2+3X+3)(X^2+2X+2).
+\end{aligned}$$ Therefore, $$U(X)=2X,\qquad\qquad V(X)=3X^2+3X+3.$$
+
+As in the case of integers, we can compute the inverse of $A(X)$ in
+$\mathbb{F}_{p^k}$ by running the Extended euclidean algorithm on $A(X)$
+and the irreducible polynomial $T(X)$, obtaining some polynomials
+$U(X),V(X)$ such that $$1=A(X)U(X)+T(X)V(X),$$ thus
+$$1\equiv A(X)U(X)\pmod{T(X)},$$ and we find that $U(X)$ is the inverse
+of $A(X)$ in $\mathbb{F}_{p^k}$.
+
+We show to define and manipulate finite fields in Sage.
+
+```{python, eval=FALSE}
+# Finite field of size 3^5. The optional argument modulus=p 
+# allows to specify the irreducible polynomial p to be used.
+F = GF(3^5, "X")
+F
+        
+# Get the polynomial p(X)=X into the field.
+X = F("X")
+        
+# Show the irreducible polynomial being used.
+F.modulus()
+        
+# Define two elements of F and operate with them.
+a = F(X^4+X^2+2*X)
+b = F(2*X^2+2*X^3+1)
+# Addition
+print("a + b = "+str(a+b))
+# Multiplication
+print("a * b = "+str(a*b))
+# Inversion
+print("a^{-1} = "+str(a^(-1)))
+```
+
+[^20]: A prime example of a different group operation, which appears
+    very often in cryptography, is the group law of elliptic curves.
+
+[^21]: Not to be confused with *Fermat's last theorem*, which states
+    that there are no positive integer solutions for the equation
+    $x^n+y^n=z^n$ for any integer $n>2$. This theorem has become famous
+    due to its history: it was originally claimed by Pierre de Fermat in
+    the 17th century. He wrote it in the margin of a book, claiming to
+    know a proof but lacking the space to write it down. Such proof was
+    never found, and the first known proof of the theorem appeared more
+    than three centuries later, in the 1990s, when Andrew Wiles finally
+    solved the problem, after the contributions of a long lineage of
+    mathematicians.
+
+[^22]: Appendix \@ref(ring-theory) contains a more detailed introduction
+    to this section. It first defines another algebraic structure called
+    a *ring*, which is somewhat between a group and a field, and then
+    defines fields as a particular type of ring. This appendix is not
+    part of the content for the exam, and the main body of these notes
+    is designed to be self-contained, but nevertheless we advise you to
+    read Appendix \@ref(ring-theory) before reading about fields, since it
+    provides a more natural introduction to the topic.
+
+[^23]: Sometimes also called Galois fields, after the mathematician
+    Évariste Galois, who notably proved that there is no algebraic
+    formula for solving polynomial equations of degree higher than $4$,
+    and then died after a duel at the age of 20.
+
+[^24]: See Appendix \@ref(polydiv) for a refresher on how to perform
+    polynomial division.

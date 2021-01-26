@@ -1,5 +1,134 @@
 # (APPENDIX) Appendices {-} 
 
+
+# Ring theory {#ring-theory}
+
+A ring is a slightly more complex algebraic structure, since it is
+equipped with two operations, the first of them with the exact same
+properties of a commutative group operation, whereas the second does not
+require the existence of inverse.
+
+::: {.definition}
+*A* ring[^25] *is a triple $(\mathbb{K},\circ,\ast)$,
+where $\mathbb{K}$ is a set and $\circ$ and $\ast$ are operations on
+$\mathbb{K}$, that is, functions $$\begin{aligned}
+        \circ : \phantom{a} & \mathbb{K}\times \mathbb{K}& \rightarrow & \phantom{a}\mathbb{K}& \qquad\qquad & \ast :& \mathbb{K}\times\mathbb{K}& \rightarrow & \mathbb{K}\\
+                & (x,y) & \mapsto & \phantom{a} x\circ y, & & & (x,y) & \mapsto & x\ast y,
+    \end{aligned}$$ which additionally satisfy the following
+properties:*
+
+1.  *$(\mathbb{K},\circ)$ is a commutative group.*
+
+2.  *$(\mathbb{K},\ast)$ satisfies the following properties:*
+
+    1.  Associative law: $(x\ast y)\ast z = x\ast(y\ast z)$ *for all*
+        $x,y,z\in \mathbb{K}$.
+
+    2.  Existence of identity: *there exists $e\in \mathbb{K}$ such
+        that $e\ast x=x\ast e=x$ for all $x\in \mathbb{K}$. Such element
+        $e$ is called the* identity element *of $\ast$.*
+
+    3.  Commutativity: $x\ast y=y \ast x$ *for all*
+        $x,y\in \mathbb{K}$.
+
+3.  Distributive law: $x\ast(y\circ z)=(x\ast y)\circ(x\ast z)$ *for
+    all* $x,y,z\in\mathbb{K}.$*
+:::
+
+Since we have two operations at the same time, we will adopt the
+additive and multiplicative notation from groups to represent each of
+them, respectively. That is, we will think of the first operation of a
+ring as a form of *addition* and the second as a form of
+*multiplication*. On input $x,y$, we write the result of the first
+operation by $x+y$, and the result of the second by $xy$. The identity
+elements of each operation are denoted by $0$ and $1$, respectively. The
+inverse of $x$ with respect to the first operation is denoted by $-x$.
+The inverse of $x$ with respect to the second operation, if exists, is
+denoted by $x^{-1}$. The following table summarizes the notation:
+
+::: {.center}
+   Operation   Operation on input $x,y$   Identity element   Inverse of $x$
+  ----------- -------------------------- ------------------ ----------------
+      $+$               $x+y$                   $0$               $-x$
+    $\cdot$              $xy$                   $1$             $x^{-1}$
+:::
+
+We consider some examples:
+
+-   $(\mathbb{Z},+,\cdot)$, with usual integer addition and
+    multiplication, is a ring, since $(\mathbb{Z},+)$ is a group with
+    identity $0$, $(\mathbb{Z},\cdot)$ verifies associativity,
+    commutativity and existence of identity ($1$), and it is easy to
+    verify distributivity. Note, however, that $\mathbb{Z}$ does not
+    contain multiplicative inverses, since for example there is no
+    $x\in\mathbb{Z}$ such that $2x=1$. For similar reasons,
+    $(\mathbb{Z}_n,+,\cdot)$, with modular addition and multiplication,
+    is a ring, for $n\in\mathbb{N}$.
+
+-   $(\mathbb{Q}[X],+,\cdot)$, where $\mathbb{Q}[X]$ is the set of
+    polynomials with rational coefficients in variable $X$, $+$ is
+    point-wise addition, and $\cdot$ is point-wise multiplication, is
+    also a ring. The identity elements are the constant polynomials
+    $p(X)=0$ and $q(X)=1$, respectively.
+
+Consider the ring $\mathbb{Z}_9$, with addition and multiplication
+modulo $9$. The following table gives the multiplicative inverses of
+each element:
+
+::: {.center}
+         $x$  $0$   $1$   $2$   $3$   $4$   $5$   $6$   $7$   $8$
+  ---------- ----- ----- ----- ----- ----- ----- ----- ----- -----
+    $x^{-1}$  $-$   $1$   $5$   $-$   $7$   $2$   $-$   $4$   $8$
+:::
+
+Note that some elements are not invertible, in this case $0$, $3$ and
+$6$. Those elements in a ring that happen to have a multiplicative
+inverse receive a special name.
+
+::: {.definition}
+*Let $\mathbb{K}$ be a ring. An element
+$x\in\mathbb{K}$ that has a multiplicative inverse is called a* unit*.
+We denote the set of units of $\mathbb{K}$ by $\mathbb{K}^*$.*
+:::
+
+Note that the only thing that $(\mathbb{K},\cdot)$ was missing to be a
+group is existence of inverses. By restricting ourselves to the subset
+$\mathbb{K}^*$ of invertible elements, we have that
+$(\mathbb{K}^*,\cdot)$ is a group. Note that, in the previous lesson, we
+defined $\mathbb{Z}_n^*$ to be the set of invertible elements of
+$\mathbb{Z}_n$, so in this new formulation, we can state that
+$\mathbb{Z}_n^*$ is actually the set of units of $\mathbb{Z}_n$.
+Moreover, we now know that $\mathbb{Z}_n^*$ is a group with
+multiplication modulo $n$.
+
+In light of the discussion above, we start this section by asking
+ourselves the following question.
+
+::: {.problem}
+*Is it possible to have a ring $\mathbb{K}$ in which all
+the elements are invertible?*
+:::
+
+This will never be the case, unless the ring only contains one element,
+since the additive identity $0$ cannot have a multiplicative inverse
+otherwise. To see this, assume that there exists $x\in\mathbb{K}$ such
+that $0\cdot x = 1$. First, $$0x=(1+(-1))x=x+(-x)=0,$$ using the
+distributive law and the properties of the multiplicative identity $1$.
+Then we have that $1=0$. But then, this means that $$x=1x=0x=0,$$ using
+the properties of the multiplicative and additive identities. Thus, we
+conclude that every element is the same. And rings with just one element
+are not very interesting.
+
+So, except for the trivial case, we know that $0$ cannot have an
+inverse. What about the rest of the elements? In this case, the answer
+is affirmative: there exist rings in which every non-zero element is
+invertible, and we call those *fields*.
+
+::: {.definition}
+*A* field *is a ring in which every non-zero element
+has a multiplicative inverse in the ring.*
+:::
+
 # Refreshers {#refreshers}
 
 ## Set notation
@@ -139,3 +268,64 @@ false.*
 
 -   *$4^x=O(2^x)$.*
 :::
+
+## Polynomial division {#polydiv}
+
+Consider two polynomials $$\begin{split}
+    & A(X)=a_kX^k+a_{k-1}X^{k-1}+\dots+a_1X+a_0, \\
+    & B(X)=b_{\ell}X^{\ell}+b_{\ell-1}X^{\ell-1}+\dots+b_1X+b_0, \\
+\end{split}$$ where $k\geq\ell$. Then, we have the following result.
+
+```{proposition, label=polydiv}
+*Let $A(X)$ and $B(X)$ be the polynomials defined
+above. Then, there exist polynomials $Q(X)$ and $R(X)$ such that
+$$A(X)=B(X)Q(X)+R(X),$$ where the degree of $R$ is smaller than $\ell$.
+In this case, $Q$ is called the* quotient *and $R$ is called the* remainder *of the division.*
+```
+
+The algorithm is very similar to the algorithm of integer division. The
+idea is to try to find factors such that, when multiplied by $B(X)$,
+allow us to remove the highest-degree term left in $A(X)$, and use these
+terms to build $Q(X)$. Although very simple, the idea is cumbersome to
+explain for general polynomials, so we illustrate it with an example.
+Let $$A(X)=3X^5+X^4+2X^2+7,\qquad B(X)=X^3+X^2+X.$$ We arrange them in
+the usual diagram: $$\begin{array}{rrrrrrl}
+    3X^5 & +x^4 & & +2x^2 & & +7 \qquad &  |\quad X^3+X^2+X\\
+     &&&&&& \overline{\phantom{|\quad  X^3+X^2+X}} \\
+\end{array}$$ We want to remove $3X^5$, so we try to find a factor
+$f(X)$ such that $f(X)X^3=3X^5$. Thus, we choose $f(X)=3X^2$, multiply
+it by $B(X)$, and subtract the result from $A(X)$, obtaining a
+lower-degree polynomial: $$\begin{array}{rrrrrrl}
+    3X^5 & +X^4 & & +2X^2 & & +7 \qquad &  |\quad X^3+X^2+X\\
+     &&&&&& \overline{\phantom{|\quad  X^3+X^2+X}} \\
+      & -2X^4 & -3X^3 & +2X^2 &  &+ 7 \qquad & 3X^2\\
+\end{array}$$ We now look at the new polynomial, $-2X^4-3X^3+2X^2+7$,
+and again try to remove the highest-degree monomial, which we achieve by
+multiplying $X^3$ by $-2X$. $$\begin{array}{rrrrrrl}
+    3X^5 & +X^4 & & +2X^2 & & +7 \qquad &  |\quad X^3+X^2+X\\
+     &&&&&& \overline{\phantom{|\quad  X^3+X^2+X}} \\
+      & -2X^4 & -3X^3 & +2X^2 &  &+ 7 \qquad & 3X^2-2X\\
+      &&&&&& {\phantom{|\quad  X^3+X^2+X}} \\
+     & & -X^3 + 4X^2 &&&+ 7 \qquad & \\
+\end{array}$$ Again, we want to remove the term $-X^3$, so we multiply
+$B(X)$ by $-1$: $$\begin{array}{rrrrrrl}
+    3X^5 & +X^4 & & +2X^2 & & +7 \qquad &  |\quad X^3+X^2+X\\
+     &&&&&& \overline{\phantom{|\quad  X^3+X^2+X}} \\
+      & -2X^4 & -3X^3 & +2X^2 &  &+ 7 \qquad & 3X^2-2X-1\\
+      &&&&&& {\phantom{|\quad  X^3+X^2+X}} \\
+     & & -X^3 + 4X^2 &&&+ 7 \qquad & \\
+     &&&&&& {\phantom{|\quad  X^3+X^2+X}} \\
+     & & & 5X^2 & +X & +7 \qquad & \\
+\end{array}$$ Since the degree of the current dividend is smaller than
+the degree of the divisor, we are done. We conclude that the quotient of
+the division of $A(X)$ by $B(X)$ is $$3X^2-2X-1,$$ and the remainder is
+$$5X^2+X+7.$$ Note that the above example works in $\mathbb{Q}$, but in
+general operations on the coefficients must take into account which
+field we are in. For example, if our coefficients are in $\mathbb{F}_5$,
+we cannot "divide" by $3$, but we can find the inverse of $3$ modulo
+$5$, and we must ensure that every coefficient is reduced modulo $5$.
+
+[^25]: *In an abstract algebra context, the definition of a ring is more
+    general, and what we are defining is known as a *commutative ring
+    with unity*. Nevertheless, we stick to this definition for
+    simplicity, since it is the only type of ring relevant to us.*

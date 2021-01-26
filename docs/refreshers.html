@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>A Refreshers | Cryptography lecture notes</title>
-  <meta name="description" content="A Refreshers | Cryptography lecture notes" />
+  <title>B Refreshers | Cryptography lecture notes</title>
+  <meta name="description" content="B Refreshers | Cryptography lecture notes" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="A Refreshers | Cryptography lecture notes" />
+  <meta property="og:title" content="B Refreshers | Cryptography lecture notes" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="A Refreshers | Cryptography lecture notes" />
+  <meta name="twitter:title" content="B Refreshers | Cryptography lecture notes" />
   
   
   
@@ -29,7 +29,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="cryptanalysis.html"/>
+<link rel="prev" href="ring-theory.html"/>
 
 <script src="libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
@@ -176,18 +176,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.3" data-path="elementary-number-theory.html"><a href="elementary-number-theory.html#modular-arithmetic"><i class="fa fa-check"></i><b>5.3</b> Modular arithmetic</a></li>
 <li class="chapter" data-level="5.4" data-path="elementary-number-theory.html"><a href="elementary-number-theory.html#modular-arithmetic-but-efficient"><i class="fa fa-check"></i><b>5.4</b> Modular arithmetic, but efficient</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="algebraic-structures.html"><a href="algebraic-structures.html"><i class="fa fa-check"></i><b>6</b> Algebraic structures</a></li>
+<li class="chapter" data-level="6" data-path="algebraic-structures.html"><a href="algebraic-structures.html"><i class="fa fa-check"></i><b>6</b> Algebraic structures</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="algebraic-structures.html"><a href="algebraic-structures.html#groups"><i class="fa fa-check"></i><b>6.1</b> Groups</a></li>
+<li class="chapter" data-level="6.2" data-path="algebraic-structures.html"><a href="algebraic-structures.html#finite-fields"><i class="fa fa-check"></i><b>6.2</b> Finite fields</a></li>
+</ul></li>
 <li class="chapter" data-level="7" data-path="pke.html"><a href="pke.html"><i class="fa fa-check"></i><b>7</b> Public-key encryption</a></li>
 <li class="chapter" data-level="8" data-path="dh.html"><a href="dh.html"><i class="fa fa-check"></i><b>8</b> The Diffie–Hellman key exchange</a></li>
 <li class="chapter" data-level="9" data-path="signatures.html"><a href="signatures.html"><i class="fa fa-check"></i><b>9</b> Digital signatures</a></li>
 <li class="part"><span><b>IV Other topics</b></span></li>
 <li class="chapter" data-level="10" data-path="cryptanalysis.html"><a href="cryptanalysis.html"><i class="fa fa-check"></i><b>10</b> Cryptanalysis</a></li>
 <li class="appendix"><span><b>Appendices</b></span></li>
-<li class="chapter" data-level="A" data-path="refreshers.html"><a href="refreshers.html"><i class="fa fa-check"></i><b>A</b> Refreshers</a>
+<li class="chapter" data-level="A" data-path="ring-theory.html"><a href="ring-theory.html"><i class="fa fa-check"></i><b>A</b> Ring theory</a></li>
+<li class="chapter" data-level="B" data-path="refreshers.html"><a href="refreshers.html"><i class="fa fa-check"></i><b>B</b> Refreshers</a>
 <ul>
-<li class="chapter" data-level="A.1" data-path="refreshers.html"><a href="refreshers.html#set-notation"><i class="fa fa-check"></i><b>A.1</b> Set notation</a></li>
-<li class="chapter" data-level="A.2" data-path="refreshers.html"><a href="refreshers.html#probability-theory"><i class="fa fa-check"></i><b>A.2</b> Probability theory</a></li>
-<li class="chapter" data-level="A.3" data-path="refreshers.html"><a href="refreshers.html#asymptotic-notation"><i class="fa fa-check"></i><b>A.3</b> Asymptotic notation</a></li>
+<li class="chapter" data-level="B.1" data-path="refreshers.html"><a href="refreshers.html#set-notation"><i class="fa fa-check"></i><b>B.1</b> Set notation</a></li>
+<li class="chapter" data-level="B.2" data-path="refreshers.html"><a href="refreshers.html#probability-theory"><i class="fa fa-check"></i><b>B.2</b> Probability theory</a></li>
+<li class="chapter" data-level="B.3" data-path="refreshers.html"><a href="refreshers.html#asymptotic-notation"><i class="fa fa-check"></i><b>B.3</b> Asymptotic notation</a></li>
+<li class="chapter" data-level="B.4" data-path="refreshers.html"><a href="refreshers.html#polydiv"><i class="fa fa-check"></i><b>B.4</b> Polynomial division</a></li>
 </ul></li>
 </ul>
 
@@ -206,10 +212,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="refreshers" class="section level1" number="11">
-<h1><span class="header-section-number">A</span> Refreshers</h1>
-<div id="set-notation" class="section level2" number="11.1">
-<h2><span class="header-section-number">A.1</span> Set notation</h2>
+<div id="refreshers" class="section level1" number="12">
+<h1><span class="header-section-number">B</span> Refreshers</h1>
+<div id="set-notation" class="section level2" number="12.1">
+<h2><span class="header-section-number">B.1</span> Set notation</h2>
 <p>A <em>set</em> is a well-defined collection of objects. Such objects are said
 to be <em>elements</em> of the set, or that they <em>belong</em> to the set. For
 example, the set of the vowels is
@@ -265,7 +271,7 @@ set <span class="math inline">\(\{0,1\}^\ell\)</span> of possible bitstrings of 
 <span class="math inline">\(\{0,1\}^*\)</span> of bitstrings of any length. Observe that
 <span class="math display">\[\#\{0,1\}=2,\qquad\#\{0,1\}^\ell=2^\ell,\qquad \#\{0,1\}^*=\infty.\]</span></p>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-48" class="exercise"><strong>Exercise A.1  </strong></span><em>Write these sets using implicit notation:</em></p>
+<p><span id="exr:unlabeled-div-73" class="exercise"><strong>Exercise B.1  </strong></span><em>Write these sets using implicit notation:</em></p>
 <ul>
 <li><p><em>The set of complex numbers with real part equal to <span class="math inline">\(1\)</span>.</em></p></li>
 <li><p><em>The set of pairs, where the first component of the pair is a
@@ -274,8 +280,8 @@ rational number and the second component is an odd natural number.</em></p></li>
 </ul>
 </div>
 </div>
-<div id="probability-theory" class="section level2" number="11.2">
-<h2><span class="header-section-number">A.2</span> Probability theory</h2>
+<div id="probability-theory" class="section level2" number="12.2">
+<h2><span class="header-section-number">B.2</span> Probability theory</h2>
 <p>We will deal with probability distributions over finite sets. In
 particular, recall that the <em>uniform distribution</em> over a set <span class="math inline">\(S\)</span> is the
 probability distribution that assigns the same probability <span class="math inline">\(1/\#S\)</span> to
@@ -290,12 +296,12 @@ Given two events <span class="math inline">\(A,B\)</span>, we denote the <em>pro
 probability of both <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> happening. Recall that, if <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>
 are independent events, then <span class="math display">\[\Pr[A\cap B]=\Pr[A]\cdot\Pr[B].\]</span></p>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-49" class="exercise"><strong>Exercise A.2  </strong></span><em>Compute the probability of a random bitstring of
+<p><span id="exr:unlabeled-div-74" class="exercise"><strong>Exercise B.2  </strong></span><em>Compute the probability of a random bitstring of
 length <span class="math inline">\(4\)</span> being the string <span class="math inline">\(1110\)</span>.</em></p>
 </div>
 </div>
-<div id="asymptotic-notation" class="section level2" number="11.3">
-<h2><span class="header-section-number">A.3</span> Asymptotic notation</h2>
+<div id="asymptotic-notation" class="section level2" number="12.3">
+<h2><span class="header-section-number">B.3</span> Asymptotic notation</h2>
 <p>Asymptotic notation allows us to easily express the <em>asymptotic
 behaviour</em> of functions, that is, how the function changes for
 arbitrarily large inputs, with respect to some other function. For
@@ -319,7 +325,7 @@ degree, and polynomials of any degree grow slower than exponential
 functions. Given two polynomials of different degrees, the one with the
 higher degree grows faster.</p>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-50" class="exercise"><strong>Exercise A.3  </strong></span><em>Decide whether each of these statements is true or
+<p><span id="exr:unlabeled-div-75" class="exercise"><strong>Exercise B.3  </strong></span><em>Decide whether each of these statements is true or
 false.</em></p>
 <ul>
 <li><p><em><span class="math inline">\(10^{10}x^3=O(x^4)\)</span>.</em></p></li>
@@ -328,9 +334,94 @@ false.</em></p>
 <li><p><em><span class="math inline">\(4^x=O(2^x)\)</span>.</em></p></li>
 </ul>
 </div>
+</div>
+<div id="polydiv" class="section level2" number="12.4">
+<h2><span class="header-section-number">B.4</span> Polynomial division</h2>
+<p>Consider two polynomials <span class="math display">\[\begin{split}
+    &amp; A(X)=a_kX^k+a_{k-1}X^{k-1}+\dots+a_1X+a_0, \\
+    &amp; B(X)=b_{\ell}X^{\ell}+b_{\ell-1}X^{\ell-1}+\dots+b_1X+b_0, \\
+\end{split}\]</span> where <span class="math inline">\(k\geq\ell\)</span>. Then, we have the following result.</p>
+
+<div class="proposition">
+<span id="prp:polydiv" class="proposition"><strong>Proposition B.1  </strong></span><em>Let <span class="math inline">\(A(X)\)</span> and <span class="math inline">\(B(X)\)</span> be the polynomials defined
+above. Then, there exist polynomials <span class="math inline">\(Q(X)\)</span> and <span class="math inline">\(R(X)\)</span> such that
+<span class="math display">\[A(X)=B(X)Q(X)+R(X),\]</span> where the degree of <span class="math inline">\(R\)</span> is smaller than <span class="math inline">\(\ell\)</span>.
+In this case, <span class="math inline">\(Q\)</span> is called the</em> quotient <em>and <span class="math inline">\(R\)</span> is called the</em> remainder <em>of the division.</em>
+</div>
+<p>The algorithm is very similar to the algorithm of integer division. The
+idea is to try to find factors such that, when multiplied by <span class="math inline">\(B(X)\)</span>,
+allow us to remove the highest-degree term left in <span class="math inline">\(A(X)\)</span>, and use these
+terms to build <span class="math inline">\(Q(X)\)</span>. Although very simple, the idea is cumbersome to
+explain for general polynomials, so we illustrate it with an example.
+Let <span class="math display">\[A(X)=3X^5+X^4+2X^2+7,\qquad B(X)=X^3+X^2+X.\]</span> We arrange them in
+the usual diagram: <span class="math display">\[\begin{array}{rrrrrrl}
+    3X^5 &amp; +x^4 &amp; &amp; +2x^2 &amp; &amp; +7 \qquad &amp;  |\quad X^3+X^2+X\\
+     &amp;&amp;&amp;&amp;&amp;&amp; \overline{\phantom{|\quad  X^3+X^2+X}} \\
+\end{array}\]</span> We want to remove <span class="math inline">\(3X^5\)</span>, so we try to find a factor
+<span class="math inline">\(f(X)\)</span> such that <span class="math inline">\(f(X)X^3=3X^5\)</span>. Thus, we choose <span class="math inline">\(f(X)=3X^2\)</span>, multiply
+it by <span class="math inline">\(B(X)\)</span>, and subtract the result from <span class="math inline">\(A(X)\)</span>, obtaining a
+lower-degree polynomial: <span class="math display">\[\begin{array}{rrrrrrl}
+    3X^5 &amp; +X^4 &amp; &amp; +2X^2 &amp; &amp; +7 \qquad &amp;  |\quad X^3+X^2+X\\
+     &amp;&amp;&amp;&amp;&amp;&amp; \overline{\phantom{|\quad  X^3+X^2+X}} \\
+      &amp; -2X^4 &amp; -3X^3 &amp; +2X^2 &amp;  &amp;+ 7 \qquad &amp; 3X^2\\
+\end{array}\]</span> We now look at the new polynomial, <span class="math inline">\(-2X^4-3X^3+2X^2+7\)</span>,
+and again try to remove the highest-degree monomial, which we achieve by
+multiplying <span class="math inline">\(X^3\)</span> by <span class="math inline">\(-2X\)</span>. <span class="math display">\[\begin{array}{rrrrrrl}
+    3X^5 &amp; +X^4 &amp; &amp; +2X^2 &amp; &amp; +7 \qquad &amp;  |\quad X^3+X^2+X\\
+     &amp;&amp;&amp;&amp;&amp;&amp; \overline{\phantom{|\quad  X^3+X^2+X}} \\
+      &amp; -2X^4 &amp; -3X^3 &amp; +2X^2 &amp;  &amp;+ 7 \qquad &amp; 3X^2-2X\\
+      &amp;&amp;&amp;&amp;&amp;&amp; {\phantom{|\quad  X^3+X^2+X}} \\
+     &amp; &amp; -X^3 + 4X^2 &amp;&amp;&amp;+ 7 \qquad &amp; \\
+\end{array}\]</span> Again, we want to remove the term <span class="math inline">\(-X^3\)</span>, so we multiply
+<span class="math inline">\(B(X)\)</span> by <span class="math inline">\(-1\)</span>: <span class="math display">\[\begin{array}{rrrrrrl}
+    3X^5 &amp; +X^4 &amp; &amp; +2X^2 &amp; &amp; +7 \qquad &amp;  |\quad X^3+X^2+X\\
+     &amp;&amp;&amp;&amp;&amp;&amp; \overline{\phantom{|\quad  X^3+X^2+X}} \\
+      &amp; -2X^4 &amp; -3X^3 &amp; +2X^2 &amp;  &amp;+ 7 \qquad &amp; 3X^2-2X-1\\
+      &amp;&amp;&amp;&amp;&amp;&amp; {\phantom{|\quad  X^3+X^2+X}} \\
+     &amp; &amp; -X^3 + 4X^2 &amp;&amp;&amp;+ 7 \qquad &amp; \\
+     &amp;&amp;&amp;&amp;&amp;&amp; {\phantom{|\quad  X^3+X^2+X}} \\
+     &amp; &amp; &amp; 5X^2 &amp; +X &amp; +7 \qquad &amp; \\
+\end{array}\]</span> Since the degree of the current dividend is smaller than
+the degree of the divisor, we are done. We conclude that the quotient of
+the division of <span class="math inline">\(A(X)\)</span> by <span class="math inline">\(B(X)\)</span> is <span class="math display">\[3X^2-2X-1,\]</span> and the remainder is
+<span class="math display">\[5X^2+X+7.\]</span> Note that the above example works in <span class="math inline">\(\mathbb{Q}\)</span>, but in
+general operations on the coefficients must take into account which
+field we are in. For example, if our coefficients are in <span class="math inline">\(\mathbb{F}_5\)</span>,
+we cannot “divide” by <span class="math inline">\(3\)</span>, but we can find the inverse of <span class="math inline">\(3\)</span> modulo
+<span class="math inline">\(5\)</span>, and we must ensure that every coefficient is reduced modulo <span class="math inline">\(5\)</span>.</p>
 
 </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -395,7 +486,7 @@ false.</em></p>
           </div>
         </div>
       </div>
-<a href="cryptanalysis.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="ring-theory.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
     </div>
   </div>

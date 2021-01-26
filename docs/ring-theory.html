@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>10 Cryptanalysis | Cryptography lecture notes</title>
-  <meta name="description" content="10 Cryptanalysis | Cryptography lecture notes" />
+  <title>A Ring theory | Cryptography lecture notes</title>
+  <meta name="description" content="A Ring theory | Cryptography lecture notes" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="10 Cryptanalysis | Cryptography lecture notes" />
+  <meta property="og:title" content="A Ring theory | Cryptography lecture notes" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="10 Cryptanalysis | Cryptography lecture notes" />
+  <meta name="twitter:title" content="A Ring theory | Cryptography lecture notes" />
   
   
   
@@ -29,8 +29,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="signatures.html"/>
-<link rel="next" href="ring-theory.html"/>
+<link rel="prev" href="cryptanalysis.html"/>
+<link rel="next" href="refreshers.html"/>
 <script src="libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -212,20 +212,181 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="cryptanalysis" class="section level1" number="10">
-<h1><span class="header-section-number">10</span> Cryptanalysis</h1>
-
+<div id="ring-theory" class="section level1" number="11">
+<h1><span class="header-section-number">A</span> Ring theory</h1>
+<p>A ring is a slightly more complex algebraic structure, since it is
+equipped with two operations, the first of them with the exact same
+properties of a commutative group operation, whereas the second does not
+require the existence of inverse.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-70" class="definition"><strong>Definition A.1  </strong></span><em>A</em> ring<a href="#fn25" class="footnote-ref" id="fnref25"><sup>25</sup></a> <em>is a triple <span class="math inline">\((\mathbb{K},\circ,\ast)\)</span>,
+where <span class="math inline">\(\mathbb{K}\)</span> is a set and <span class="math inline">\(\circ\)</span> and <span class="math inline">\(\ast\)</span> are operations on
+<span class="math inline">\(\mathbb{K}\)</span>, that is, functions <span class="math display">\[\begin{aligned}
+        \circ : \phantom{a} &amp; \mathbb{K}\times \mathbb{K}&amp; \rightarrow &amp; \phantom{a}\mathbb{K}&amp; \qquad\qquad &amp; \ast :&amp; \mathbb{K}\times\mathbb{K}&amp; \rightarrow &amp; \mathbb{K}\\
+                &amp; (x,y) &amp; \mapsto &amp; \phantom{a} x\circ y, &amp; &amp; &amp; (x,y) &amp; \mapsto &amp; x\ast y,
+    \end{aligned}\]</span> which additionally satisfy the following
+properties:</em></p>
+<ol style="list-style-type: decimal">
+<li><p><em><span class="math inline">\((\mathbb{K},\circ)\)</span> is a commutative group.</em></p></li>
+<li><p><em><span class="math inline">\((\mathbb{K},\ast)\)</span> satisfies the following properties:</em></p>
+<ol style="list-style-type: decimal">
+<li><p>Associative law: <span class="math inline">\((x\ast y)\ast z = x\ast(y\ast z)\)</span> <em>for all</em>
+<span class="math inline">\(x,y,z\in \mathbb{K}\)</span>.</p></li>
+<li><p>Existence of identity: <em>there exists <span class="math inline">\(e\in \mathbb{K}\)</span> such
+that <span class="math inline">\(e\ast x=x\ast e=x\)</span> for all <span class="math inline">\(x\in \mathbb{K}\)</span>. Such element
+<span class="math inline">\(e\)</span> is called the</em> identity element <em>of <span class="math inline">\(\ast\)</span>.</em></p></li>
+<li><p>Commutativity: <span class="math inline">\(x\ast y=y \ast x\)</span> <em>for all</em>
+<span class="math inline">\(x,y\in \mathbb{K}\)</span>.</p></li>
+</ol></li>
+<li><p>Distributive law: <span class="math inline">\(x\ast(y\circ z)=(x\ast y)\circ(x\ast z)\)</span> <em>for
+all</em> <span class="math inline">\(x,y,z\in\mathbb{K}.\)</span>*</p></li>
+</ol>
 </div>
-
-
-
+<p>Since we have two operations at the same time, we will adopt the
+additive and multiplicative notation from groups to represent each of
+them, respectively. That is, we will think of the first operation of a
+ring as a form of <em>addition</em> and the second as a form of
+<em>multiplication</em>. On input <span class="math inline">\(x,y\)</span>, we write the result of the first
+operation by <span class="math inline">\(x+y\)</span>, and the result of the second by <span class="math inline">\(xy\)</span>. The identity
+elements of each operation are denoted by <span class="math inline">\(0\)</span> and <span class="math inline">\(1\)</span>, respectively. The
+inverse of <span class="math inline">\(x\)</span> with respect to the first operation is denoted by <span class="math inline">\(-x\)</span>.
+The inverse of <span class="math inline">\(x\)</span> with respect to the second operation, if exists, is
+denoted by <span class="math inline">\(x^{-1}\)</span>. The following table summarizes the notation:</p>
+<div class="center">
+<table>
+<thead>
+<tr class="header">
+<th align="center">Operation</th>
+<th align="center">Operation on input <span class="math inline">\(x,y\)</span></th>
+<th align="center">Identity element</th>
+<th align="center">Inverse of <span class="math inline">\(x\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><span class="math inline">\(+\)</span></td>
+<td align="center"><span class="math inline">\(x+y\)</span></td>
+<td align="center"><span class="math inline">\(0\)</span></td>
+<td align="center"><span class="math inline">\(-x\)</span></td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(\cdot\)</span></td>
+<td align="center"><span class="math inline">\(xy\)</span></td>
+<td align="center"><span class="math inline">\(1\)</span></td>
+<td align="center"><span class="math inline">\(x^{-1}\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>We consider some examples:</p>
+<ul>
+<li><p><span class="math inline">\((\mathbb{Z},+,\cdot)\)</span>, with usual integer addition and
+multiplication, is a ring, since <span class="math inline">\((\mathbb{Z},+)\)</span> is a group with
+identity <span class="math inline">\(0\)</span>, <span class="math inline">\((\mathbb{Z},\cdot)\)</span> verifies associativity,
+commutativity and existence of identity (<span class="math inline">\(1\)</span>), and it is easy to
+verify distributivity. Note, however, that <span class="math inline">\(\mathbb{Z}\)</span> does not
+contain multiplicative inverses, since for example there is no
+<span class="math inline">\(x\in\mathbb{Z}\)</span> such that <span class="math inline">\(2x=1\)</span>. For similar reasons,
+<span class="math inline">\((\mathbb{Z}_n,+,\cdot)\)</span>, with modular addition and multiplication,
+is a ring, for <span class="math inline">\(n\in\mathbb{N}\)</span>.</p></li>
+<li><p><span class="math inline">\((\mathbb{Q}[X],+,\cdot)\)</span>, where <span class="math inline">\(\mathbb{Q}[X]\)</span> is the set of
+polynomials with rational coefficients in variable <span class="math inline">\(X\)</span>, <span class="math inline">\(+\)</span> is
+point-wise addition, and <span class="math inline">\(\cdot\)</span> is point-wise multiplication, is
+also a ring. The identity elements are the constant polynomials
+<span class="math inline">\(p(X)=0\)</span> and <span class="math inline">\(q(X)=1\)</span>, respectively.</p></li>
+</ul>
+<p>Consider the ring <span class="math inline">\(\mathbb{Z}_9\)</span>, with addition and multiplication
+modulo <span class="math inline">\(9\)</span>. The following table gives the multiplicative inverses of
+each element:</p>
+<div class="center">
+<table>
+<thead>
+<tr class="header">
+<th align="right"><span class="math inline">\(x\)</span></th>
+<th align="center"><span class="math inline">\(0\)</span></th>
+<th align="center"><span class="math inline">\(1\)</span></th>
+<th align="center"><span class="math inline">\(2\)</span></th>
+<th align="center"><span class="math inline">\(3\)</span></th>
+<th align="center"><span class="math inline">\(4\)</span></th>
+<th align="center"><span class="math inline">\(5\)</span></th>
+<th align="center"><span class="math inline">\(6\)</span></th>
+<th align="center"><span class="math inline">\(7\)</span></th>
+<th align="center"><span class="math inline">\(8\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right"><span class="math inline">\(x^{-1}\)</span></td>
+<td align="center"><span class="math inline">\(-\)</span></td>
+<td align="center"><span class="math inline">\(1\)</span></td>
+<td align="center"><span class="math inline">\(5\)</span></td>
+<td align="center"><span class="math inline">\(-\)</span></td>
+<td align="center"><span class="math inline">\(7\)</span></td>
+<td align="center"><span class="math inline">\(2\)</span></td>
+<td align="center"><span class="math inline">\(-\)</span></td>
+<td align="center"><span class="math inline">\(4\)</span></td>
+<td align="center"><span class="math inline">\(8\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Note that some elements are not invertible, in this case <span class="math inline">\(0\)</span>, <span class="math inline">\(3\)</span> and
+<span class="math inline">\(6\)</span>. Those elements in a ring that happen to have a multiplicative
+inverse receive a special name.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-71" class="definition"><strong>Definition A.2  </strong></span><em>Let <span class="math inline">\(\mathbb{K}\)</span> be a ring. An element
+<span class="math inline">\(x\in\mathbb{K}\)</span> that has a multiplicative inverse is called a</em> unit<em>.
+We denote the set of units of <span class="math inline">\(\mathbb{K}\)</span> by <span class="math inline">\(\mathbb{K}^*\)</span>.</em></p>
+</div>
+<p>Note that the only thing that <span class="math inline">\((\mathbb{K},\cdot)\)</span> was missing to be a
+group is existence of inverses. By restricting ourselves to the subset
+<span class="math inline">\(\mathbb{K}^*\)</span> of invertible elements, we have that
+<span class="math inline">\((\mathbb{K}^*,\cdot)\)</span> is a group. Note that, in the previous lesson, we
+defined <span class="math inline">\(\mathbb{Z}_n^*\)</span> to be the set of invertible elements of
+<span class="math inline">\(\mathbb{Z}_n\)</span>, so in this new formulation, we can state that
+<span class="math inline">\(\mathbb{Z}_n^*\)</span> is actually the set of units of <span class="math inline">\(\mathbb{Z}_n\)</span>.
+Moreover, we now know that <span class="math inline">\(\mathbb{Z}_n^*\)</span> is a group with
+multiplication modulo <span class="math inline">\(n\)</span>.</p>
+<p>In light of the discussion above, we start this section by asking
+ourselves the following question.</p>
+<div class="problem">
+<p><em>Is it possible to have a ring <span class="math inline">\(\mathbb{K}\)</span> in which all
+the elements are invertible?</em></p>
+</div>
+<p>This will never be the case, unless the ring only contains one element,
+since the additive identity <span class="math inline">\(0\)</span> cannot have a multiplicative inverse
+otherwise. To see this, assume that there exists <span class="math inline">\(x\in\mathbb{K}\)</span> such
+that <span class="math inline">\(0\cdot x = 1\)</span>. First, <span class="math display">\[0x=(1+(-1))x=x+(-x)=0,\]</span> using the
+distributive law and the properties of the multiplicative identity <span class="math inline">\(1\)</span>.
+Then we have that <span class="math inline">\(1=0\)</span>. But then, this means that <span class="math display">\[x=1x=0x=0,\]</span> using
+the properties of the multiplicative and additive identities. Thus, we
+conclude that every element is the same. And rings with just one element
+are not very interesting.</p>
+<p>So, except for the trivial case, we know that <span class="math inline">\(0\)</span> cannot have an
+inverse. What about the rest of the elements? In this case, the answer
+is affirmative: there exist rings in which every non-zero element is
+invertible, and we call those <em>fields</em>.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-72" class="definition"><strong>Definition A.3  </strong></span><em>A</em> field <em>is a ring in which every non-zero element
+has a multiplicative inverse in the ring.</em></p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="25">
+<li id="fn25"><p><em>In an abstract algebra context, the definition of a ring is more
+general, and what we are defining is known as a </em>commutative ring
+with unity<em>. Nevertheless, we stick to this definition for
+simplicity, since it is the only type of ring relevant to us.</em><a href="ring-theory.html#fnref25" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="signatures.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="ring-theory.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="cryptanalysis.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="refreshers.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
