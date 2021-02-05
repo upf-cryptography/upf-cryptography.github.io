@@ -70,7 +70,7 @@ more general way.
 Assume that we want to encrypt a message $\mathsf{m}$ of length $\ell n$
 with a block cipher. When the message length is not a multiple of the
 block length, some extra bytes are added to complete the last block.
-This is called *padding*.[^10] We start by splitting the message in
+This is called *padding*.[^11] We start by splitting the message in
 blocks $$\mathsf{m}_1,\dots,\mathsf{m}_n,$$ each of them of length
 $\ell$, so that they can be fed into our block cipher. The question is:
 do we encrypt each block in parallel? Is that secure? Or should we
@@ -114,7 +114,7 @@ Furthermore, the ECB mode is particularly bad when encrypting
 image. Assume that we split the image into small squares of pixels, so
 that the bit length of each of these matches the length of our block
 cipher, and then use ECB-mode encryption on each square. Below you can
-see the result on an example image.[^11]
+see the result on an example image.[^12]
 
 ::: {.center}
 ![image](Tux.jpg)![image](Tux_ecb.jpg)
@@ -265,7 +265,7 @@ of the most famous ones: the *Data Encryption Standard (DES)*, and its
 successor the *Advanced Encryption Standard (AES)*. DES was designed by
 a team at IBM in 1974, and became the first official encryption standard
 in the US in 1977. It remained as the recommended encryption scheme
-until 1999, when it was replaced by AES.[^12]
+until 1999, when it was replaced by AES.[^13]
 
 ### Data Encryption Standard (DES)
 
@@ -365,15 +365,15 @@ workings of AES.
 
 <div><iframe width="720" height="405" src="https://www.youtube-nocookie.com/embed/mlzxpkdXP58" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
 
-[^10]: One must be careful when choosing padding, as some choices are
+[^11]: One must be careful when choosing padding, as some choices are
     vulnerable to certain attacks in some modes of operation. An example
     of this is the padding oracle attack:
     <https://en.wikipedia.org/wiki/Padding_oracle_attack>.
 
-[^11]: Source:
+[^12]: Source:
     <https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation>.
     Images by Larry Ewing ([lewing\@isc.tamu.edu](lewing@isc.tamu.edu))
     and GIMP (<https://www.gimp.org/>).
 
-[^12]: Some interesting bits of history around DES and NSA involvement
+[^13]: Some interesting bits of history around DES and NSA involvement
     can be found in Chapter 3 of (ref:paar).

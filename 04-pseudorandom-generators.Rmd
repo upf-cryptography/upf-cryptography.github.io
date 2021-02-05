@@ -395,7 +395,7 @@ uniformly random, and thus LFSRs are not suited for cryptography.
 
 Still, a clever combination of a few LFSRs, with a couple of extra
 details, seems to be enough to realize the stream cipher Trivium, which,
-to this date, is believed to be secure.
+to this date, is believed to be secure.[^9]
 
 Below is a direct implementation of an LFSR. You can try different sets of feedback coeffients, and see how this impacts the period of the key stream. 
 
@@ -430,7 +430,7 @@ print(key_stream)
 We have dealt with the problem of stretching a tiny bit of randomness
 into something usable. But where does this initial randomness come from?
 It cannot really come from our computers, since these are deterministic,
-so the answer lies out in the physical world.[^9] The general idea is to
+so the answer lies out in the physical world.[^10] The general idea is to
 look for unpredictable processes from which to extract randomness. Some
 examples are radioactive decay, cosmic radiation, hardware processes
 like the least significant bit of the timestamp of a keystroke.
@@ -449,6 +449,9 @@ them.
 
 [^8]: We set the output length to be $2\ell$ for simplicity, but the
     idea could easily be adapted to any other output length.
+    
+[^9]: De Canniere, C., & Preneel, B. (2008). Trivium. In *New stream
+    cipher designs* (pp. 244-266). Springer, Berlin, Heidelberg.
 
-[^9]: Assuming, of course, that the universe is not completely
+[^10]: Assuming, of course, that the universe is not completely
     deterministic.

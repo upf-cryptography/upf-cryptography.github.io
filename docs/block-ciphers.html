@@ -174,26 +174,33 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.1" data-path="elementary-number-theory.html"><a href="elementary-number-theory.html#integer-arithmetic"><i class="fa fa-check"></i><b>5.1</b> Integer arithmetic</a></li>
 <li class="chapter" data-level="5.2" data-path="elementary-number-theory.html"><a href="elementary-number-theory.html#the-euclidean-algorithm"><i class="fa fa-check"></i><b>5.2</b> The euclidean algorithm</a></li>
 <li class="chapter" data-level="5.3" data-path="elementary-number-theory.html"><a href="elementary-number-theory.html#modular-arithmetic"><i class="fa fa-check"></i><b>5.3</b> Modular arithmetic</a></li>
-<li class="chapter" data-level="5.4" data-path="elementary-number-theory.html"><a href="elementary-number-theory.html#modular-arithmetic-but-efficient"><i class="fa fa-check"></i><b>5.4</b> Modular arithmetic, but efficient</a></li>
+<li class="chapter" data-level="5.4" data-path="elementary-number-theory.html"><a href="elementary-number-theory.html#efficient-modular"><i class="fa fa-check"></i><b>5.4</b> Modular arithmetic, but efficient</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="algebraic-structures.html"><a href="algebraic-structures.html"><i class="fa fa-check"></i><b>6</b> Algebraic structures</a>
 <ul>
 <li class="chapter" data-level="6.1" data-path="algebraic-structures.html"><a href="algebraic-structures.html#groups"><i class="fa fa-check"></i><b>6.1</b> Groups</a></li>
 <li class="chapter" data-level="6.2" data-path="algebraic-structures.html"><a href="algebraic-structures.html#finite-fields"><i class="fa fa-check"></i><b>6.2</b> Finite fields</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="pke.html"><a href="pke.html"><i class="fa fa-check"></i><b>7</b> Public-key encryption</a></li>
+<li class="chapter" data-level="7" data-path="public-key-encryption.html"><a href="public-key-encryption.html"><i class="fa fa-check"></i><b>7</b> Public-key encryption</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="public-key-encryption.html"><a href="public-key-encryption.html#public-key-cryptography"><i class="fa fa-check"></i><b>7.1</b> Public-key cryptography</a></li>
+<li class="chapter" data-level="7.2" data-path="public-key-encryption.html"><a href="public-key-encryption.html#the-rsa-encryption-scheme"><i class="fa fa-check"></i><b>7.2</b> The RSA encryption scheme</a></li>
+<li class="chapter" data-level="7.3" data-path="public-key-encryption.html"><a href="public-key-encryption.html#security-of-rsa"><i class="fa fa-check"></i><b>7.3</b> Security of RSA</a></li>
+<li class="chapter" data-level="7.4" data-path="public-key-encryption.html"><a href="public-key-encryption.html#efficiency-optimizations"><i class="fa fa-check"></i><b>7.4</b> Efficiency optimizations</a></li>
+</ul></li>
 <li class="chapter" data-level="8" data-path="dh.html"><a href="dh.html"><i class="fa fa-check"></i><b>8</b> The Diffie–Hellman key exchange</a></li>
 <li class="chapter" data-level="9" data-path="signatures.html"><a href="signatures.html"><i class="fa fa-check"></i><b>9</b> Digital signatures</a></li>
 <li class="part"><span><b>IV Other topics</b></span></li>
 <li class="chapter" data-level="10" data-path="cryptanalysis.html"><a href="cryptanalysis.html"><i class="fa fa-check"></i><b>10</b> Cryptanalysis</a></li>
 <li class="appendix"><span><b>Appendices</b></span></li>
 <li class="chapter" data-level="A" data-path="ring-theory.html"><a href="ring-theory.html"><i class="fa fa-check"></i><b>A</b> Ring theory</a></li>
-<li class="chapter" data-level="B" data-path="refreshers.html"><a href="refreshers.html"><i class="fa fa-check"></i><b>B</b> Refreshers</a>
+<li class="chapter" data-level="B" data-path="primality-testing.html"><a href="primality-testing.html"><i class="fa fa-check"></i><b>B</b> Primality testing</a></li>
+<li class="chapter" data-level="C" data-path="refreshers.html"><a href="refreshers.html"><i class="fa fa-check"></i><b>C</b> Refreshers</a>
 <ul>
-<li class="chapter" data-level="B.1" data-path="refreshers.html"><a href="refreshers.html#set-notation"><i class="fa fa-check"></i><b>B.1</b> Set notation</a></li>
-<li class="chapter" data-level="B.2" data-path="refreshers.html"><a href="refreshers.html#probability-theory"><i class="fa fa-check"></i><b>B.2</b> Probability theory</a></li>
-<li class="chapter" data-level="B.3" data-path="refreshers.html"><a href="refreshers.html#asymptotic-notation"><i class="fa fa-check"></i><b>B.3</b> Asymptotic notation</a></li>
-<li class="chapter" data-level="B.4" data-path="refreshers.html"><a href="refreshers.html#polydiv"><i class="fa fa-check"></i><b>B.4</b> Polynomial division</a></li>
+<li class="chapter" data-level="C.1" data-path="refreshers.html"><a href="refreshers.html#set-notation"><i class="fa fa-check"></i><b>C.1</b> Set notation</a></li>
+<li class="chapter" data-level="C.2" data-path="refreshers.html"><a href="refreshers.html#probability-theory"><i class="fa fa-check"></i><b>C.2</b> Probability theory</a></li>
+<li class="chapter" data-level="C.3" data-path="refreshers.html"><a href="refreshers.html#asymptotic-notation"><i class="fa fa-check"></i><b>C.3</b> Asymptotic notation</a></li>
+<li class="chapter" data-level="C.4" data-path="refreshers.html"><a href="refreshers.html#polydiv"><i class="fa fa-check"></i><b>C.4</b> Polynomial division</a></li>
 </ul></li>
 </ul>
 
@@ -267,7 +274,7 @@ more general way.</p>
 <p>Assume that we want to encrypt a message <span class="math inline">\(\mathsf{m}\)</span> of length <span class="math inline">\(\ell n\)</span>
 with a block cipher. When the message length is not a multiple of the
 block length, some extra bytes are added to complete the last block.
-This is called <em>padding</em>.<a href="#fn10" class="footnote-ref" id="fnref10"><sup>10</sup></a> We start by splitting the message in
+This is called <em>padding</em>.<a href="#fn11" class="footnote-ref" id="fnref11"><sup>11</sup></a> We start by splitting the message in
 blocks <span class="math display">\[\mathsf{m}_1,\dots,\mathsf{m}_n,\]</span> each of them of length
 <span class="math inline">\(\ell\)</span>, so that they can be fed into our block cipher. The question is:
 do we encrypt each block in parallel? Is that secure? Or should we
@@ -293,7 +300,7 @@ that we would like to avoid.</p>
 image. Assume that we split the image into small squares of pixels, so
 that the bit length of each of these matches the length of our block
 cipher, and then use ECB-mode encryption on each square. Below you can
-see the result on an example image.<a href="#fn11" class="footnote-ref" id="fnref11"><sup>11</sup></a></p>
+see the result on an example image.<a href="#fn12" class="footnote-ref" id="fnref12"><sup>12</sup></a></p>
 <div class="center">
 <p><img src="Tux.jpg" alt="image" /><img src="Tux_ecb.jpg" alt="image" /></p>
 </div>
@@ -381,7 +388,7 @@ of the most famous ones: the <em>Data Encryption Standard (DES)</em>, and its
 successor the <em>Advanced Encryption Standard (AES)</em>. DES was designed by
 a team at IBM in 1974, and became the first official encryption standard
 in the US in 1977. It remained as the recommended encryption scheme
-until 1999, when it was replaced by AES.<a href="#fn12" class="footnote-ref" id="fnref12"><sup>12</sup></a></p>
+until 1999, when it was replaced by AES.<a href="#fn13" class="footnote-ref" id="fnref13"><sup>13</sup></a></p>
 <div id="data-encryption-standard-des" class="section level3" number="3.3.1">
 <h3><span class="header-section-number">3.3.1</span> Data Encryption Standard (DES)</h3>
 <p>DES is a block cipher of length <span class="math inline">\(64\)</span>, which uses a key of <span class="math inline">\(56\)</span> bits.
@@ -477,17 +484,17 @@ workings of AES.</p>
 </div>
 <div class="footnotes">
 <hr />
-<ol start="10">
-<li id="fn10"><p>One must be careful when choosing padding, as some choices are
+<ol start="11">
+<li id="fn11"><p>One must be careful when choosing padding, as some choices are
 vulnerable to certain attacks in some modes of operation. An example
 of this is the padding oracle attack:
-<a href="https://en.wikipedia.org/wiki/Padding_oracle_attack" class="uri">https://en.wikipedia.org/wiki/Padding_oracle_attack</a>.<a href="block-ciphers.html#fnref10" class="footnote-back">↩︎</a></p></li>
-<li id="fn11"><p>Source:
+<a href="https://en.wikipedia.org/wiki/Padding_oracle_attack" class="uri">https://en.wikipedia.org/wiki/Padding_oracle_attack</a>.<a href="block-ciphers.html#fnref11" class="footnote-back">↩︎</a></p></li>
+<li id="fn12"><p>Source:
 <a href="https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation" class="uri">https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation</a>.
 Images by Larry Ewing (<a href="lewing@isc.tamu.edu">lewing@isc.tamu.edu</a>)
-and GIMP (<a href="https://www.gimp.org/" class="uri">https://www.gimp.org/</a>).<a href="block-ciphers.html#fnref11" class="footnote-back">↩︎</a></p></li>
-<li id="fn12"><p>Some interesting bits of history around DES and NSA involvement
-can be found in Chapter 3 of Christof Paar and Jan Pelzl. <em>Understanding cryptography: a textbook for students and practitioners</em>. Springer Science &amp; Business Media, 2009..<a href="block-ciphers.html#fnref12" class="footnote-back">↩︎</a></p></li>
+and GIMP (<a href="https://www.gimp.org/" class="uri">https://www.gimp.org/</a>).<a href="block-ciphers.html#fnref12" class="footnote-back">↩︎</a></p></li>
+<li id="fn13"><p>Some interesting bits of history around DES and NSA involvement
+can be found in Chapter 3 of Christof Paar and Jan Pelzl. <em>Understanding cryptography: a textbook for students and practitioners</em>. Springer Science &amp; Business Media, 2009..<a href="block-ciphers.html#fnref13" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>

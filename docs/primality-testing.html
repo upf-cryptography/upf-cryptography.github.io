@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>8 The Diffie–Hellman key exchange | Cryptography lecture notes</title>
-  <meta name="description" content="8 The Diffie–Hellman key exchange | Cryptography lecture notes" />
+  <title>B Primality testing | Cryptography lecture notes</title>
+  <meta name="description" content="B Primality testing | Cryptography lecture notes" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="8 The Diffie–Hellman key exchange | Cryptography lecture notes" />
+  <meta property="og:title" content="B Primality testing | Cryptography lecture notes" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="8 The Diffie–Hellman key exchange | Cryptography lecture notes" />
+  <meta name="twitter:title" content="B Primality testing | Cryptography lecture notes" />
   
   
   
@@ -29,8 +29,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="public-key-encryption.html"/>
-<link rel="next" href="signatures.html"/>
+<link rel="prev" href="ring-theory.html"/>
+<link rel="next" href="refreshers.html"/>
 <script src="libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -219,17 +219,153 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="dh" class="section level1" number="8">
-<h1><span class="header-section-number">8</span> The Diffie–Hellman key exchange</h1>
+<div id="primality-testing" class="section level1" number="12">
+<h1><span class="header-section-number">B</span> Primality testing</h1>
+<p>Many modern cryptographic schemes require some very large prime numbers,
+so we are interested in generating these numbers efficiently. The basic
+strategy is very simple: pick a random number of the desired size, and
+check whether it is prime. If it is not, pick another. A consequence of
+the prime number theorem
+(Proposition <a href="elementary-number-theory.html#prp:pnt">5.3</a>) is that, on average, we need about <span class="math inline">\(\lambda\)</span>
+tries to find a prime of bitlength <span class="math inline">\(\lambda\)</span>, so that’s not too bad.</p>
+<p>But what about recognizing whether a number is prime or not? This part
+is solved with a <em>primality test</em>. In this section, we look at some of
+them.</p>
+<p>The naive way to check primality is to check if the candidate integer
+<span class="math inline">\(n=O(2^\lambda)\)</span> is divisible by any other smaller integer. If that’s
+not the case, then necessarily <span class="math inline">\(n\)</span> is prime. So, in general, this
+algorithm runs in time <span class="math inline">\(O(n)\)</span>, which is exponential in <span class="math inline">\(\lambda\)</span>. We can
+do slightly better by observing that it is enough to check divisors up
+to <span class="math inline">\(\sqrt{n}\)</span>.</p>
 
+<div class="proposition">
+<span id="prp:unnamed-chunk-33" class="proposition"><strong>Proposition B.1  </strong></span><em>Let <span class="math inline">\(n\in\mathbb{N}\)</span>. If <span class="math inline">\(n\)</span> is composite, then <span class="math inline">\(n\)</span>
+has a non-trivial divisor <span class="math inline">\(d\leq\sqrt{n}\)</span>.</em>
+</div>
+<div class="proof">
+<p><span id="unlabeled-div-81" class="proof"><em>Proof</em>. </span>We prove the result by contradiction. Assume that <span class="math inline">\(n\)</span> is
+composite and has no non-trivial divisor smaller than <span class="math inline">\(\sqrt{n}\)</span>. Since
+<span class="math inline">\(n\)</span> is composite, it has at least two non-trivial divisors
+<span class="math inline">\(a,b\in\mathbb{N}\)</span>, such that <span class="math inline">\(ab=n\)</span>. But every divisor is larger than
+<span class="math inline">\(\sqrt{n}\)</span>, therefore <span class="math display">\[n=ab&gt;\sqrt{n}\cdot\sqrt{n}=n,\]</span> and thus <span class="math inline">\(n&gt;n\)</span>,
+which is a contradiction.</p>
+</div>
+<p>Still, our primality test would run in time <span class="math inline">\(O(\sqrt{n})\)</span>, which is
+still exponential in <span class="math inline">\(\lambda\)</span>. We need to look for a more efficient
+approach. We turn our attention to Fermat’s little theorem:</p>
+
+<div class="proposition">
+<span id="prp:unnamed-chunk-34" class="proposition"><strong>Proposition B.2  (Fermat’s little theorem)  </strong></span><em>Let <span class="math inline">\(p\)</span> be a prime
+number. Then, for any <span class="math inline">\(x\in\mathbb{Z}\)</span> such that <span class="math inline">\(p\nmid x\)</span>, we have
+that <span class="math display">\[x^{p-1}\equiv1\pmod{p}.\]</span></em>
+</div>
+<p>This theorem tells us about a condition that all prime numbers verify,
+which gives us an easy condition to test and discard composite numbers.
+Given a candidate <span class="math inline">\(n\)</span>, choose some <span class="math inline">\(x\in\mathbb{Z}\)</span> such that
+<span class="math inline">\(\gcd(n,x)=1\)</span>, and compute <span class="math display">\[x^{n-1}\bmod{p}.\]</span> If the result is not
+<span class="math inline">\(1\)</span>, then we conclude that <span class="math inline">\(n\)</span> is not a prime. This is known as the
+<em>Fermat primality test</em>, and it is very efficient. But what happens if
+the result is <span class="math inline">\(1\)</span>? Does this mean that <span class="math inline">\(n\)</span> is a prime? Unfortunately, it
+is not as simple as this. For example, take <span class="math inline">\(n=91\)</span> and <span class="math inline">\(x=3\)</span>. It is easy
+to verify that <span class="math display">\[3^{90}\pmod{91}=1,\]</span> but <span class="math inline">\(91=7\cdot13\)</span>, so it is not a
+prime. We call the numbers that produce these “false positives”
+<em>pseudoprimes</em>.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-83" class="definition"><strong>Definition B.1  </strong></span><em>Let <span class="math inline">\(n\in\mathbb{Z}\)</span> be a composite number, and let
+<span class="math inline">\(x\in\mathbb{Z}\)</span> such that <span class="math inline">\(\gcd(x,n)=1\)</span>. We call <span class="math inline">\(n\)</span> an</em> <span class="math inline">\(x\)</span>-Fermat
+pseudoprime <em>if</em> <span class="math display">\[x^{n-1}\equiv1\pmod{n}.\]</span></p>
+</div>
+<p>Moreover, for any <span class="math inline">\(x\)</span> there are many <span class="math inline">\(x\)</span>-Fermat pseudoprimes. Okay, so
+everybody don’t panic. Fermat’s little theorem tell us that primes
+verify the condition <span class="math display">\[x^{p-1}\equiv1\pmod{p}\]</span> for <em>every</em> <span class="math inline">\(x\)</span> such
+that <span class="math inline">\(\gcd(p,x)=1\)</span>. So surely we can find some other base <span class="math inline">\(x\)</span> so that
+<span class="math inline">\(91\)</span> cannot fool the test. Indeed, <span class="math display">\[5^{90}\bmod{91} = 64.\]</span> So that’s
+it, we are now sure that <span class="math inline">\(91\)</span> is not a prime, because it does not pass
+the test for <span class="math inline">\(x=5\)</span>. Problem solved.</p>
+<p>Or is it? What if there are some truly evil numbers that can fool the
+Fermat test for all the possible bases?</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-84" class="definition"><strong>Definition B.2  </strong></span><em>Let <span class="math inline">\(n\in\mathbb{Z}\)</span> be a composite number. We say
+that <span class="math inline">\(n\)</span> is a</em> Carmichael number <em>if it is a <span class="math inline">\(x\)</span>-Fermat pseudoprime for
+every <span class="math inline">\(x\in\mathbb{Z}\)</span> such that</em> <span class="math inline">\(\gcd(n,x)=1\)</span>.</p>
+</div>
+<p>Unfortunately, there are too many of these Carmichael numbers. For large
+values of <span class="math inline">\(B\in\mathbb{N}\)</span>, the number of Carmichael numbers up to <span class="math inline">\(B\)</span>
+is approximately <span class="math inline">\(B^{2/7}\)</span>. This means that a significant amount of
+numbers will fool our test, even if we run it for all the possible
+bases. We need a better test.</p>
+<p>The solution lies on a strengthened version of Fermat’s little theorem.</p>
+
+<div class="proposition">
+<span id="prp:unnamed-chunk-35" class="proposition"><strong>Proposition B.3  </strong></span><em>Let <span class="math inline">\(p\in\mathbb{N}\)</span> be an odd prime, and let
+<span class="math inline">\(p-1=2^st\)</span> such that <span class="math inline">\(2\nmid t\)</span>. If <span class="math inline">\(\gcd(p,x)=1\)</span>, then either
+<span class="math display">\[x^t\equiv1\pmod{p},\]</span> or there exists <span class="math inline">\(i\in\{0,1,\dots,s-1\}\)</span> such
+that <span class="math display">\[x^{2^it}\equiv-1\pmod{p}.\]</span></em>
+</div>
+<p>Again, the idea is to test our numbers against this result, and see if
+they satisfy the equations. This version is called the <em>strong Fermat
+primality test</em>. Observe that, in the worst case, we need to perform <span class="math inline">\(s\)</span>
+checks, and if <span class="math inline">\(p\)</span> has bitlength <span class="math inline">\(\lambda\)</span>, then <span class="math inline">\(s=O(\lambda)\)</span>, and
+each check amounts to modular exponentiation, so overall this is
+efficient. As before, this new test also produces false positives.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-86" class="definition"><strong>Definition B.3  </strong></span><em>Let <span class="math inline">\(n\in\mathbb{Z}\)</span> be an odd composite integer,
+and let <span class="math inline">\(n-1=2^st\)</span>. Let <span class="math inline">\(x\in\mathbb{Z}\)</span> such that <span class="math inline">\(\gcd(x,n)=1\)</span>. We
+call <span class="math inline">\(n\)</span> a</em> strong <span class="math inline">\(x\)</span>-Fermat pseudoprime <em>if
+<span class="math display">\[x^{t-1}\equiv1\pmod{n},\]</span> or there exists <span class="math inline">\(i\in\{0,1,\dots,s-1\}\)</span> such
+that</em> <span class="math display">\[x^{2^it}\equiv-1\pmod{n}.\]</span></p>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-87" class="exercise"><strong>Exercise B.1  </strong></span><em>Check that <span class="math inline">\(2047\)</span> is a strong <span class="math inline">\(2\)</span>-Fermat pseudoprime,
+because it satisfies the first condition, and that <span class="math inline">\(91\)</span> is a strong
+<span class="math inline">\(10\)</span>-Fermat pseudoprime, because it satisfies the second condition.</em></p>
+</div>
+<p>So why bother with the strong Fermat test, if it has the same flaw? The
+key point is that, even if we have strong pseudoprimes, the strong
+Fermat test does not have its version of Carmichael numbers. That is,
+for any composite number <span class="math inline">\(n\)</span> we will always be able to find a base such
+that <span class="math inline">\(n\)</span> does not pass the strong test, showing that it is indeed
+composite. Moreover, most of the bases will do!</p>
+
+<div class="proposition">
+<span id="prp:unnamed-chunk-36" class="proposition"><strong>Proposition B.4  (Monier–Rabin)  </strong></span><em>Let <span class="math inline">\(n&gt;9\)</span> be an odd composite
+integer. Then, the number of bases <span class="math inline">\(x\)</span> smaller than <span class="math inline">\(n\)</span> such that <span class="math inline">\(n\)</span> is
+a strong <span class="math inline">\(x\)</span>-Fermat pseudoprime is at most <span class="math inline">\(\frac14\varphi(n)\)</span>.</em>
+</div>
+<p>This is a very strong result. Since <span class="math inline">\(\varphi(n)&lt;n\)</span>, this tells us that,
+by picking a base in <span class="math inline">\(\mathbb{Z}_n\)</span> at random, there is only a
+probability of <span class="math inline">\(1/4\)</span> that the test lies. Of course, we want a smaller
+probability, so we repeat the test many times. By using <span class="math inline">\(\lambda\)</span>
+iterations for different random bases, we bring the error probability
+down to <span class="math inline">\(1/4^\lambda\)</span>. Observe that this decreases exponentially in
+<span class="math inline">\(\lambda\)</span>! To give some concrete numbers, for <span class="math inline">\(\lambda=1024\)</span>, we have
+that <span class="math display">\[\frac{1}{4^\lambda}\approx 3.094346\cdot 10^{-67},\]</span> and this
+looks like a failure probability that we can live with.</p>
+<p>Asymptotically, we have an algorithm that runs <span class="math inline">\(\lambda\)</span> iterations, and
+each of these is computing <span class="math inline">\(O(\lambda)\)</span> exponentiations, so in total we
+have a running cost of <span class="math inline">\(O(\lambda^2)\)</span> modular exponentiations.</p>
+<p>This test is known as the <em>Miller–Rabin primality test</em>, and it is in
+essence what is used in practice to check for primality, due to its high
+efficiency and almost-perfect reliability.</p>
+<p>If you are still concerned about the error probability, there are some
+alternatives that <em>never</em> produce erroneous results, while still running
+in polynomial time. However, they are much slower than the Miller–Rabin
+test, which is why they are not often used in practice.<a href="#fn34" class="footnote-ref" id="fnref34"><sup>34</sup></a></p>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="34">
+<li id="fn34"><p>Agrawal, M., Kayal, N., &amp; Saxena, N. (2004). PRIMES is in P.
+<em>Annals of mathematics</em>, 781-793.<a href="primality-testing.html#fnref34" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="public-key-encryption.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="signatures.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="ring-theory.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="refreshers.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

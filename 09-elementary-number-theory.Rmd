@@ -16,7 +16,7 @@ cryptography. In this section, we will:
 not include $0$. We will refer to the set of non-negative integers by
 $\mathbb{Z}_{\geq0}$.
 
-## Integer arithmetic
+## Integer arithmetic {#integer-arithmetic}
 
 Consider the set $\mathbb{Z}$ of integer numbers. A key concept to the
 whole section is that of *divisibility*.
@@ -89,7 +89,7 @@ $$n=\pm p_1^{e_1}\dots p_\ell^{e_\ell}.$$ Moreover, this *decomposition*
 (or *factorization*) is unique, up to reordering of the factors.*
 ```
 
-```{proposition, name="Prime number theorem"}
+```{proposition, name="Prime number theorem", label="pnt"}
 *Let $n\in\mathbb{N}$, and
 let us denote by $\pi(n)$ the number of prime numbers smaller than $n$.
 Then $$\lim_{n\rightarrow\infty}\frac{\pi(n)}{n/\log(n)}=1.$$*
@@ -102,7 +102,7 @@ the surprising truth is that the second is believed to be much harder
 than the first! More precisely, there exist efficient algorithms for
 determining whether a number is prime, but no efficient factorization
 algorithm is known for numbers that are a product of two large primes,
-despite decades of huge efforts in finding one.[^18]
+despite decades of huge efforts in finding one.[^19]
 
 Sage contains implementations of the best algorithms known for each
 case. Try increasing the size of the numbers, and observe that the first
@@ -264,7 +264,7 @@ position. Recall that the algorithm of integer division tells us how to
 compute $q,r\in\mathbb{Z}$ such that $$a=12\cdot q + r.$$ In the context
 of our problem, notice that $q$ is the number of full circles around the
 clock that happen in $a$ hours. Then, the only real change of position
-in the clock is determined by $r$, and $q$ does not matter at all.[^19]
+in the clock is determined by $r$, and $q$ does not matter at all.[^20]
 
 Generalizing this idea leads to the key concept of modular arithmetic,
 by replacing $12$ by any positive integer. Moreover, observe that there
@@ -327,7 +327,7 @@ $a\equiv \alpha\pmod{n}$, then:*
         (i) & a+b\equiv \alpha+b\pmod{n}. \\
         (ii) & a\cdot b\equiv \alpha\cdot b\pmod{n}. \\
         (iii) & \text{If }b\geq0,\text{ then }a^b\equiv \alpha^b\pmod{n}.\\
-    \end{array}$$*
+    \end{array}$$
 *In particular, this is true when* $\alpha=a\bmod{n}$.
 ```
 
@@ -412,7 +412,7 @@ The value of the totient function, and thus the size of
 $\mathbb{Z}_n^*$, is determined by the prime factorization of $n$. More
 precisely, we have the following result.
 
-```{proposition}
+```{proposition, label="totient"}
 *Let $n\in\mathbb{N}$. Then:*
 
 *If $n=p^e$, where $p$ is a prime and $e\in\mathbb{N}$, we have
@@ -439,7 +439,56 @@ $$ax\equiv1\pmod{n},$$ which means that $x$ is the inverse of $a$ modulo
 $n$. If we find that $\gcd(a,n)\neq1$, then $a$ is not invertible modulo
 $n$.
 
-## Modular arithmetic, but efficient
+We also introduce the *Chinese remainder theorem (CRT)*, which, in its
+simplest form, states the following.
+
+```{proposition, name="Chinese remainder theorem", label="crt"}
+*Let $a,b\in\mathbb{N}$
+be coprime, and let $n=ab$. Then, for each $x\in\mathbb{Z}_n$, there
+exists a unique pair $(y,z)\in\mathbb{Z}_a\times\mathbb{Z}_b$ such that
+$$\begin{aligned}
+        & x\equiv y\pmod{a}, \\
+        & x\equiv z\pmod{b}. \\
+    \end{aligned}$$ Moreover, given
+$(y,z)\in\mathbb{Z}_a\times\mathbb{Z}_b$, we can explicitly recover the
+corresponding $x$ by computing
+$$x=\left(by\left(b^{-1}\bmod{a}\right)+az\left(a^{-1}\bmod{b}\right)\right)\bmod{n}.$$*
+```
+
+With the notations of the proposition above, the Sage command that
+computes the value $x$ given by the Chinese remainder theorem is
+`crt(y, z, a, b)`.
+
+The legend says that this theorem was used in ancient China to count
+troops, proceeding as follows. Say that you had $200$ troops before
+battle, and you want to count your losses.
+
+1.  Choose a pair of coprime numbers such that their product is at least
+    the upper bound on the number of troops. In this case, we can use
+    $11\cdot19=209$.
+
+2.  Order the troops to stand in columns of length $11$. The last column
+    (possibly incomplete) tells us the remainder modulo $11$, say it is
+    $8$.
+
+3.  Reorganize the troops in columns of length $19$. Again, the last
+    column tells us the remainder $z$ modulo $19$, say it is $2$.
+
+4.  Using the Chinese remainder theorem, we know that there is a unique
+    number $x<209$ such that $$\begin{aligned}
+            & x\bmod 11 = 9, \\
+            & x\bmod 19 = 2, \\
+        \end{aligned}$$ and the second part of the theorem allows us to
+    explicitly compute this number. Since $$\begin{aligned}
+            & 19^{-1}\bmod 11 = 7, \\
+            & 11^{-1}\bmod 19 = 7, \\
+        \end{aligned}$$ we have that
+    $$x=\left(11\cdot 9\cdot 7+19\cdot 2\cdot 7\right)\bmod{209}=97.$$
+
+Higher factors, or more than two of them, can be used to deal with
+larger numbers.
+
+## Modular arithmetic, but efficient {#efficient-modular}
 
 There are different approaches to actually do computations modulo $n$.
 The end result will not change, but some ways involve easier
@@ -502,10 +551,10 @@ $3$, and for each bit in $[75]_2$, starting from the right, we
 Take a moment to review the example above, and convince yourself that it
 matches the steps described.
 
-[^18]: For those with a background in complexity theory, primality is a
+[^19]: For those with a background in complexity theory, primality is a
     problem in P and factorization is a problem in NP.
 
-[^19]: The only small caveat is that, when $a$ is a multiple of $12$,
+[^20]: The only small caveat is that, when $a$ is a multiple of $12$,
     the remainder will be $0$, not $12$, although both of these
     represent the same position. So, to be precise, let us assume that
     our clock has a $0$ instead of $12$, so that it perfectly aligns

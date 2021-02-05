@@ -25,7 +25,7 @@ substantial effort in using cryptographic tools to build what we know as
 *cryptocurrencies*, which aim to be completely decentralized.
 
 In this section, we discuss some issues that arise in decentralized
-systems. This is a very high level overview, based on the Bitcoin[^13]
+systems. This is a very high level overview, based on the Bitcoin[^14]
 approach, and omits many technicalities for the sake of the exposition.
 Nevertheless, it will be enough to motivate the use of hash functions.
 
@@ -163,7 +163,7 @@ more than functions that take an arbitrarily-long bitstring and output a
 bitstring of fixed length.
 
 ::: {.definition}
-*A* hash function *is an efficiently computable[^14]
+*A* hash function *is an efficiently computable[^15]
 function* $$H:\{0,1\}^*\rightarrow\{0,1\}^\ell,$$ *for some
 $\ell\in\mathbb{N}$, and where $\{0,1\}^*$ denotes the set of all
 bitstrings of any length. The process of computing a hash function is
@@ -325,10 +325,10 @@ in two steps. First, we build a hash function for fixed-length inputs,
 e.g. $$H:\{0,1\}^{2\ell}\rightarrow\{0,1\}^\ell,$$ and then we extend
 them to arbitrarily-large input. We will not get into the details of
 concrete constructions, but will simply mention the SHA family of hash
-functions, which is the standard used in practice most of the time.[^15]
+functions, which is the standard used in practice most of the time.[^16]
 
 A common way to realize this second step is to use the *Merkle-Damgård
-transformation*,[^16] which describes how to build from $H$ another hash
+transformation*,[^17] which describes how to build from $H$ another hash
 function $\mathbf{H}$ that takes as input any string of length at most
 $2^\ell-1$, and outputs a hash of length $\ell$. It is clear that
 repeated applications of the transformation can make the input go as
@@ -337,7 +337,7 @@ large as we want.
 Similar to modes of operations in block ciphers, the Merkle-Damgård
 transformation starts by splitting the string $\mathbf x$ of length
 $L\leq 2^\ell$ to be hashed into blocks
-$$\mathbf x_1, \dots, \mathbf x_n,$$ each of them of length $\ell$.[^17]
+$$\mathbf x_1, \dots, \mathbf x_n,$$ each of them of length $\ell$.[^18]
 An additional block $\mathbf x_{n+1}$ is added, containing a binary
 encoding of $L$. Note that, because $L\leq 2^n-1$, we can fit the
 encoding of $L$ in $n$ bits. Then, we recursively compute
@@ -379,18 +379,18 @@ $\mathbf{H}$, produced with the Merkle-Damgård transformation, as
 described above, is also collision-resistant.*
 :::
 
-[^13]: <https://bitcoin.org/bitcoin.pdf>.
+[^14]: <https://bitcoin.org/bitcoin.pdf>.
 
-[^14]: *You might wonder what "efficiently computable" means in this
+[^15]: *You might wonder what "efficiently computable" means in this
     case, if the input size could be anything. To be precise, we say
     that the function is efficiently computable if it can be evaluated
     in time polynomial in $\ell$ when the input is of length polynomial
     in $\ell$.*
 
-[^15]: <https://en.wikipedia.org/wiki/Secure_Hash_Algorithms>.
+[^16]: <https://en.wikipedia.org/wiki/Secure_Hash_Algorithms>.
 
-[^16]: You might also see the same concept named the Merkle-Damgård
+[^17]: You might also see the same concept named the Merkle-Damgård
     transform, or the Merkle-Damgård construction.
 
-[^17]: As before, use some padding if the length of $\mathbf x$ is not a
+[^18]: As before, use some padding if the length of $\mathbf x$ is not a
     multiple of $\ell$.

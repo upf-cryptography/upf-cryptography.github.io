@@ -9,7 +9,7 @@ properties of a commutative group operation, whereas the second does not
 require the existence of inverse.
 
 ::: {.definition}
-*A* ring[^25] *is a triple $(\mathbb{K},\circ,\ast)$,
+*A* ring[^39] *is a triple $(\mathbb{K},\circ,\ast)$,
 where $\mathbb{K}$ is a set and $\circ$ and $\ast$ are operations on
 $\mathbb{K}$, that is, functions $$\begin{aligned}
         \circ : \phantom{a} & \mathbb{K}\times \mathbb{K}& \rightarrow & \phantom{a}\mathbb{K}& \qquad\qquad & \ast :& \mathbb{K}\times\mathbb{K}& \rightarrow & \mathbb{K}\\
@@ -128,6 +128,158 @@ invertible, and we call those *fields*.
 *A* field *is a ring in which every non-zero element
 has a multiplicative inverse in the ring.*
 :::
+
+# Primality testing {#primality-testing}
+
+Many modern cryptographic schemes require some very large prime numbers,
+so we are interested in generating these numbers efficiently. The basic
+strategy is very simple: pick a random number of the desired size, and
+check whether it is prime. If it is not, pick another. A consequence of
+the prime number theorem
+(Proposition \@ref(prp:pnt)) is that, on average, we need about $\lambda$
+tries to find a prime of bitlength $\lambda$, so that's not too bad.
+
+But what about recognizing whether a number is prime or not? This part
+is solved with a *primality test*. In this section, we look at some of
+them.
+
+The naive way to check primality is to check if the candidate integer
+$n=O(2^\lambda)$ is divisible by any other smaller integer. If that's
+not the case, then necessarily $n$ is prime. So, in general, this
+algorithm runs in time $O(n)$, which is exponential in $\lambda$. We can
+do slightly better by observing that it is enough to check divisors up
+to $\sqrt{n}$.
+
+```{proposition}
+*Let $n\in\mathbb{N}$. If $n$ is composite, then $n$
+has a non-trivial divisor $d\leq\sqrt{n}$.*
+```
+
+::: {.proof}
+We prove the result by contradiction. Assume that $n$ is
+composite and has no non-trivial divisor smaller than $\sqrt{n}$. Since
+$n$ is composite, it has at least two non-trivial divisors
+$a,b\in\mathbb{N}$, such that $ab=n$. But every divisor is larger than
+$\sqrt{n}$, therefore $$n=ab>\sqrt{n}\cdot\sqrt{n}=n,$$ and thus $n>n$,
+which is a contradiction.
+:::
+
+Still, our primality test would run in time $O(\sqrt{n})$, which is
+still exponential in $\lambda$. We need to look for a more efficient
+approach. We turn our attention to Fermat's little theorem:
+
+```{proposition, name="Fermat's little theorem"}
+*Let $p$ be a prime
+number. Then, for any $x\in\mathbb{Z}$ such that $p\nmid x$, we have
+that $$x^{p-1}\equiv1\pmod{p}.$$*
+```
+
+This theorem tells us about a condition that all prime numbers verify,
+which gives us an easy condition to test and discard composite numbers.
+Given a candidate $n$, choose some $x\in\mathbb{Z}$ such that
+$\gcd(n,x)=1$, and compute $$x^{n-1}\bmod{p}.$$ If the result is not
+$1$, then we conclude that $n$ is not a prime. This is known as the
+*Fermat primality test*, and it is very efficient. But what happens if
+the result is $1$? Does this mean that $n$ is a prime? Unfortunately, it
+is not as simple as this. For example, take $n=91$ and $x=3$. It is easy
+to verify that $$3^{90}\pmod{91}=1,$$ but $91=7\cdot13$, so it is not a
+prime. We call the numbers that produce these "false positives"
+*pseudoprimes*.
+
+::: {.definition}
+*Let $n\in\mathbb{Z}$ be a composite number, and let
+$x\in\mathbb{Z}$ such that $\gcd(x,n)=1$. We call $n$ an* $x$-Fermat
+pseudoprime *if* $$x^{n-1}\equiv1\pmod{n}.$$
+:::
+
+Moreover, for any $x$ there are many $x$-Fermat pseudoprimes. Okay, so
+everybody don't panic. Fermat's little theorem tell us that primes
+verify the condition $$x^{p-1}\equiv1\pmod{p}$$ for *every* $x$ such
+that $\gcd(p,x)=1$. So surely we can find some other base $x$ so that
+$91$ cannot fool the test. Indeed, $$5^{90}\bmod{91} = 64.$$ So that's
+it, we are now sure that $91$ is not a prime, because it does not pass
+the test for $x=5$. Problem solved.
+
+Or is it? What if there are some truly evil numbers that can fool the
+Fermat test for all the possible bases?
+
+::: {.definition}
+*Let $n\in\mathbb{Z}$ be a composite number. We say
+that $n$ is a* Carmichael number *if it is a $x$-Fermat pseudoprime for
+every $x\in\mathbb{Z}$ such that* $\gcd(n,x)=1$.
+:::
+
+Unfortunately, there are too many of these Carmichael numbers. For large
+values of $B\in\mathbb{N}$, the number of Carmichael numbers up to $B$
+is approximately $B^{2/7}$. This means that a significant amount of
+numbers will fool our test, even if we run it for all the possible
+bases. We need a better test.
+
+The solution lies on a strengthened version of Fermat's little theorem.
+
+```{proposition}
+*Let $p\in\mathbb{N}$ be an odd prime, and let
+$p-1=2^st$ such that $2\nmid t$. If $\gcd(p,x)=1$, then either
+$$x^t\equiv1\pmod{p},$$ or there exists $i\in\{0,1,\dots,s-1\}$ such
+that $$x^{2^it}\equiv-1\pmod{p}.$$*
+```
+
+Again, the idea is to test our numbers against this result, and see if
+they satisfy the equations. This version is called the *strong Fermat
+primality test*. Observe that, in the worst case, we need to perform $s$
+checks, and if $p$ has bitlength $\lambda$, then $s=O(\lambda)$, and
+each check amounts to modular exponentiation, so overall this is
+efficient. As before, this new test also produces false positives.
+
+::: {.definition}
+*Let $n\in\mathbb{Z}$ be an odd composite integer,
+and let $n-1=2^st$. Let $x\in\mathbb{Z}$ such that $\gcd(x,n)=1$. We
+call $n$ a* strong $x$-Fermat pseudoprime *if
+$$x^{t-1}\equiv1\pmod{n},$$ or there exists $i\in\{0,1,\dots,s-1\}$ such
+that* $$x^{2^it}\equiv-1\pmod{n}.$$
+:::
+
+::: {.exercise}
+*Check that $2047$ is a strong $2$-Fermat pseudoprime,
+because it satisfies the first condition, and that $91$ is a strong
+$10$-Fermat pseudoprime, because it satisfies the second condition.*
+:::
+
+So why bother with the strong Fermat test, if it has the same flaw? The
+key point is that, even if we have strong pseudoprimes, the strong
+Fermat test does not have its version of Carmichael numbers. That is,
+for any composite number $n$ we will always be able to find a base such
+that $n$ does not pass the strong test, showing that it is indeed
+composite. Moreover, most of the bases will do!
+
+```{proposition, name="Monier--Rabin"}
+*Let $n>9$ be an odd composite
+integer. Then, the number of bases $x$ smaller than $n$ such that $n$ is
+a strong $x$-Fermat pseudoprime is at most $\frac14\varphi(n)$.*
+```
+
+This is a very strong result. Since $\varphi(n)<n$, this tells us that,
+by picking a base in $\mathbb{Z}_n$ at random, there is only a
+probability of $1/4$ that the test lies. Of course, we want a smaller
+probability, so we repeat the test many times. By using $\lambda$
+iterations for different random bases, we bring the error probability
+down to $1/4^\lambda$. Observe that this decreases exponentially in
+$\lambda$! To give some concrete numbers, for $\lambda=1024$, we have
+that $$\frac{1}{4^\lambda}\approx 3.094346\cdot 10^{-67},$$ and this
+looks like a failure probability that we can live with.
+
+Asymptotically, we have an algorithm that runs $\lambda$ iterations, and
+each of these is computing $O(\lambda)$ exponentiations, so in total we
+have a running cost of $O(\lambda^2)$ modular exponentiations.
+
+This test is known as the *Miller--Rabin primality test*, and it is in
+essence what is used in practice to check for primality, due to its high
+efficiency and almost-perfect reliability.
+
+If you are still concerned about the error probability, there are some
+alternatives that *never* produce erroneous results, while still running
+in polynomial time. However, they are much slower than the Miller--Rabin
+test, which is why they are not often used in practice.[^40]
 
 # Refreshers {#refreshers}
 
@@ -325,7 +477,10 @@ field we are in. For example, if our coefficients are in $\mathbb{F}_5$,
 we cannot "divide" by $3$, but we can find the inverse of $3$ modulo
 $5$, and we must ensure that every coefficient is reduced modulo $5$.
 
-[^25]: *In an abstract algebra context, the definition of a ring is more
+[^39]: In an abstract algebra context, the definition of a ring is more
     general, and what we are defining is known as a *commutative ring
     with unity*. Nevertheless, we stick to this definition for
-    simplicity, since it is the only type of ring relevant to us.*
+    simplicity, since it is the only type of ring relevant to us.
+
+[^40]: Agrawal, M., Kayal, N., & Saxena, N. (2004). PRIMES is in P.
+    *Annals of mathematics*, 781-793.

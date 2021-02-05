@@ -97,7 +97,7 @@ multiplication by $x^{-1}$. Applying the operation to $n$ copies of the
 same element $x$ is represented by $nx$ in additive notation, and by
 $x^n$ in multiplicative notation. Even though not all group operations
 are addition or multiplication, it is common to adopt their notation for
-a generic group operation.[^20] In these notes, we will often use
+a generic group operation.[^21] In these notes, we will often use
 multiplicative notation for generic groups. That is, we denote the
 identity element by $1$, the inverse of $x$ by $x^{-1}$, and the
 operation of $x$ and $y$ by $x\cdot y$ or simply $xy$.
@@ -223,7 +223,7 @@ $ord(\mathbb{H})\mid ord(\mathbb{G})$.*
 
 The order of a group plays an important role in the group operation.
 
-```{proposition, name="Euler's theorem"}
+```{proposition, name="Euler's theorem", label="euler"}
 *Let $\mathbb{G}$ be a group of
 finite order. Then, for any $x\in \mathbb{G}$, we have that
 $$x^{ord(\mathbb{G})}=1.$$*
@@ -279,7 +279,7 @@ $\mathbb{G}$.*
 We conclude the section on groups by looking at some specific properties
 of the groups $\mathbb{Z}_n$ and $\mathbb{Z}_n^*$.
 
-```{proposition}
+```{proposition, label="primitive"}
 *Let $p$ be a prime number. The multiplicative group
 $\mathbb{Z}_p^*$ is a cyclic group of order $p-1$, and it has
 $\varphi(p-1)$ generators. These generators are called *primitive roots*
@@ -287,7 +287,7 @@ modulo $p$.*
 ```
 
 Moreover, a direct consequence of Euler's theorem and the proposition
-above is known as *Fermat's little theorem*.[^21]
+above is known as *Fermat's little theorem*.[^22]
 
 ```{proposition, name="Fermat's little theorem"}
 *Let $p$ be a prime
@@ -295,66 +295,17 @@ number. Then, for any $x\in\mathbb{Z}$, we have that
 $$x^{p-1}\equiv1\pmod{p}.$$*
 ```
 
-We also introduce the *Chinese remainder theorem (CRT)*, which, in its
-simplest form, states the following.
-
-```{proposition, name="Chinese remainder theorem"}
-*Let $a,b\in\mathbb{N}$
-be coprime, and let $n=ab$. Then, for each $x\in\mathbb{Z}_n$, there
-exists a unique pair $(y,z)\in\mathbb{Z}_a\times\mathbb{Z}_b$ such that
-$$\begin{aligned}
-        & x\equiv y\pmod{a}, \\
-        & x\equiv z\pmod{b}. \\
-    \end{aligned}$$ Moreover, given
-$(y,z)\in\mathbb{Z}_a\times\mathbb{Z}_b$, we can explicitly recover the
-corresponding $x$ by computing
-$$x=\left(by\left(b^{-1}\bmod{a}\right)+az\left(a^{-1}\bmod{b}\right)\right)\bmod{n}.$$*
-```
-
-With the notations of the proposition above, the Sage command that
-computes the value $x$ given by the Chinese remainder theorem is
-`crt(y, z, a, b)`.
-
-The legend says that this theorem was used in ancient China to count
-troops, proceeding as follows. Say that you had $200$ troops before
-battle, and you want to count your losses.
-
-1.  Choose a pair of coprime numbers such that their product is at least
-    the upper bound on the number of troops. In this case, we can use
-    $11\cdot19=209$.
-
-2.  Order the troops to stand in columns of length $11$. The last column
-    (possibly incomplete) tells us the remainder modulo $11$, say it is
-    $8$.
-
-3.  Reorganize the troops in columns of length $19$. Again, the last
-    column tells us the remainder $z$ modulo $19$, say it is $2$.
-
-4.  Using the Chinese remainder theorem, we know that there is a unique
-    number $x<209$ such that $$\begin{aligned}
-            & x\bmod 11 = 9, \\
-            & x\bmod 19 = 2, \\
-        \end{aligned}$$ and the second part of the theorem allows us to
-    explicitly compute this number. Since $$\begin{aligned}
-            & 19^{-1}\bmod 11 = 7, \\
-            & 11^{-1}\bmod 19 = 7, \\
-        \end{aligned}$$ we have that
-    $$x=\left(11\cdot 9\cdot 7+19\cdot 2\cdot 7\right)\bmod{209}=97.$$
-
-Higher factors, or more than two of them, can be used to deal with
-larger numbers.
-
 ## Finite fields
 
 A *field* is a more complex algebraic structure, since it is equipped
 with two operations, both of which work similarly to a group
-operation.[^22]
+operation.[^23]
 
 ::: {.definition}
 *A* field *is a triple $(\mathbb{F},\circ,\ast)$,
 where $\mathbb{F}$ is a set and $\circ$ and $\ast$ are operations on
-$\mathbb{K}$, that is, functions $$\begin{aligned}
-        \circ : \phantom{a} & \mathbb{K}\times \mathbb{K}& \rightarrow & \phantom{a}\mathbb{K}& \qquad\qquad & \ast :& \mathbb{K}\times\mathbb{K}& \rightarrow & \mathbb{K}\\
+$\mathbb{F}$, that is, functions $$\begin{aligned}
+        \circ : \phantom{a} & \mathbb{F}\times \mathbb{F}& \rightarrow & \phantom{a}\mathbb{F}& \qquad\qquad & \ast :& \mathbb{F}\times\mathbb{F}& \rightarrow & \mathbb{F}\\
                 & (x,y) & \mapsto & \phantom{a} x\circ y, & & & (x,y) & \mapsto & x\ast y,
     \end{aligned}$$ which additionally satisfy the following
 properties:*
@@ -420,7 +371,7 @@ for x in R:
     print(x,x.is_unit())
 ```
 
-In this course we will be interested in *finite fields*,[^23] so what
+In this course we will be interested in *finite fields*,[^24] so what
 are some examples of those? Could it be, for example, that
 $\mathbb{Z}_n$ is a field for some $n\in\mathbb{N}$? We already know
 that this will not be true for all $n\in\mathbb{N}$, since we saw that
@@ -457,8 +408,8 @@ what is it?
 It turns out that we need some more involved tools to describe these. An
 element of the field $\mathbb{F}_{p^k}$ is not represented by an
 integer. Instead, we use a polynomial
-$$a_{k-1}x^{k-1}+\dots +a_1x+a_0,$$ for some coefficients
-$a_{k-1},\dots,a_0\in\mathbb{F}_p$. Note that the degree of the
+$$r_{k-1}x^{k-1}+\dots +r_1x+r_0,$$ for some coefficients
+$r_{k-1},\dots,a_0\in\mathbb{F}_p$. Note that the degree of the
 polynomial is $k-1$ for representing an element of $\mathbb{F}_{p^k}$.
 Since there are $k$ coefficients, and each of these has $p$ possible
 values, we see that there are in total $p^k$ possible polynomials, and
@@ -467,22 +418,22 @@ elements of $\mathbb{F}_{p^k}$.
 
 But we still need to specify how the operations work. For addition, we
 use usual polynomial addition, that is, $$\begin{split}
-    A(X)+B(X)& =(a_{k-1}X^{k-1}+\dots +a_1X+a_0)+(b_{k-1}X^{k-1}+\dots +b_1X+b_0) = \\
-    & =(a_{k-1}+b_{k-1})X^{k-1}+\dots +(a_1+b_1)X+(a_0+b_0),
+    R(X)+S(X)& =(r_{k-1}X^{k-1}+\dots +r_1X+r_0)+(s_{k-1}X^{k-1}+\dots +s_1X+s_0) = \\
+    & =(r_{k-1}+s_{k-1})X^{k-1}+\dots +(r_1+s_1)X+(r_0+s_0),
 \end{split}$$ which is also a polynomial of degree at most $k-1$, and it
 is easy to see that it verifies the conditions of a group operation.
 Note that the coefficients are in $\mathbb{F}_p$, so the additions of
 the coefficients are reduced modulo $p$ if necessary.
 
 For multiplication, we consider multiplying the two polynomials.
-However, note that, in general, multiplying two polynomials $A(X)$ and
-$B(X)$ of degree $k-1$ produces a polynomial $A(X)B(X)$ of degree
+However, note that, in general, multiplying two polynomials $R(X)$ and
+$S(X)$ of degree $k-1$ produces a polynomial $R(X)S(X)$ of degree
 $2k-2$, which is not in $\mathbb{F}_{p^k}$ anymore. Our trick then is
 analogous to what we did in $\mathbb{F}_p=\mathbb{Z}_p$. In that case,
 we reduced the result modulo a prime number $p$. Now, we will reduce the
 result modulo a certain polynomial $T(X)$ of degree $k$. This means that
-we compute the polynomial division of $A(X)B(X)$ by $T(X)$, and keep the
-remainder, so that the result has degree at most $k-1$.[^24] Since this
+we compute the polynomial division of $R(X)S(X)$ by $T(X)$, and keep the
+remainder, so that the result has degree at most $k-1$.[^25] Since this
 is analogous to the case of integers, we extend the notation
 $$A(X)\bmod{T(X)}$$ to denote the remainder of the polynomial division
 $A(X)$ by $T(X)$, and the notation $$A(X)\equiv B(X)\pmod{T(X)}$$ to
@@ -615,10 +566,10 @@ print("a * b = "+str(a*b))
 print("a^{-1} = "+str(a^(-1)))
 ```
 
-[^20]: A prime example of a different group operation, which appears
+[^21]: A prime example of a different group operation, which appears
     very often in cryptography, is the group law of elliptic curves.
 
-[^21]: Not to be confused with *Fermat's last theorem*, which states
+[^22]: Not to be confused with *Fermat's last theorem*, which states
     that there are no positive integer solutions for the equation
     $x^n+y^n=z^n$ for any integer $n>2$. This theorem has become famous
     due to its history: it was originally claimed by Pierre de Fermat in
@@ -629,7 +580,7 @@ print("a^{-1} = "+str(a^(-1)))
     solved the problem, after the contributions of a long lineage of
     mathematicians.
 
-[^22]: Appendix \@ref(ring-theory) contains a more detailed introduction
+[^23]: Appendix \@ref(ring-theory) contains a more detailed introduction
     to this section. It first defines another algebraic structure called
     a *ring*, which is somewhat between a group and a field, and then
     defines fields as a particular type of ring. This appendix is not
@@ -638,10 +589,10 @@ print("a^{-1} = "+str(a^(-1)))
     read Appendix \@ref(ring-theory) before reading about fields, since it
     provides a more natural introduction to the topic.
 
-[^23]: Sometimes also called Galois fields, after the mathematician
+[^24]: Sometimes also called Galois fields, after the mathematician
     Évariste Galois, who notably proved that there is no algebraic
     formula for solving polynomial equations of degree higher than $4$,
     and then died after a duel at the age of 20.
 
-[^24]: See Appendix \@ref(polydiv) for a refresher on how to perform
+[^25]: See Appendix \@ref(polydiv) for a refresher on how to perform
     polynomial division.

@@ -11,7 +11,7 @@ output:
 
 # Front page {-}
 
-*Latest update: 26/01/2021.*
+*Latest update: 05/02/2021.*
 
 This page contains some useful information related to the course and the lecture notes. Note that there are some useful buttons above the text, in particular one to download the notes as a well-formatted PDF, for offline use. 
 
@@ -54,6 +54,7 @@ The documentation at <https://doc.sagemath.org/> is pretty good, although most o
 
 #### Changelog {-}
 
+-   05/02/2021. Section \@ref(public-key-encryption) and Appendix \@ref(primality-testing) added. Minor fixes in Section \@ref(algebraic-structures). CRT moved to Section \@ref(elementary-number-theory).
 -   26/01/2021. Section \@ref(algebraic-structures) and Appendices \@ref(ring-theory) and \@ref(polydiv) added.
 -   21/01/2021. Minor fixes and additions in Sections \@ref(hash-functions) and \@ref(elementary-number-theory).
 -   18/01/2021. Remainder of Section \@ref(elementary-number-theory) uploaded. Some typos fixed in Sections \@ref(block-ciphers) and \@ref(hash-functions).
