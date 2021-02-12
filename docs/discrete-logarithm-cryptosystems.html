@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>8 Discrete logarithm cryptosystems | Cryptography lecture notes</title>
+  <meta name="description" content="8 Discrete logarithm cryptosystems | Cryptography lecture notes" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="8 Discrete logarithm cryptosystems | Cryptography lecture notes" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="8 Discrete logarithm cryptosystems | Cryptography lecture notes" />
+  
+  
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="public-key-encryption.html"/>
+<link rel="next" href="signatures.html"/>
+<script src="libs/header-attrs-2.6/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="part"><span><b>I Introduction to modern cryptography</b></span></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Front page</a></li>
+<li class="chapter" data-level="1" data-path="introduction-to-security.html"><a href="introduction-to-security.html"><i class="fa fa-check"></i><b>1</b> Introduction to security</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="introduction-to-security.html"><a href="introduction-to-security.html#what-cryptography-is-and-is-not"><i class="fa fa-check"></i><b>1.1</b> What cryptography is and is not</a></li>
+<li class="chapter" data-level="1.2" data-path="introduction-to-security.html"><a href="introduction-to-security.html#fundamental-security-principles"><i class="fa fa-check"></i><b>1.2</b> Fundamental security principles</a></li>
+<li class="chapter" data-level="1.3" data-path="introduction-to-security.html"><a href="introduction-to-security.html#security-parameter"><i class="fa fa-check"></i><b>1.3</b> Security parameter</a></li>
+<li class="chapter" data-level="1.4" data-path="introduction-to-security.html"><a href="introduction-to-security.html#security-level"><i class="fa fa-check"></i><b>1.4</b> Security level</a></li>
+</ul></li>
+<li class="part"><span><b>II Symmetric cryptography</b></span></li>
+<li class="chapter" data-level="2" data-path="randomness-in-cryptography.html"><a href="randomness-in-cryptography.html"><i class="fa fa-check"></i><b>2</b> Randomness in cryptography</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="randomness-in-cryptography.html"><a href="randomness-in-cryptography.html#one-time-pad"><i class="fa fa-check"></i><b>2.1</b> One-time pad</a></li>
+<li class="chapter" data-level="2.2" data-path="randomness-in-cryptography.html"><a href="randomness-in-cryptography.html#sec:prngs"><i class="fa fa-check"></i><b>2.2</b> Pseudorandom generators</a></li>
+<li class="chapter" data-level="2.3" data-path="randomness-in-cryptography.html"><a href="randomness-in-cryptography.html#sec:examples"><i class="fa fa-check"></i><b>2.3</b> Linear feedback shift registers</a></li>
+<li class="chapter" data-level="2.4" data-path="randomness-in-cryptography.html"><a href="randomness-in-cryptography.html#true-randomness"><i class="fa fa-check"></i><b>2.4</b> True randomness</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="block-ciphers.html"><a href="block-ciphers.html"><i class="fa fa-check"></i><b>3</b> Block ciphers</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="block-ciphers.html"><a href="block-ciphers.html#overview-of-block-ciphers"><i class="fa fa-check"></i><b>3.1</b> Overview of block ciphers</a></li>
+<li class="chapter" data-level="3.2" data-path="block-ciphers.html"><a href="block-ciphers.html#modes-of-operation"><i class="fa fa-check"></i><b>3.2</b> Modes of operation</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="block-ciphers.html"><a href="block-ciphers.html#electronic-codebook-ecb-mode"><i class="fa fa-check"></i><b>3.2.1</b> Electronic codebook (ECB) mode</a></li>
+<li class="chapter" data-level="3.2.2" data-path="block-ciphers.html"><a href="block-ciphers.html#cipher-block-chaining-cbc-mode"><i class="fa fa-check"></i><b>3.2.2</b> Cipher block chaining (CBC) mode</a></li>
+<li class="chapter" data-level="3.2.3" data-path="block-ciphers.html"><a href="block-ciphers.html#output-feedback-ofb-mode"><i class="fa fa-check"></i><b>3.2.3</b> Output feedback (OFB) mode</a></li>
+<li class="chapter" data-level="3.2.4" data-path="block-ciphers.html"><a href="block-ciphers.html#counter-ctr-mode"><i class="fa fa-check"></i><b>3.2.4</b> Counter (CTR) mode</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="block-ciphers.html"><a href="block-ciphers.html#des-and-aes"><i class="fa fa-check"></i><b>3.3</b> DES and AES</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="block-ciphers.html"><a href="block-ciphers.html#data-encryption-standard-des"><i class="fa fa-check"></i><b>3.3.1</b> Data Encryption Standard (DES)</a></li>
+<li class="chapter" data-level="3.3.2" data-path="block-ciphers.html"><a href="block-ciphers.html#advanced-encryption-standard-aes"><i class="fa fa-check"></i><b>3.3.2</b> Advanced Encryption Standard (AES)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="hash-functions.html"><a href="hash-functions.html"><i class="fa fa-check"></i><b>4</b> Hash functions</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="hash-functions.html"><a href="hash-functions.html#some-issues-in-cryptocurrencies"><i class="fa fa-check"></i><b>4.1</b> Some issues in cryptocurrencies</a></li>
+<li class="chapter" data-level="4.2" data-path="hash-functions.html"><a href="hash-functions.html#sec:hash_def"><i class="fa fa-check"></i><b>4.2</b> Hash functions</a></li>
+<li class="chapter" data-level="4.3" data-path="hash-functions.html"><a href="hash-functions.html#birthday-attacks"><i class="fa fa-check"></i><b>4.3</b> Birthday attacks</a></li>
+<li class="chapter" data-level="4.4" data-path="hash-functions.html"><a href="hash-functions.html#the-merkle-damgård-transformation"><i class="fa fa-check"></i><b>4.4</b> The Merkle-Damgård transformation</a></li>
+</ul></li>
+<li class="part"><span><b>III Asymmetric cryptography</b></span></li>
+<li class="chapter" data-level="5" data-path="elementary-number-theory.html"><a href="elementary-number-theory.html"><i class="fa fa-check"></i><b>5</b> Elementary number theory</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="elementary-number-theory.html"><a href="elementary-number-theory.html#integer-arithmetic"><i class="fa fa-check"></i><b>5.1</b> Integer arithmetic</a></li>
+<li class="chapter" data-level="5.2" data-path="elementary-number-theory.html"><a href="elementary-number-theory.html#the-euclidean-algorithm"><i class="fa fa-check"></i><b>5.2</b> The euclidean algorithm</a></li>
+<li class="chapter" data-level="5.3" data-path="elementary-number-theory.html"><a href="elementary-number-theory.html#modular-arithmetic"><i class="fa fa-check"></i><b>5.3</b> Modular arithmetic</a></li>
+<li class="chapter" data-level="5.4" data-path="elementary-number-theory.html"><a href="elementary-number-theory.html#efficient-modular"><i class="fa fa-check"></i><b>5.4</b> Modular arithmetic, but efficient</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="algebraic-structures.html"><a href="algebraic-structures.html"><i class="fa fa-check"></i><b>6</b> Algebraic structures</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="algebraic-structures.html"><a href="algebraic-structures.html#groups"><i class="fa fa-check"></i><b>6.1</b> Groups</a></li>
+<li class="chapter" data-level="6.2" data-path="algebraic-structures.html"><a href="algebraic-structures.html#finite-fields"><i class="fa fa-check"></i><b>6.2</b> Finite fields</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="public-key-encryption.html"><a href="public-key-encryption.html"><i class="fa fa-check"></i><b>7</b> Public-key encryption</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="public-key-encryption.html"><a href="public-key-encryption.html#public-key-cryptography"><i class="fa fa-check"></i><b>7.1</b> Public-key cryptography</a></li>
+<li class="chapter" data-level="7.2" data-path="public-key-encryption.html"><a href="public-key-encryption.html#the-rsa-encryption-scheme"><i class="fa fa-check"></i><b>7.2</b> The RSA encryption scheme</a></li>
+<li class="chapter" data-level="7.3" data-path="public-key-encryption.html"><a href="public-key-encryption.html#security-of-rsa"><i class="fa fa-check"></i><b>7.3</b> Security of RSA</a></li>
+<li class="chapter" data-level="7.4" data-path="public-key-encryption.html"><a href="public-key-encryption.html#efficiency-optimizations"><i class="fa fa-check"></i><b>7.4</b> Efficiency optimizations</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="discrete-logarithm-cryptosystems.html"><a href="discrete-logarithm-cryptosystems.html"><i class="fa fa-check"></i><b>8</b> Discrete logarithm cryptosystems</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="discrete-logarithm-cryptosystems.html"><a href="discrete-logarithm-cryptosystems.html#the-discrete-logarithm-problem"><i class="fa fa-check"></i><b>8.1</b> The discrete logarithm problem</a></li>
+<li class="chapter" data-level="8.2" data-path="discrete-logarithm-cryptosystems.html"><a href="discrete-logarithm-cryptosystems.html#the-diffie-hellman-key-exchange"><i class="fa fa-check"></i><b>8.2</b> The Diffie-Hellman key exchange</a></li>
+<li class="chapter" data-level="8.3" data-path="discrete-logarithm-cryptosystems.html"><a href="discrete-logarithm-cryptosystems.html#the-elgamal-encryption-scheme"><i class="fa fa-check"></i><b>8.3</b> The ElGamal encryption scheme</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="signatures.html"><a href="signatures.html"><i class="fa fa-check"></i><b>9</b> Digital signatures</a></li>
+<li class="part"><span><b>IV Other topics</b></span></li>
+<li class="chapter" data-level="10" data-path="cryptanalysis.html"><a href="cryptanalysis.html"><i class="fa fa-check"></i><b>10</b> Cryptanalysis</a></li>
+<li class="appendix"><span><b>Appendices</b></span></li>
+<li class="chapter" data-level="A" data-path="ring-theory.html"><a href="ring-theory.html"><i class="fa fa-check"></i><b>A</b> Ring theory</a></li>
+<li class="chapter" data-level="B" data-path="primality-testing.html"><a href="primality-testing.html"><i class="fa fa-check"></i><b>B</b> Primality testing</a></li>
+<li class="chapter" data-level="C" data-path="refreshers.html"><a href="refreshers.html"><i class="fa fa-check"></i><b>C</b> Refreshers</a>
+<ul>
+<li class="chapter" data-level="C.1" data-path="refreshers.html"><a href="refreshers.html#set-notation"><i class="fa fa-check"></i><b>C.1</b> Set notation</a></li>
+<li class="chapter" data-level="C.2" data-path="refreshers.html"><a href="refreshers.html#probability-theory"><i class="fa fa-check"></i><b>C.2</b> Probability theory</a></li>
+<li class="chapter" data-level="C.3" data-path="refreshers.html"><a href="refreshers.html#asymptotic-notation"><i class="fa fa-check"></i><b>C.3</b> Asymptotic notation</a></li>
+<li class="chapter" data-level="C.4" data-path="refreshers.html"><a href="refreshers.html#polydiv"><i class="fa fa-check"></i><b>C.4</b> Polynomial division</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Cryptography lecture notes</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="discrete-logarithm-cryptosystems" class="section level1" number="8">
+<h1><span class="header-section-number">8</span> Discrete logarithm cryptosystems</h1>
+<p>In the previous lesson, we saw that the security of the RSA encryption
+scheme relies on the hardness of factoring products of two large primes.
+However, this is not the only “hard” problem in which we can base our
+security. In this section, we will introduce</p>
+<ol style="list-style-type: decimal">
+<li><p>The discrete logarithm problem.</p></li>
+<li><p>The Diffie–Hellman key exchange protocol.</p></li>
+<li><p>The ElGamal encryption scheme.</p></li>
+</ol>
+<div id="the-discrete-logarithm-problem" class="section level2" number="8.1">
+<h2><span class="header-section-number">8.1</span> The discrete logarithm problem</h2>
+<p>In this section, we will present another computational problem that is
+believed to be hard. To do so, we first introduce the notion of
+<em>discrete logarithm</em>.</p>
+<p>Let <span class="math inline">\(\mathbb{G}\)</span> be a cyclic group, with a generator <span class="math inline">\(g\)</span>, written with
+multiplicative notation. Remember that this means that
+<span class="math display">\[\mathbb{G}=\langle g \rangle = \{g^n\mid n\in\mathbb{Z}_{\geq0}\},\]</span>
+that is, any element of <span class="math inline">\(\mathbb{G}\)</span> can be seen as a power of the
+generator <span class="math inline">\(g\)</span>. We can also look at this from the other side: given any
+element <span class="math inline">\(h\in\mathbb{G}\)</span>, there exists <span class="math inline">\(n\in\mathbb{Z}_{\geq0}\)</span> such
+that <span class="math display">\[g^n=h.\]</span> This leads to the following definition.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-77" class="definition"><strong>Definition 8.1  </strong></span><em>Let <span class="math inline">\(\mathbb{G}\)</span> be a cyclic group with generator
+<span class="math inline">\(g\)</span>, written multiplicatively. Given <span class="math inline">\(h\in\mathbb{G}\)</span>, we define the</em> discrete logarithm (DLog) <em>of <span class="math inline">\(h\)</span> with respect to <span class="math inline">\(g\)</span> as the value
+<span class="math inline">\(n\in\mathbb{Z}_{\geq0}\)</span> such that <span class="math inline">\(g^n=h\)</span>, and we denote it by
+<span class="math display">\[\log_gh=n.\]</span> When the generator is fixed and there is no ambiguity, we
+might simply write <span class="math inline">\(\log h\)</span>.</em></p>
+</div>
+<p>The name of the discrete logarithm comes from its similarity to
+logarithm as the inverse operation to exponentiation over the real
+numbers. That is, If <span class="math inline">\(a,b\in\mathbb{R}\)</span>, and <span class="math inline">\(c=a^b\)</span>, then we have that
+<span class="math inline">\(\log_ac=b\)</span>.</p>
+<p>In Sage, given a group element <code>h</code> and a generator <code>g</code>, the discrete
+logarithm of <code>h</code> with respect to <code>g</code> can be computed with <code>log(h,g)</code>.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-78" class="definition"><strong>Definition 8.2  </strong></span><em>Let <span class="math inline">\(\mathbb{G}\)</span> be a cyclic group with generator
+<span class="math inline">\(g\)</span>. The</em> discrete logarithm problem <em>relative to <span class="math inline">\(\mathbb{G}\)</span> consists
+of, given <span class="math inline">\(\mathbb{G},g\)</span> and a uniformly random <span class="math inline">\(h\in\mathbb{G}\)</span>,
+computing <span class="math inline">\(\log_gh\)</span>.</em></p>
+</div>
+<p>Similarly to the factorization problem, the discrete logarithm problem
+is believed to be hard (i.e. computationally infeasible) for some
+well-chosen groups. Again, we do not have a formal proof of the problem
+being hard, but it has been studied for decades, and no general
+algorithm faster than exponential-time has been found.</p>
+<p>An important detail is the “well-chosen” part in the previous paragraph.
+That is, there exist some groups for which faster algorithms are known.
+Some cases can even be solved in time polynomial in the size of <span class="math inline">\(p\)</span>.
+Consider, for example, <span class="math inline">\((\mathbb{Z}_p,+)\)</span> for some large prime <span class="math inline">\(p\)</span>, and
+a generator <span class="math inline">\(g\)</span>. For this additive group, the discrete logarithm problem
+becomes, given <span class="math inline">\(\mathbb{Z}_p,g\)</span> and a uniformly random
+<span class="math inline">\(h\in\mathbb{Z}_p\)</span>, to find <span class="math inline">\(x\)</span> such that <span class="math display">\[gx\equiv h\pmod{p}.\]</span> But
+this can easily be solved as <span class="math display">\[x\equiv g^{-1}h\pmod{p},\]</span> where the
+inverse can be computed efficiently using the extended Euclidean
+algorithm. Therefore, these groups are not suitable for cryptographic
+purposes, if we want to rely on the discrete logarithm problem being
+hard.</p>
+<p>A better candidate are the multiplicative groups
+<span class="math inline">\((\mathbb{Z}_n^*,\cdot)\)</span> or, more precisely, a large subgroup of prime
+order. Without getting into much detail, the restriction to the
+prime-order subgroup is due to the Pohlig–Hellman attack,<a href="#fn33" class="footnote-ref" id="fnref33"><sup>33</sup></a> which
+tells us that the discrete logarithm problem in a composite-order group
+is as hard as the problem in the largest prime-order subgroup.</p>
+<p>If <span class="math inline">\(n\)</span> is prime, then the order of <span class="math inline">\(\mathbb{Z}_n^*\)</span> is <span class="math inline">\(n-1\)</span>, and thus
+we want to ensure that the largest prime-order subgroup is as large as
+possible relative to <span class="math inline">\(n\)</span>. This motivates the introduction of <em>safe
+primes</em>, which are prime numbers <span class="math inline">\(p\)</span> such that <span class="math inline">\(q=(p-1)/2\)</span> is also a
+prime. This ensures that <span class="math inline">\(\mathbb{Z}_p^*\)</span> has order <span class="math inline">\(2q\)</span>, and the
+subgroup of order <span class="math inline">\(q\)</span> can be used.</p>
+<p>To convince ourselves that looking for safe primes is efficient enough,
+let us try to find them with Sage, using the following code.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="discrete-logarithm-cryptosystems.html#cb13-1" aria-hidden="true" tabindex="-1"></a>sec_param<span class="op">=</span><span class="dv">128</span></span>
+<span id="cb13-2"><a href="discrete-logarithm-cryptosystems.html#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="va">True</span>:</span>
+<span id="cb13-3"><a href="discrete-logarithm-cryptosystems.html#cb13-3" aria-hidden="true" tabindex="-1"></a>    p <span class="op">=</span> randint(<span class="dv">2</span><span class="op">^</span>(sec_param<span class="op">-</span><span class="dv">1</span>),<span class="dv">2</span><span class="op">^</span>(sec_param)<span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb13-4"><a href="discrete-logarithm-cryptosystems.html#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> p <span class="kw">in</span> Primes():</span>
+<span id="cb13-5"><a href="discrete-logarithm-cryptosystems.html#cb13-5" aria-hidden="true" tabindex="-1"></a>        q <span class="op">=</span> (p<span class="op">-</span><span class="dv">1</span>)<span class="op">/</span><span class="dv">2</span></span>
+<span id="cb13-6"><a href="discrete-logarithm-cryptosystems.html#cb13-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> q <span class="kw">in</span> Primes():</span>
+<span id="cb13-7"><a href="discrete-logarithm-cryptosystems.html#cb13-7" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="st">&quot;p = &quot;</span><span class="op">+</span><span class="bu">str</span>(p))</span>
+<span id="cb13-8"><a href="discrete-logarithm-cryptosystems.html#cb13-8" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="st">&quot;q = &quot;</span><span class="op">+</span><span class="bu">str</span>(q))</span>
+<span id="cb13-9"><a href="discrete-logarithm-cryptosystems.html#cb13-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span></span></code></pre></div>
+<p>Running on the free version of CoCalc, these are the approximate times
+to find a safe prime, for different choices of the security parameter</p>
+<div class="center">
+<table>
+<thead>
+<tr class="header">
+<th align="center"><span class="math inline">\(\lambda\)</span></th>
+<th align="center">Running time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><span class="math inline">\(128\)</span></td>
+<td align="center">Less than a second</td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(256\)</span></td>
+<td align="center">A few seconds</td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math inline">\(512\)</span></td>
+<td align="center">About five minutes</td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(1024\)</span></td>
+<td align="center">Two hours</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>This will be much faster with serious computing power (and a refined
+search algorithm), and nevertheless observe that this will be something
+that we only need to run once, since the prime can be reused without
+compromising the hardness of the problem.</p>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-79" class="exercise"><strong>Exercise 8.1  </strong></span><em>If we want <span class="math inline">\(q\)</span> as close to <span class="math inline">\(p\)</span> as possible, why don’t
+we look for primes <span class="math inline">\(p\)</span> such that <span class="math inline">\(q=p-1\)</span> is also prime?</em></p>
+</div>
+<p>Although, strictly speaking, no efficient algorithm is known, some
+algorithms that are better than exponential have been found for these
+groups, so this is not an ideal candidate either. The current record of
+broken discrete logarithm is in a group <span class="math inline">\(\mathbb{Z}_p^*\)</span> for a prime <span class="math inline">\(p\)</span>
+of bitlength <span class="math inline">\(795\)</span>, which took around <span class="math inline">\(3100\)</span> core-years.<a href="#fn34" class="footnote-ref" id="fnref34"><sup>34</sup></a></p>
+<p>Currently, the best choice is groups of points of elliptic curves.
+Elliptic curves are an advanced topic in mathematics, and lie at the
+intersection of algebraic geometry and number theory. We will not cover
+them in these notes, but it suffices to say that one can define a group
+law in the set of points of one such curve, and some of these curves are
+believed to have very hard discrete logarithms, much harder than the
+groups <span class="math inline">\(\mathbb{Z}_n^*\)</span> of the same size. In contrast with the discrete
+logarithm records in <span class="math inline">\(\mathbb{Z}_n^*\)</span>, the largest known discrete
+logarithm solved corresponds to an elliptic curve of order <span class="math inline">\(n\)</span>, for <span class="math inline">\(n\)</span>
+a <span class="math inline">\(114\)</span>-bit integer. It took the researchers 13 days of parallel
+computation on <span class="math inline">\(256\)</span> NVIDIA Tesla V100 GPUs.<a href="#fn35" class="footnote-ref" id="fnref35"><sup>35</sup></a></p>
+</div>
+<div id="the-diffie-hellman-key-exchange" class="section level2" number="8.2">
+<h2><span class="header-section-number">8.2</span> The Diffie-Hellman key exchange</h2>
+<p>In the first half of the course, we discussed symmetric cryptography.
+For two parties Alice and Bob to communicate using a symmetric
+encryption scheme, they need to first establish a shared secret key, in
+a process called <em>key agreement</em> or <em>key establishment</em>. This is a
+non-trivial task. Maybe they could meet in person and agree on a key, or
+maybe they could both trust a third party to handle the key agreement
+for them. But clearly this is not ideal, and depending on the context
+maybe not possible at all.</p>
+<p>One way to solve this issue is to use an asymmetric encryption scheme as
+a <em>key encapsulation mechanism</em>: Alice chooses a random <em>symmetric key</em>
+<span class="math inline">\(k\)</span>, and uses a public-key encryption scheme, like RSA, to encrypt the
+key and send it to Bob. Then Bob decrypts the message and learns <span class="math inline">\(k\)</span>.
+They can do this because the public-key encryption scheme does not
+require sharing secret keys in advance. From this point onwards, Alice
+and Bob can use the key <span class="math inline">\(k\)</span> to communicate using a symmetric encryption
+scheme, like AES.</p>
+<p>One might ask why not use public-key encryption all the time, since it
+requires no shared keys. While this poses no security problem,
+asymmetric encryption schemes tend to be much less efficient that
+symmetric ones, so it is simply faster to establish a key using
+asymmetric encryption, and later use symmetric encryption.</p>
+<p>An alternative approach to key encapsulation mechanisms is to use the
+following.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-80" class="definition"><strong>Definition 8.3  </strong></span><em>A</em> key exchange protocol <em>is a procedure between two parties, at the end of which both parties know a common key.</em></p>
+</div>
+<p>The first and best-known key exchange protocol is the Diffie–Hellman
+key exchange protocol, introduced in 1976,<a href="#fn36" class="footnote-ref" id="fnref36"><sup>36</sup></a> and it works as follows.
+The only common input is a security parameter <span class="math inline">\(\lambda\)</span>.</p>
+<ol style="list-style-type: decimal">
+<li><p>On input <span class="math inline">\(\lambda\)</span>, Alice chooses a uniformly random prime <span class="math inline">\(p\)</span> of
+bitlength <span class="math inline">\(\lambda\)</span>, and determines a cyclic group <span class="math inline">\(\mathbb{G}\)</span> of
+order <span class="math inline">\(p\)</span>, and a generator <span class="math inline">\(g\)</span> of <span class="math inline">\(\mathbb{G}\)</span>.</p></li>
+<li><p>Alice sends <span class="math inline">\((\mathbb{G},g)\)</span> to Bob.<a href="#fn37" class="footnote-ref" id="fnref37"><sup>37</sup></a></p></li>
+<li><p>Alice chooses a uniformly random <span class="math inline">\(a\in\mathbb{Z}_p\)</span>, computes
+<span class="math inline">\(A=g^a\)</span>, and sends <span class="math inline">\(A\)</span> to Bob. Similarly, Bob chooses a uniformly
+random <span class="math inline">\(b\in\mathbb{Z}_p\)</span>, computes <span class="math inline">\(B=g^b\)</span>, and sends <span class="math inline">\(B\)</span> to Alice.</p></li>
+<li><p>Now, Alice computes the key as <span class="math inline">\(k=B^a\)</span>, and Bob computes the same
+key as <span class="math inline">\(k=A^b\)</span>.</p></li>
+</ol>
+<p>Since <span class="math inline">\(k\)</span> is technically a group element, it is processed in some
+established way to obtain a bitstring, which is the actual key that will
+be used for symmetric encryption purposes.</p>
+<p>The parameters <span class="math inline">\((\mathbb{G},g)\)</span> can be reused without compromising
+security, so steps (1) and (2) do not need to be run again every time
+that Alice and Bob want to share a key, but it is very important that
+the values <span class="math inline">\(a,b\)</span> are always fresh.</p>
+<p>Before discussing security, let us convince ourselves that indeed Alice
+and Bob end up with the same key. Observe that
+<span class="math display">\[B^a = \left(g^b\right)^a = g^{ab} = \left(g^a\right)^b = A^b.\]</span>
+Therefore, the value computed by each party is actually the same.</p>
+<p>Notice how <span class="math inline">\(k\)</span> was never sent from one side to the other. However, some
+partial information related to it was sent, so one might be worried that
+an eavesdropper might learn some information about the key from the
+intercepted values, <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>. We define the exact level of security
+that we want to attain.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-81" class="definition"><strong>Definition 8.4  </strong></span><em>A key exchange protocol is</em> secure in the presence
+of an eavesdropper <em>if no efficient adversary that observes the protocol
+(that is, an adversary that sees <span class="math inline">\(\mathbb{G},g,A,B\)</span>) can tell the real
+key from a uniformly random bitstring of the same size.</em></p>
+</div>
+<p>Notice that this is a very strong definition, which implies that not a
+single bit of the key is leaked.</p>
+<p>So why is the Diffie–Hellman key exchange protocol secure? Consider the
+following scenario. The adversary eavesdrops <span class="math inline">\(A,B\)</span>, and finds <span class="math inline">\(a\)</span> by
+solving the discrete logarithm of <span class="math inline">\(A\)</span> with respect to <span class="math inline">\(g\)</span>. Then the
+adversary could simply compute <span class="math inline">\(B^a\)</span> and learn the shared key.
+Therefore, to prevent such an attack, we must ensure that the discrete
+logarithm problem is hard in <span class="math inline">\(\mathbb{G}\)</span>.</p>
+<p>However, formally this is not enough, because conceivably an adversary
+could extract the key directly from <span class="math inline">\(A,B\)</span>, without the need to solve any
+discrete logarithm. This motivates the introduction of the following
+related problem.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-82" class="definition"><strong>Definition 8.5  </strong></span><em>Let <span class="math inline">\(\mathbb{G}\)</span> be a cyclic group of primer order
+<span class="math inline">\(p\)</span>, with generator <span class="math inline">\(g\)</span>. Let <span class="math inline">\(a,b\)</span> be uniformly random elements of
+<span class="math inline">\(\mathbb{Z}_p\)</span>, and let <span class="math display">\[A=g^a,\qquad B=g^b.\]</span> The</em> computational
+Diffie–Hellman (CDH) problem <em>relative to <span class="math inline">\(\mathbb{G}\)</span> consists of,
+given <span class="math inline">\(\mathbb{G},g,A,B\)</span>, computing <span class="math inline">\(g^{ab}\)</span>.</em></p>
+</div>
+<p>If this problem is hard, then clearly an adversary will not be able to
+compute a Diffie–Hellman key from eavesdropping communications.
+However, our definition of security requires something stronger: that
+such a key cannot be distinguished from random strings.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-83" class="definition"><strong>Definition 8.6  </strong></span><em>Let <span class="math inline">\(\mathbb{G}\)</span> be a cyclic group of primer order
+<span class="math inline">\(p\)</span>, with generator <span class="math inline">\(g\)</span>. Let <span class="math inline">\(a,b\)</span> be uniformly random elements of
+<span class="math inline">\(\mathbb{Z}_p\)</span>, and let <span class="math display">\[A=g^a,\qquad B=g^b.\]</span> With probability <span class="math inline">\(1/2\)</span>,
+let <span class="math inline">\(C=g^{ab}\)</span>, otherwise let <span class="math inline">\(C\)</span> be a uniformly random element of
+<span class="math inline">\(\mathbb{G}\)</span>. The</em> decisional Diffie–Hellman (DDH) problem <em>relative to
+<span class="math inline">\(\mathbb{G}\)</span> consists of, given <span class="math inline">\(\mathbb{G},g,A,B,C\)</span>, decide whether
+<span class="math inline">\(C=g^{ab}\)</span> or <span class="math inline">\(C\)</span> is something else.</em></p>
+</div>
+<p>Observe that, unlike any other computational problem that we have
+considered, the DDH problem can easily be solved with probability <span class="math inline">\(1/2\)</span>,
+by guessing at random. Thus, for decisional problems, we say that the
+problem is hard if there is no efficient algorithm that can do
+significantly better than that. For example, an efficient algorithm that
+succeeds in solving the DDH problem with probability <span class="math inline">\(2/3\)</span> would be
+considered a breach of the problem.</p>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-84" class="exercise"><strong>Exercise 8.2  </strong></span><em>Prove that:</em></p>
+<ol style="list-style-type: decimal">
+<li><p><em>If we can break the DLog problem, then we can break the CDH
+problem.</em></p></li>
+<li><p><em>If we can break the CDH problem, then we can break the DDH
+problem.</em></p></li>
+</ol>
+</div>
+<p>As is was the case with the factorization and RSA problems, there is no
+known algorithm that can solve CDH or DDH any faster than the DLog
+problem. Nevertheless, there is no formal proof that solving either of
+these allows us to solve DLog, so the problems are not known to be
+equivalent, hence why we require them for security of the
+Diffie–Hellman key exchange protocol.</p>
+<div class="proposition">
+<p><span id="prp:unlabeled-div-85" class="proposition"><strong>Proposition 8.1  </strong></span><em>If the DDH problem is hard relative to a group
+<span class="math inline">\(\mathbb{G}\)</span>, then the Diffie–Hellman key exchange, using the group
+<span class="math inline">\(\mathbb{G}\)</span>, is secure in the presence of an eavesdropper.</em></p>
+</div>
+</div>
+<div id="the-elgamal-encryption-scheme" class="section level2" number="8.3">
+<h2><span class="header-section-number">8.3</span> The ElGamal encryption scheme</h2>
+<p>We introduce the ElGamal encryption scheme,<a href="#fn38" class="footnote-ref" id="fnref38"><sup>38</sup></a> Unlike the RSA
+cryptosystem, the ElGamal encryption scheme works in a cyclic group of
+prime order. An advantage of this scheme is that it provides CPA
+security by default, without the need of padding, so no hash function is
+required.</p>
+<ul>
+<li><p><span class="math inline">\(\mathsf{KeyGen}\)</span>: on input a security parameter <span class="math inline">\(\lambda\)</span>, choose a
+cyclic group <span class="math inline">\(\mathbb{G}\)</span> of prime order <span class="math inline">\(p\)</span>, and a generator <span class="math inline">\(g\)</span> of
+<span class="math inline">\(\mathbb{G}\)</span>. We will write <span class="math inline">\(\mathbb{G}\)</span> with multiplicative
+notation. Sample a uniformly random <span class="math inline">\(x\in\mathbb{Z}_p\)</span>, and set
+<span class="math inline">\(h=g^x\)</span>. Output the public key <span class="math display">\[\mathsf{pk}=(\mathbb{G}, g, h),\]</span>
+and the secret key <span class="math display">\[\mathsf{sk}=x.\]</span></p></li>
+<li><p><span class="math inline">\(\mathsf{Enc}\)</span>: given a message <span class="math inline">\(\mathsf{m}\in\mathbb{Z}_p\)</span>, with
+<span class="math inline">\(\mathsf{m}\)</span> small, and the receiver’s public key
+<span class="math inline">\((\mathbb{G}, g, h)\)</span>, choose a uniformly random <span class="math inline">\(r\in\mathbb{Z}_p\)</span>
+and output the ciphertext
+<span class="math display">\[\mathsf{c}=(\mathsf{c}_1,\mathsf{c}_2)=(g^r,g^mh^r).\]</span></p></li>
+<li><p><span class="math inline">\(\mathsf{Dec}\)</span>: given a ciphertext <span class="math inline">\(\mathsf{c}\)</span> and the secret key
+<span class="math inline">\(d\)</span>, output <span class="math display">\[\log_g\frac{\mathsf{c}_2}{\mathsf{c}_1^x}.\]</span></p></li>
+</ul>
+<p>It is easy to see that decryption recovers the original message
+encrypted. Indeed, observe that
+<span class="math display">\[g^mh^r=g^m\left(g^x\right)^r=g^{m+xr},\]</span> and thus
+<span class="math display">\[\log_g\frac{\mathsf{c}_2}{\mathsf{c}_1^x}=\log_g\frac{g^{m+xr}}{\left(g^r\right)^x}=\log_g g^m=m.\]</span></p>
+<p>One thing that might seem counter-intuitive is the fact that we are
+supposed to find the discrete logarithm of <span class="math inline">\(g^m\)</span> to recover the message.
+But, at the same time, we will require the DLog problem to be hard for
+security. The key point is that <span class="math inline">\(\mathsf{m}\)</span> is small relative to <span class="math inline">\(p\)</span>,
+so that the DLog of <span class="math inline">\(g^m\)</span> can be solved efficiently. Observe that this
+does not contradict the discrete logarithm problem, which states that
+the discrete logarithm should be hard to compute for <em>uniformly random</em>
+elements of <span class="math inline">\(\mathbb{Z}_p\)</span>, but it is fine if it can be solved for small
+values.</p>
+<p>Intuitively, the security of the scheme relies on the DLog problem being
+hard, because an adversary that can compute discrete logarithms would be
+able to recover <span class="math inline">\(x\)</span> and run the decryption algorithm. Moreover, observe
+that the scheme is <em>randomized</em>, that is, the same plaintext can produce
+different ciphertexts, depending on each encryption’s randomness <span class="math inline">\(r\)</span>.</p>
+<p>Formally, again we require the DDH problem to be hard to ensure
+security.</p>
+<div class="proposition">
+<p><span id="prp:unlabeled-div-86" class="proposition"><strong>Proposition 8.2  </strong></span><em>If the DDH problem is hard for a group
+<span class="math inline">\(\mathbb{G}\)</span>, then the ElGamal encryption scheme in <span class="math inline">\(\mathbb{G}\)</span> is
+secure.</em></p>
+</div>
+<p>Below is an implementation of the ElGamal encryption scheme in
+<span class="math inline">\(\mathbb{Z}_p^*\)</span>. The value of <span class="math inline">\(p\)</span> used is a safe prime of bitlength
+<span class="math inline">\(1024\)</span> found used the algorithm above.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="discrete-logarithm-cryptosystems.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">### KEY GENERATION</span></span>
+<span id="cb14-2"><a href="discrete-logarithm-cryptosystems.html#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Choose parameters</span></span>
+<span id="cb14-3"><a href="discrete-logarithm-cryptosystems.html#cb14-3" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="dv">98477271628635149697160687227938079584387801057656524674547805684845362792314056005063953177189645361017363320475498530632115997158699647766751945380661872143643706009196552179178021780647235396351787889600626935912984928121265808769679480550797947557845891911467438040517702514768796757174157093600219716843</span></span>
+<span id="cb14-4"><a href="discrete-logarithm-cryptosystems.html#cb14-4" aria-hidden="true" tabindex="-1"></a>q <span class="op">=</span> (p<span class="op">-</span><span class="dv">1</span>)<span class="op">/</span><span class="dv">2</span></span>
+<span id="cb14-5"><a href="discrete-logarithm-cryptosystems.html#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Check that p, q are primes</span></span>
+<span id="cb14-6"><a href="discrete-logarithm-cryptosystems.html#cb14-6" aria-hidden="true" tabindex="-1"></a>p <span class="kw">in</span> Primes(), q <span class="kw">in</span> Primes()</span>
+<span id="cb14-7"><a href="discrete-logarithm-cryptosystems.html#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the group as Z_n^*, choose a generator g and check that g has order q</span></span>
+<span id="cb14-8"><a href="discrete-logarithm-cryptosystems.html#cb14-8" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> Integers(p)</span>
+<span id="cb14-9"><a href="discrete-logarithm-cryptosystems.html#cb14-9" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> G(<span class="dv">3</span>)</span>
+<span id="cb14-10"><a href="discrete-logarithm-cryptosystems.html#cb14-10" aria-hidden="true" tabindex="-1"></a>g.multiplicative_order() <span class="op">==</span> q</span>
+<span id="cb14-11"><a href="discrete-logarithm-cryptosystems.html#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute and output the keys.</span></span>
+<span id="cb14-12"><a href="discrete-logarithm-cryptosystems.html#cb14-12" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> randint(<span class="dv">0</span>,q)</span>
+<span id="cb14-13"><a href="discrete-logarithm-cryptosystems.html#cb14-13" aria-hidden="true" tabindex="-1"></a>h <span class="op">=</span> g<span class="op">^</span>x</span>
+<span id="cb14-14"><a href="discrete-logarithm-cryptosystems.html#cb14-14" aria-hidden="true" tabindex="-1"></a>pk <span class="op">=</span> (p,g,h)</span>
+<span id="cb14-15"><a href="discrete-logarithm-cryptosystems.html#cb14-15" aria-hidden="true" tabindex="-1"></a>sk <span class="op">=</span> x</span>
+<span id="cb14-16"><a href="discrete-logarithm-cryptosystems.html#cb14-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-17"><a href="discrete-logarithm-cryptosystems.html#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="co">### ENCRYPTION</span></span>
+<span id="cb14-18"><a href="discrete-logarithm-cryptosystems.html#cb14-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Choose a small message (so that its DLog can be computed)</span></span>
+<span id="cb14-19"><a href="discrete-logarithm-cryptosystems.html#cb14-19" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> <span class="dv">27593</span></span>
+<span id="cb14-20"><a href="discrete-logarithm-cryptosystems.html#cb14-20" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (m<span class="op">&gt;=</span>q):</span>
+<span id="cb14-21"><a href="discrete-logarithm-cryptosystems.html#cb14-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;Message too large.&quot;</span>)</span>
+<span id="cb14-22"><a href="discrete-logarithm-cryptosystems.html#cb14-22" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb14-23"><a href="discrete-logarithm-cryptosystems.html#cb14-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Sample randomness</span></span>
+<span id="cb14-24"><a href="discrete-logarithm-cryptosystems.html#cb14-24" aria-hidden="true" tabindex="-1"></a>    r <span class="op">=</span> randint(<span class="dv">0</span>,q)</span>
+<span id="cb14-25"><a href="discrete-logarithm-cryptosystems.html#cb14-25" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute the ciphertext</span></span>
+<span id="cb14-26"><a href="discrete-logarithm-cryptosystems.html#cb14-26" aria-hidden="true" tabindex="-1"></a>    c <span class="op">=</span> (g<span class="op">^</span>r, g<span class="op">^</span>m<span class="op">*</span>h<span class="op">^</span>r)</span>
+<span id="cb14-27"><a href="discrete-logarithm-cryptosystems.html#cb14-27" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(c)</span>
+<span id="cb14-28"><a href="discrete-logarithm-cryptosystems.html#cb14-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-29"><a href="discrete-logarithm-cryptosystems.html#cb14-29" aria-hidden="true" tabindex="-1"></a><span class="co">### DECRYPTION</span></span>
+<span id="cb14-30"><a href="discrete-logarithm-cryptosystems.html#cb14-30" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> c[<span class="dv">1</span>]<span class="op">/</span>(c[<span class="dv">0</span>]<span class="op">^</span>x)</span>
+<span id="cb14-31"><a href="discrete-logarithm-cryptosystems.html#cb14-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Solve the discrete logarithm of w with respect to g by brute force</span></span>
+<span id="cb14-32"><a href="discrete-logarithm-cryptosystems.html#cb14-32" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> m <span class="kw">in</span> <span class="bu">range</span>(q):</span>
+<span id="cb14-33"><a href="discrete-logarithm-cryptosystems.html#cb14-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> g<span class="op">^</span>m <span class="op">==</span> w:</span>
+<span id="cb14-34"><a href="discrete-logarithm-cryptosystems.html#cb14-34" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(m)</span>
+<span id="cb14-35"><a href="discrete-logarithm-cryptosystems.html#cb14-35" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span></span></code></pre></div>
+
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="33">
+<li id="fn33"><p>Pohlig, S., &amp; Hellman, M. (1978). An improved algorithm for
+computing logarithms over GF(p) and its cryptographic significance
+(corresp.). <em>IEEE Transactions on information Theory</em>, 24(1),
+106-110.<a href="discrete-logarithm-cryptosystems.html#fnref33" class="footnote-back">↩︎</a></p></li>
+<li id="fn34"><p>Boudot, F., Gaudry, P., Guillevic, A., Heninger, N., Thomé, E., &amp;
+Zimmermann, P. (2020, August). Comparing the difficulty of
+factorization and discrete logarithm: a 240-digit experiment. In
+<em>Annual International Cryptology Conference</em> (pp. 62-91). Springer,
+Cham.<a href="discrete-logarithm-cryptosystems.html#fnref34" class="footnote-back">↩︎</a></p></li>
+<li id="fn35"><p><a href="https://github.com/JeanLucPons/Kangaroo" class="uri">https://github.com/JeanLucPons/Kangaroo</a>.<a href="discrete-logarithm-cryptosystems.html#fnref35" class="footnote-back">↩︎</a></p></li>
+<li id="fn36"><p>Diffie, W., &amp; Hellman, M. (1976). New directions in cryptography.
+<em>IEEE transactions on Information Theory</em>, 22(6), 644-654.<a href="discrete-logarithm-cryptosystems.html#fnref36" class="footnote-back">↩︎</a></p></li>
+<li id="fn37"><p>Formally, some description of the group is published as part of
+the key. For example, if it has been agreed that the group is some
+<span class="math inline">\((\mathbb{Z}_p^*,\cdot)\)</span>, then it is enough to publish <span class="math inline">\(p\)</span>.<a href="discrete-logarithm-cryptosystems.html#fnref37" class="footnote-back">↩︎</a></p></li>
+<li id="fn38"><p>ElGamal, T. (1985). A public key cryptosystem and a signature
+scheme based on discrete logarithms. <em>IEEE transactions on
+information theory</em>, 31(4), 469-472.<a href="discrete-logarithm-cryptosystems.html#fnref38" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="public-key-encryption.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="signatures.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

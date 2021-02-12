@@ -165,8 +165,7 @@ same operation.
 ::: {.definition}
 *Let $\mathbb{G}$ be a group. A* subgroup $\mathbb{H}$
 *of $\mathbb{G}$ is a subset of $\mathbb{G}$ that contains the identity
-element and is closed under the group operation, that is, for any
-$x,y\in \mathbb{H}$, we have that $xy\in \mathbb{H}$.*
+element and such that $\mathbb{H}$ forms a group with the operation of $\mathbb{G}$ restricted to $\mathbb{H}$. That is, for any $x,y\in \mathbb{H}$, we have that $x^{-1}\in\mathbb{H}$ and* $xy\in \mathbb{H}$. 
 :::
 
 For example, the set of even integers is a subgroup of $(\mathbb{Z},+)$,

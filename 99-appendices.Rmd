@@ -177,7 +177,7 @@ that $$x^{p-1}\equiv1\pmod{p}.$$*
 This theorem tells us about a condition that all prime numbers verify,
 which gives us an easy condition to test and discard composite numbers.
 Given a candidate $n$, choose some $x\in\mathbb{Z}$ such that
-$\gcd(n,x)=1$, and compute $$x^{n-1}\bmod{p}.$$ If the result is not
+$\gcd(n,x)=1$, and compute $$x^{n-1}\bmod{n}.$$ If the result is not
 $1$, then we conclude that $n$ is not a prime. This is known as the
 *Fermat primality test*, and it is very efficient. But what happens if
 the result is $1$? Does this mean that $n$ is a prime? Unfortunately, it

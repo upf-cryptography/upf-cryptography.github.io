@@ -231,8 +231,7 @@ computation. Moreover, this works both ways: it can be shown that
 knowledge of $\varphi(N)$ allows to factor $N$ efficiently. Thus, the security of RSA relies on the hardness of factorization.
 
 ::: {.definition}
-*Let $p,q$ be large prime numbers, and let $N=pq$.
-The *factorization problem* consists of recovering $p,q$, given $N$.*
+*Let $p,q$ be large prime numbers, and let $N=pq$. The* factorization problem *consists of recovering $p,q$, given* $N$.
 :::
 
 As mentioned in
@@ -248,7 +247,7 @@ following problem.
 ::: {.definition}
 *Let $p,q$ be large primes, and let $N=pq$. Let
 $e\in\mathbb{Z}_N$. The* RSA problem *consists of recovering
-$\mathsf{m}\in\mathbb{Z}_p$, given $N,e$ and $\mathsf{m}^e\bmod{N}$.*
+$\mathsf{m}\in\mathbb{Z}_N$, given $N,e$ and $\mathsf{m}^e\bmod{N}$.*
 :::
 
 Clearly if factorization is easy then the RSA problem is also easy, but

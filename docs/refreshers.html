@@ -188,7 +188,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.3" data-path="public-key-encryption.html"><a href="public-key-encryption.html#security-of-rsa"><i class="fa fa-check"></i><b>7.3</b> Security of RSA</a></li>
 <li class="chapter" data-level="7.4" data-path="public-key-encryption.html"><a href="public-key-encryption.html#efficiency-optimizations"><i class="fa fa-check"></i><b>7.4</b> Efficiency optimizations</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="dh.html"><a href="dh.html"><i class="fa fa-check"></i><b>8</b> The Diffie–Hellman key exchange</a></li>
+<li class="chapter" data-level="8" data-path="discrete-logarithm-cryptosystems.html"><a href="discrete-logarithm-cryptosystems.html"><i class="fa fa-check"></i><b>8</b> Discrete logarithm cryptosystems</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="discrete-logarithm-cryptosystems.html"><a href="discrete-logarithm-cryptosystems.html#the-discrete-logarithm-problem"><i class="fa fa-check"></i><b>8.1</b> The discrete logarithm problem</a></li>
+<li class="chapter" data-level="8.2" data-path="discrete-logarithm-cryptosystems.html"><a href="discrete-logarithm-cryptosystems.html#the-diffie-hellman-key-exchange"><i class="fa fa-check"></i><b>8.2</b> The Diffie-Hellman key exchange</a></li>
+<li class="chapter" data-level="8.3" data-path="discrete-logarithm-cryptosystems.html"><a href="discrete-logarithm-cryptosystems.html#the-elgamal-encryption-scheme"><i class="fa fa-check"></i><b>8.3</b> The ElGamal encryption scheme</a></li>
+</ul></li>
 <li class="chapter" data-level="9" data-path="signatures.html"><a href="signatures.html"><i class="fa fa-check"></i><b>9</b> Digital signatures</a></li>
 <li class="part"><span><b>IV Other topics</b></span></li>
 <li class="chapter" data-level="10" data-path="cryptanalysis.html"><a href="cryptanalysis.html"><i class="fa fa-check"></i><b>10</b> Cryptanalysis</a></li>
@@ -278,7 +283,7 @@ set <span class="math inline">\(\{0,1\}^\ell\)</span> of possible bitstrings of 
 <span class="math inline">\(\{0,1\}^*\)</span> of bitstrings of any length. Observe that
 <span class="math display">\[\#\{0,1\}=2,\qquad\#\{0,1\}^\ell=2^\ell,\qquad \#\{0,1\}^*=\infty.\]</span></p>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-89" class="exercise"><strong>Exercise C.1  </strong></span><em>Write these sets using implicit notation:</em></p>
+<p><span id="exr:unlabeled-div-99" class="exercise"><strong>Exercise C.1  </strong></span><em>Write these sets using implicit notation:</em></p>
 <ul>
 <li><p><em>The set of complex numbers with real part equal to <span class="math inline">\(1\)</span>.</em></p></li>
 <li><p><em>The set of pairs, where the first component of the pair is a
@@ -303,7 +308,7 @@ Given two events <span class="math inline">\(A,B\)</span>, we denote the <em>pro
 probability of both <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> happening. Recall that, if <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>
 are independent events, then <span class="math display">\[\Pr[A\cap B]=\Pr[A]\cdot\Pr[B].\]</span></p>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-90" class="exercise"><strong>Exercise C.2  </strong></span><em>Compute the probability of a random bitstring of
+<p><span id="exr:unlabeled-div-100" class="exercise"><strong>Exercise C.2  </strong></span><em>Compute the probability of a random bitstring of
 length <span class="math inline">\(4\)</span> being the string <span class="math inline">\(1110\)</span>.</em></p>
 </div>
 </div>
@@ -332,7 +337,7 @@ degree, and polynomials of any degree grow slower than exponential
 functions. Given two polynomials of different degrees, the one with the
 higher degree grows faster.</p>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-91" class="exercise"><strong>Exercise C.3  </strong></span><em>Decide whether each of these statements is true or
+<p><span id="exr:unlabeled-div-101" class="exercise"><strong>Exercise C.3  </strong></span><em>Decide whether each of these statements is true or
 false.</em></p>
 <ul>
 <li><p><em><span class="math inline">\(10^{10}x^3=O(x^4)\)</span>.</em></p></li>
@@ -399,6 +404,24 @@ we cannot “divide” by <span class="math inline">\(3\)</span>, but we can fin
 
 </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

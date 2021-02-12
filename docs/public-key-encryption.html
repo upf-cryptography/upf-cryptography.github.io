@@ -30,7 +30,7 @@
   
   
 <link rel="prev" href="algebraic-structures.html"/>
-<link rel="next" href="dh.html"/>
+<link rel="next" href="discrete-logarithm-cryptosystems.html"/>
 <script src="libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -188,7 +188,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.3" data-path="public-key-encryption.html"><a href="public-key-encryption.html#security-of-rsa"><i class="fa fa-check"></i><b>7.3</b> Security of RSA</a></li>
 <li class="chapter" data-level="7.4" data-path="public-key-encryption.html"><a href="public-key-encryption.html#efficiency-optimizations"><i class="fa fa-check"></i><b>7.4</b> Efficiency optimizations</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="dh.html"><a href="dh.html"><i class="fa fa-check"></i><b>8</b> The Diffie–Hellman key exchange</a></li>
+<li class="chapter" data-level="8" data-path="discrete-logarithm-cryptosystems.html"><a href="discrete-logarithm-cryptosystems.html"><i class="fa fa-check"></i><b>8</b> Discrete logarithm cryptosystems</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="discrete-logarithm-cryptosystems.html"><a href="discrete-logarithm-cryptosystems.html#the-discrete-logarithm-problem"><i class="fa fa-check"></i><b>8.1</b> The discrete logarithm problem</a></li>
+<li class="chapter" data-level="8.2" data-path="discrete-logarithm-cryptosystems.html"><a href="discrete-logarithm-cryptosystems.html#the-diffie-hellman-key-exchange"><i class="fa fa-check"></i><b>8.2</b> The Diffie-Hellman key exchange</a></li>
+<li class="chapter" data-level="8.3" data-path="discrete-logarithm-cryptosystems.html"><a href="discrete-logarithm-cryptosystems.html#the-elgamal-encryption-scheme"><i class="fa fa-check"></i><b>8.3</b> The ElGamal encryption scheme</a></li>
+</ul></li>
 <li class="chapter" data-level="9" data-path="signatures.html"><a href="signatures.html"><i class="fa fa-check"></i><b>9</b> Digital signatures</a></li>
 <li class="part"><span><b>IV Other topics</b></span></li>
 <li class="chapter" data-level="10" data-path="cryptanalysis.html"><a href="cryptanalysis.html"><i class="fa fa-check"></i><b>10</b> Cryptanalysis</a></li>
@@ -427,8 +432,7 @@ However, if we do not know the factors of <span class="math inline">\(N\)</span>
 computation. Moreover, this works both ways: it can be shown that
 knowledge of <span class="math inline">\(\varphi(N)\)</span> allows to factor <span class="math inline">\(N\)</span> efficiently. Thus, the security of RSA relies on the hardness of factorization.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-73" class="definition"><strong>Definition 7.2  </strong></span><em>Let <span class="math inline">\(p,q\)</span> be large prime numbers, and let <span class="math inline">\(N=pq\)</span>.
-The </em>factorization problem* consists of recovering <span class="math inline">\(p,q\)</span>, given <span class="math inline">\(N\)</span>.*</p>
+<p><span id="def:unlabeled-div-73" class="definition"><strong>Definition 7.2  </strong></span><em>Let <span class="math inline">\(p,q\)</span> be large prime numbers, and let <span class="math inline">\(N=pq\)</span>. The</em> factorization problem <em>consists of recovering <span class="math inline">\(p,q\)</span>, given</em> <span class="math inline">\(N\)</span>.</p>
 </div>
 <p>As mentioned in
 Section <a href="elementary-number-theory.html#integer-arithmetic">5.1</a>, there is no known algorithm for
@@ -441,7 +445,7 @@ following problem.</p>
 <div class="definition">
 <p><span id="def:unlabeled-div-74" class="definition"><strong>Definition 7.3  </strong></span><em>Let <span class="math inline">\(p,q\)</span> be large primes, and let <span class="math inline">\(N=pq\)</span>. Let
 <span class="math inline">\(e\in\mathbb{Z}_N\)</span>. The</em> RSA problem <em>consists of recovering
-<span class="math inline">\(\mathsf{m}\in\mathbb{Z}_p\)</span>, given <span class="math inline">\(N,e\)</span> and <span class="math inline">\(\mathsf{m}^e\bmod{N}\)</span>.</em></p>
+<span class="math inline">\(\mathsf{m}\in\mathbb{Z}_N\)</span>, given <span class="math inline">\(N,e\)</span> and <span class="math inline">\(\mathsf{m}^e\bmod{N}\)</span>.</em></p>
 </div>
 <p>Clearly if factorization is easy then the RSA problem is also easy, but
 the implication in the other direction is not known to be true or false
@@ -634,7 +638,7 @@ practice.<a href="public-key-encryption.html#fnref32" class="footnote-back">↩�
         </div>
       </div>
 <a href="algebraic-structures.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="dh.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="discrete-logarithm-cryptosystems.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

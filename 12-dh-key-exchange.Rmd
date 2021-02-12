@@ -1,1 +1,404 @@
-# The Diffie--Hellman key exchange {#dh}
+# Discrete logarithm cryptosystems
+
+In the previous lesson, we saw that the security of the RSA encryption
+scheme relies on the hardness of factoring products of two large primes.
+However, this is not the only "hard" problem in which we can base our
+security. In this section, we will introduce
+
+1.  The discrete logarithm problem.
+
+2.  The Diffie--Hellman key exchange protocol.
+
+3.  The ElGamal encryption scheme.
+
+## The discrete logarithm problem
+
+In this section, we will present another computational problem that is
+believed to be hard. To do so, we first introduce the notion of
+*discrete logarithm*.
+
+Let $\mathbb{G}$ be a cyclic group, with a generator $g$, written with
+multiplicative notation. Remember that this means that
+$$\mathbb{G}=\langle g \rangle = \{g^n\mid n\in\mathbb{Z}_{\geq0}\},$$
+that is, any element of $\mathbb{G}$ can be seen as a power of the
+generator $g$. We can also look at this from the other side: given any
+element $h\in\mathbb{G}$, there exists $n\in\mathbb{Z}_{\geq0}$ such
+that $$g^n=h.$$ This leads to the following definition.
+
+::: {.definition}
+*Let $\mathbb{G}$ be a cyclic group with generator
+$g$, written multiplicatively. Given $h\in\mathbb{G}$, we define the* discrete logarithm (DLog) *of $h$ with respect to $g$ as the value
+$n\in\mathbb{Z}_{\geq0}$ such that $g^n=h$, and we denote it by
+$$\log_gh=n.$$ When the generator is fixed and there is no ambiguity, we
+might simply write $\log h$.*
+:::
+
+The name of the discrete logarithm comes from its similarity to
+logarithm as the inverse operation to exponentiation over the real
+numbers. That is, If $a,b\in\mathbb{R}$, and $c=a^b$, then we have that
+$\log_ac=b$.
+
+In Sage, given a group element `h` and a generator `g`, the discrete
+logarithm of `h` with respect to `g` can be computed with `log(h,g)`.
+
+::: {.definition}
+*Let $\mathbb{G}$ be a cyclic group with generator
+$g$. The* discrete logarithm problem *relative to $\mathbb{G}$ consists
+of, given $\mathbb{G},g$ and a uniformly random $h\in\mathbb{G}$,
+computing $\log_gh$.*
+:::
+
+Similarly to the factorization problem, the discrete logarithm problem
+is believed to be hard (i.e. computationally infeasible) for some
+well-chosen groups. Again, we do not have a formal proof of the problem
+being hard, but it has been studied for decades, and no general
+algorithm faster than exponential-time has been found.
+
+An important detail is the "well-chosen" part in the previous paragraph.
+That is, there exist some groups for which faster algorithms are known.
+Some cases can even be solved in time polynomial in the size of $p$.
+Consider, for example, $(\mathbb{Z}_p,+)$ for some large prime $p$, and
+a generator $g$. For this additive group, the discrete logarithm problem
+becomes, given $\mathbb{Z}_p,g$ and a uniformly random
+$h\in\mathbb{Z}_p$, to find $x$ such that $$gx\equiv h\pmod{p}.$$ But
+this can easily be solved as $$x\equiv g^{-1}h\pmod{p},$$ where the
+inverse can be computed efficiently using the extended Euclidean
+algorithm. Therefore, these groups are not suitable for cryptographic
+purposes, if we want to rely on the discrete logarithm problem being
+hard.
+
+A better candidate are the multiplicative groups
+$(\mathbb{Z}_n^*,\cdot)$ or, more precisely, a large subgroup of prime
+order. Without getting into much detail, the restriction to the
+prime-order subgroup is due to the Pohlig--Hellman attack,[^33] which
+tells us that the discrete logarithm problem in a composite-order group
+is as hard as the problem in the largest prime-order subgroup.
+
+If $n$ is prime, then the order of $\mathbb{Z}_n^*$ is $n-1$, and thus
+we want to ensure that the largest prime-order subgroup is as large as
+possible relative to $n$. This motivates the introduction of *safe
+primes*, which are prime numbers $p$ such that $q=(p-1)/2$ is also a
+prime. This ensures that $\mathbb{Z}_p^*$ has order $2q$, and the
+subgroup of order $q$ can be used.
+
+To convince ourselves that looking for safe primes is efficient enough,
+let us try to find them with Sage, using the following code.
+
+```{python, eval=FALSE}
+sec_param=128
+while True:
+    p = randint(2^(sec_param-1),2^(sec_param)-1)
+    if p in Primes():
+        q = (p-1)/2
+        if q in Primes():
+            print("p = "+str(p))
+            print("q = "+str(q))
+            break
+```
+
+Running on the free version of CoCalc, these are the approximate times
+to find a safe prime, for different choices of the security parameter
+
+::: {.center}
+   $\lambda$      Running time
+  ----------- --------------------
+     $128$     Less than a second
+     $256$       A few seconds
+     $512$     About five minutes
+    $1024$         Two hours
+:::
+
+This will be much faster with serious computing power (and a refined
+search algorithm), and nevertheless observe that this will be something
+that we only need to run once, since the prime can be reused without
+compromising the hardness of the problem.
+
+::: {.exercise}
+*If we want $q$ as close to $p$ as possible, why don't
+we look for primes $p$ such that $q=p-1$ is also prime?*
+:::
+
+Although, strictly speaking, no efficient algorithm is known, some
+algorithms that are better than exponential have been found for these
+groups, so this is not an ideal candidate either. The current record of
+broken discrete logarithm is in a group $\mathbb{Z}_p^*$ for a prime $p$
+of bitlength $795$, which took around $3100$ core-years.[^34]
+
+Currently, the best choice is groups of points of elliptic curves.
+Elliptic curves are an advanced topic in mathematics, and lie at the
+intersection of algebraic geometry and number theory. We will not cover
+them in these notes, but it suffices to say that one can define a group
+law in the set of points of one such curve, and some of these curves are
+believed to have very hard discrete logarithms, much harder than the
+groups $\mathbb{Z}_n^*$ of the same size. In contrast with the discrete
+logarithm records in $\mathbb{Z}_n^*$, the largest known discrete
+logarithm solved corresponds to an elliptic curve of order $n$, for $n$
+a $114$-bit integer. It took the researchers 13 days of parallel
+computation on $256$ NVIDIA Tesla V100 GPUs.[^35]
+
+## The Diffie-Hellman key exchange
+
+In the first half of the course, we discussed symmetric cryptography.
+For two parties Alice and Bob to communicate using a symmetric
+encryption scheme, they need to first establish a shared secret key, in
+a process called *key agreement* or *key establishment*. This is a
+non-trivial task. Maybe they could meet in person and agree on a key, or
+maybe they could both trust a third party to handle the key agreement
+for them. But clearly this is not ideal, and depending on the context
+maybe not possible at all.
+
+One way to solve this issue is to use an asymmetric encryption scheme as
+a *key encapsulation mechanism*: Alice chooses a random *symmetric key*
+$k$, and uses a public-key encryption scheme, like RSA, to encrypt the
+key and send it to Bob. Then Bob decrypts the message and learns $k$.
+They can do this because the public-key encryption scheme does not
+require sharing secret keys in advance. From this point onwards, Alice
+and Bob can use the key $k$ to communicate using a symmetric encryption
+scheme, like AES.
+
+One might ask why not use public-key encryption all the time, since it
+requires no shared keys. While this poses no security problem,
+asymmetric encryption schemes tend to be much less efficient that
+symmetric ones, so it is simply faster to establish a key using
+asymmetric encryption, and later use symmetric encryption.
+
+An alternative approach to key encapsulation mechanisms is to use the
+following.
+
+::: {.definition}
+*A* key exchange protocol *is a procedure between two parties, at the end of which both parties know a common key.*
+:::
+
+The first and best-known key exchange protocol is the Diffie--Hellman
+key exchange protocol, introduced in 1976,[^36] and it works as follows.
+The only common input is a security parameter $\lambda$.
+
+1.  On input $\lambda$, Alice chooses a uniformly random prime $p$ of
+    bitlength $\lambda$, and determines a cyclic group $\mathbb{G}$ of
+    order $p$, and a generator $g$ of $\mathbb{G}$.
+
+2.  Alice sends $(\mathbb{G},g)$ to Bob.[^37]
+
+3.  Alice chooses a uniformly random $a\in\mathbb{Z}_p$, computes
+    $A=g^a$, and sends $A$ to Bob. Similarly, Bob chooses a uniformly
+    random $b\in\mathbb{Z}_p$, computes $B=g^b$, and sends $B$ to Alice.
+
+4.  Now, Alice computes the key as $k=B^a$, and Bob computes the same
+    key as $k=A^b$.
+
+Since $k$ is technically a group element, it is processed in some
+established way to obtain a bitstring, which is the actual key that will
+be used for symmetric encryption purposes.
+
+The parameters $(\mathbb{G},g)$ can be reused without compromising
+security, so steps (1) and (2) do not need to be run again every time
+that Alice and Bob want to share a key, but it is very important that
+the values $a,b$ are always fresh.
+
+Before discussing security, let us convince ourselves that indeed Alice
+and Bob end up with the same key. Observe that
+$$B^a = \left(g^b\right)^a = g^{ab} = \left(g^a\right)^b = A^b.$$
+Therefore, the value computed by each party is actually the same.
+
+Notice how $k$ was never sent from one side to the other. However, some
+partial information related to it was sent, so one might be worried that
+an eavesdropper might learn some information about the key from the
+intercepted values, $A$ and $B$. We define the exact level of security
+that we want to attain.
+
+::: {.definition}
+*A key exchange protocol is* secure in the presence
+of an eavesdropper *if no efficient adversary that observes the protocol
+(that is, an adversary that sees $\mathbb{G},g,A,B$) can tell the real
+key from a uniformly random bitstring of the same size.*
+:::
+
+Notice that this is a very strong definition, which implies that not a
+single bit of the key is leaked.
+
+So why is the Diffie--Hellman key exchange protocol secure? Consider the
+following scenario. The adversary eavesdrops $A,B$, and finds $a$ by
+solving the discrete logarithm of $A$ with respect to $g$. Then the
+adversary could simply compute $B^a$ and learn the shared key.
+Therefore, to prevent such an attack, we must ensure that the discrete
+logarithm problem is hard in $\mathbb{G}$.
+
+However, formally this is not enough, because conceivably an adversary
+could extract the key directly from $A,B$, without the need to solve any
+discrete logarithm. This motivates the introduction of the following
+related problem.
+
+::: {.definition}
+*Let $\mathbb{G}$ be a cyclic group of primer order
+$p$, with generator $g$. Let $a,b$ be uniformly random elements of
+$\mathbb{Z}_p$, and let $$A=g^a,\qquad B=g^b.$$ The* computational
+Diffie--Hellman (CDH) problem *relative to $\mathbb{G}$ consists of,
+given $\mathbb{G},g,A,B$, computing $g^{ab}$.*
+:::
+
+If this problem is hard, then clearly an adversary will not be able to
+compute a Diffie--Hellman key from eavesdropping communications.
+However, our definition of security requires something stronger: that
+such a key cannot be distinguished from random strings.
+
+::: {.definition}
+*Let $\mathbb{G}$ be a cyclic group of primer order
+$p$, with generator $g$. Let $a,b$ be uniformly random elements of
+$\mathbb{Z}_p$, and let $$A=g^a,\qquad B=g^b.$$ With probability $1/2$,
+let $C=g^{ab}$, otherwise let $C$ be a uniformly random element of
+$\mathbb{G}$. The* decisional Diffie--Hellman (DDH) problem *relative to
+$\mathbb{G}$ consists of, given $\mathbb{G},g,A,B,C$, decide whether
+$C=g^{ab}$ or $C$ is something else.*
+:::
+
+Observe that, unlike any other computational problem that we have
+considered, the DDH problem can easily be solved with probability $1/2$,
+by guessing at random. Thus, for decisional problems, we say that the
+problem is hard if there is no efficient algorithm that can do
+significantly better than that. For example, an efficient algorithm that
+succeeds in solving the DDH problem with probability $2/3$ would be
+considered a breach of the problem.
+
+::: {.exercise}
+*Prove that:*
+
+1.  *If we can break the DLog problem, then we can break the CDH
+    problem.*
+
+2.  *If we can break the CDH problem, then we can break the DDH
+    problem.*
+:::
+
+As is was the case with the factorization and RSA problems, there is no
+known algorithm that can solve CDH or DDH any faster than the DLog
+problem. Nevertheless, there is no formal proof that solving either of
+these allows us to solve DLog, so the problems are not known to be
+equivalent, hence why we require them for security of the
+Diffie--Hellman key exchange protocol.
+
+::: {.proposition}
+*If the DDH problem is hard relative to a group
+$\mathbb{G}$, then the Diffie--Hellman key exchange, using the group
+$\mathbb{G}$, is secure in the presence of an eavesdropper.*
+:::
+
+## The ElGamal encryption scheme
+
+We introduce the ElGamal encryption scheme,[^38] Unlike the RSA
+cryptosystem, the ElGamal encryption scheme works in a cyclic group of
+prime order. An advantage of this scheme is that it provides CPA
+security by default, without the need of padding, so no hash function is
+required.
+
+-   $\mathsf{KeyGen}$: on input a security parameter $\lambda$, choose a
+    cyclic group $\mathbb{G}$ of prime order $p$, and a generator $g$ of
+    $\mathbb{G}$. We will write $\mathbb{G}$ with multiplicative
+    notation. Sample a uniformly random $x\in\mathbb{Z}_p$, and set
+    $h=g^x$. Output the public key $$\mathsf{pk}=(\mathbb{G}, g, h),$$
+    and the secret key $$\mathsf{sk}=x.$$
+
+-   $\mathsf{Enc}$: given a message $\mathsf{m}\in\mathbb{Z}_p$, with
+    $\mathsf{m}$ small, and the receiver's public key
+    $(\mathbb{G}, g, h)$, choose a uniformly random $r\in\mathbb{Z}_p$
+    and output the ciphertext
+    $$\mathsf{c}=(\mathsf{c}_1,\mathsf{c}_2)=(g^r,g^mh^r).$$
+
+-   $\mathsf{Dec}$: given a ciphertext $\mathsf{c}$ and the secret key
+    $d$, output $$\log_g\frac{\mathsf{c}_2}{\mathsf{c}_1^x}.$$
+
+It is easy to see that decryption recovers the original message
+encrypted. Indeed, observe that
+$$g^mh^r=g^m\left(g^x\right)^r=g^{m+xr},$$ and thus
+$$\log_g\frac{\mathsf{c}_2}{\mathsf{c}_1^x}=\log_g\frac{g^{m+xr}}{\left(g^r\right)^x}=\log_g g^m=m.$$
+
+One thing that might seem counter-intuitive is the fact that we are
+supposed to find the discrete logarithm of $g^m$ to recover the message.
+But, at the same time, we will require the DLog problem to be hard for
+security. The key point is that $\mathsf{m}$ is small relative to $p$,
+so that the DLog of $g^m$ can be solved efficiently. Observe that this
+does not contradict the discrete logarithm problem, which states that
+the discrete logarithm should be hard to compute for *uniformly random*
+elements of $\mathbb{Z}_p$, but it is fine if it can be solved for small
+values.
+
+Intuitively, the security of the scheme relies on the DLog problem being
+hard, because an adversary that can compute discrete logarithms would be
+able to recover $x$ and run the decryption algorithm. Moreover, observe
+that the scheme is *randomized*, that is, the same plaintext can produce
+different ciphertexts, depending on each encryption's randomness $r$.
+
+Formally, again we require the DDH problem to be hard to ensure
+security.
+
+::: {.proposition}
+*If the DDH problem is hard for a group
+$\mathbb{G}$, then the ElGamal encryption scheme in $\mathbb{G}$ is
+secure.*
+:::
+
+Below is an implementation of the ElGamal encryption scheme in
+$\mathbb{Z}_p^*$. The value of $p$ used is a safe prime of bitlength
+$1024$ found used the algorithm above.
+
+```{python, eval=FALSE}
+### KEY GENERATION
+# Choose parameters
+p = 98477271628635149697160687227938079584387801057656524674547805684845362792314056005063953177189645361017363320475498530632115997158699647766751945380661872143643706009196552179178021780647235396351787889600626935912984928121265808769679480550797947557845891911467438040517702514768796757174157093600219716843
+q = (p-1)/2
+# Check that p, q are primes
+p in Primes(), q in Primes()
+# Set the group as Z_n^*, choose a generator g and check that g has order q
+G = Integers(p)
+g = G(3)
+g.multiplicative_order() == q
+# Compute and output the keys.
+x = randint(0,q)
+h = g^x
+pk = (p,g,h)
+sk = x
+
+### ENCRYPTION
+# Choose a small message (so that its DLog can be computed)
+m = 27593
+if (m>=q):
+    print("Message too large.")
+else:
+    # Sample randomness
+    r = randint(0,q)
+    # Compute the ciphertext
+    c = (g^r, g^m*h^r)
+    print(c)
+
+### DECRYPTION
+w = c[1]/(c[0]^x)
+# Solve the discrete logarithm of w with respect to g by brute force
+for m in range(q):
+    if g^m == w:
+        print(m)
+        break
+```
+
+
+[^33]: Pohlig, S., & Hellman, M. (1978). An improved algorithm for
+    computing logarithms over GF(p) and its cryptographic significance
+    (corresp.). *IEEE Transactions on information Theory*, 24(1),
+    106-110.
+
+[^34]: Boudot, F., Gaudry, P., Guillevic, A., Heninger, N., Thomé, E., &
+    Zimmermann, P. (2020, August). Comparing the difficulty of
+    factorization and discrete logarithm: a 240-digit experiment. In
+    *Annual International Cryptology Conference* (pp. 62-91). Springer,
+    Cham.
+
+[^35]: <https://github.com/JeanLucPons/Kangaroo>.
+
+[^36]: Diffie, W., & Hellman, M. (1976). New directions in cryptography.
+    *IEEE transactions on Information Theory*, 22(6), 644-654.
+
+[^37]: Formally, some description of the group is published as part of
+    the key. For example, if it has been agreed that the group is some
+    $(\mathbb{Z}_p^*,\cdot)$, then it is enough to publish $p$.
+
+[^38]: ElGamal, T. (1985). A public key cryptosystem and a signature
+    scheme based on discrete logarithms. *IEEE transactions on
+    information theory*, 31(4), 469-472.

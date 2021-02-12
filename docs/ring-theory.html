@@ -188,7 +188,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.3" data-path="public-key-encryption.html"><a href="public-key-encryption.html#security-of-rsa"><i class="fa fa-check"></i><b>7.3</b> Security of RSA</a></li>
 <li class="chapter" data-level="7.4" data-path="public-key-encryption.html"><a href="public-key-encryption.html#efficiency-optimizations"><i class="fa fa-check"></i><b>7.4</b> Efficiency optimizations</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="dh.html"><a href="dh.html"><i class="fa fa-check"></i><b>8</b> The Diffie–Hellman key exchange</a></li>
+<li class="chapter" data-level="8" data-path="discrete-logarithm-cryptosystems.html"><a href="discrete-logarithm-cryptosystems.html"><i class="fa fa-check"></i><b>8</b> Discrete logarithm cryptosystems</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="discrete-logarithm-cryptosystems.html"><a href="discrete-logarithm-cryptosystems.html#the-discrete-logarithm-problem"><i class="fa fa-check"></i><b>8.1</b> The discrete logarithm problem</a></li>
+<li class="chapter" data-level="8.2" data-path="discrete-logarithm-cryptosystems.html"><a href="discrete-logarithm-cryptosystems.html#the-diffie-hellman-key-exchange"><i class="fa fa-check"></i><b>8.2</b> The Diffie-Hellman key exchange</a></li>
+<li class="chapter" data-level="8.3" data-path="discrete-logarithm-cryptosystems.html"><a href="discrete-logarithm-cryptosystems.html#the-elgamal-encryption-scheme"><i class="fa fa-check"></i><b>8.3</b> The ElGamal encryption scheme</a></li>
+</ul></li>
 <li class="chapter" data-level="9" data-path="signatures.html"><a href="signatures.html"><i class="fa fa-check"></i><b>9</b> Digital signatures</a></li>
 <li class="part"><span><b>IV Other topics</b></span></li>
 <li class="chapter" data-level="10" data-path="cryptanalysis.html"><a href="cryptanalysis.html"><i class="fa fa-check"></i><b>10</b> Cryptanalysis</a></li>
@@ -226,7 +231,7 @@ equipped with two operations, the first of them with the exact same
 properties of a commutative group operation, whereas the second does not
 require the existence of inverse.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-77" class="definition"><strong>Definition A.1  </strong></span><em>A</em> ring<a href="#fn33" class="footnote-ref" id="fnref33"><sup>33</sup></a> <em>is a triple <span class="math inline">\((\mathbb{K},\circ,\ast)\)</span>,
+<p><span id="def:unlabeled-div-87" class="definition"><strong>Definition A.1  </strong></span><em>A</em> ring<a href="#fn39" class="footnote-ref" id="fnref39"><sup>39</sup></a> <em>is a triple <span class="math inline">\((\mathbb{K},\circ,\ast)\)</span>,
 where <span class="math inline">\(\mathbb{K}\)</span> is a set and <span class="math inline">\(\circ\)</span> and <span class="math inline">\(\ast\)</span> are operations on
 <span class="math inline">\(\mathbb{K}\)</span>, that is, functions <span class="math display">\[\begin{aligned}
         \circ : \phantom{a} &amp; \mathbb{K}\times \mathbb{K}&amp; \rightarrow &amp; \phantom{a}\mathbb{K}&amp; \qquad\qquad &amp; \ast :&amp; \mathbb{K}\times\mathbb{K}&amp; \rightarrow &amp; \mathbb{K}\\
@@ -341,7 +346,7 @@ each element:</p>
 <span class="math inline">\(6\)</span>. Those elements in a ring that happen to have a multiplicative
 inverse receive a special name.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-78" class="definition"><strong>Definition A.2  </strong></span><em>Let <span class="math inline">\(\mathbb{K}\)</span> be a ring. An element
+<p><span id="def:unlabeled-div-88" class="definition"><strong>Definition A.2  </strong></span><em>Let <span class="math inline">\(\mathbb{K}\)</span> be a ring. An element
 <span class="math inline">\(x\in\mathbb{K}\)</span> that has a multiplicative inverse is called a</em> unit<em>.
 We denote the set of units of <span class="math inline">\(\mathbb{K}\)</span> by <span class="math inline">\(\mathbb{K}^*\)</span>.</em></p>
 </div>
@@ -374,17 +379,17 @@ inverse. What about the rest of the elements? In this case, the answer
 is affirmative: there exist rings in which every non-zero element is
 invertible, and we call those <em>fields</em>.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-79" class="definition"><strong>Definition A.3  </strong></span><em>A</em> field <em>is a ring in which every non-zero element
+<p><span id="def:unlabeled-div-89" class="definition"><strong>Definition A.3  </strong></span><em>A</em> field <em>is a ring in which every non-zero element
 has a multiplicative inverse in the ring.</em></p>
 </div>
 </div>
 <div class="footnotes">
 <hr />
-<ol start="33">
-<li id="fn33"><p>In an abstract algebra context, the definition of a ring is more
+<ol start="39">
+<li id="fn39"><p>In an abstract algebra context, the definition of a ring is more
 general, and what we are defining is known as a <em>commutative ring
 with unity</em>. Nevertheless, we stick to this definition for
-simplicity, since it is the only type of ring relevant to us.<a href="ring-theory.html#fnref33" class="footnote-back">↩︎</a></p></li>
+simplicity, since it is the only type of ring relevant to us.<a href="ring-theory.html#fnref39" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>

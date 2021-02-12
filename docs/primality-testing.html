@@ -188,7 +188,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.3" data-path="public-key-encryption.html"><a href="public-key-encryption.html#security-of-rsa"><i class="fa fa-check"></i><b>7.3</b> Security of RSA</a></li>
 <li class="chapter" data-level="7.4" data-path="public-key-encryption.html"><a href="public-key-encryption.html#efficiency-optimizations"><i class="fa fa-check"></i><b>7.4</b> Efficiency optimizations</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="dh.html"><a href="dh.html"><i class="fa fa-check"></i><b>8</b> The Diffie–Hellman key exchange</a></li>
+<li class="chapter" data-level="8" data-path="discrete-logarithm-cryptosystems.html"><a href="discrete-logarithm-cryptosystems.html"><i class="fa fa-check"></i><b>8</b> Discrete logarithm cryptosystems</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="discrete-logarithm-cryptosystems.html"><a href="discrete-logarithm-cryptosystems.html#the-discrete-logarithm-problem"><i class="fa fa-check"></i><b>8.1</b> The discrete logarithm problem</a></li>
+<li class="chapter" data-level="8.2" data-path="discrete-logarithm-cryptosystems.html"><a href="discrete-logarithm-cryptosystems.html#the-diffie-hellman-key-exchange"><i class="fa fa-check"></i><b>8.2</b> The Diffie-Hellman key exchange</a></li>
+<li class="chapter" data-level="8.3" data-path="discrete-logarithm-cryptosystems.html"><a href="discrete-logarithm-cryptosystems.html#the-elgamal-encryption-scheme"><i class="fa fa-check"></i><b>8.3</b> The ElGamal encryption scheme</a></li>
+</ul></li>
 <li class="chapter" data-level="9" data-path="signatures.html"><a href="signatures.html"><i class="fa fa-check"></i><b>9</b> Digital signatures</a></li>
 <li class="part"><span><b>IV Other topics</b></span></li>
 <li class="chapter" data-level="10" data-path="cryptanalysis.html"><a href="cryptanalysis.html"><i class="fa fa-check"></i><b>10</b> Cryptanalysis</a></li>
@@ -239,11 +244,11 @@ do slightly better by observing that it is enough to check divisors up
 to <span class="math inline">\(\sqrt{n}\)</span>.</p>
 
 <div class="proposition">
-<span id="prp:unnamed-chunk-33" class="proposition"><strong>Proposition B.1  </strong></span><em>Let <span class="math inline">\(n\in\mathbb{N}\)</span>. If <span class="math inline">\(n\)</span> is composite, then <span class="math inline">\(n\)</span>
+<span id="prp:unnamed-chunk-35" class="proposition"><strong>Proposition B.1  </strong></span><em>Let <span class="math inline">\(n\in\mathbb{N}\)</span>. If <span class="math inline">\(n\)</span> is composite, then <span class="math inline">\(n\)</span>
 has a non-trivial divisor <span class="math inline">\(d\leq\sqrt{n}\)</span>.</em>
 </div>
 <div class="proof">
-<p><span id="unlabeled-div-81" class="proof"><em>Proof</em>. </span>We prove the result by contradiction. Assume that <span class="math inline">\(n\)</span> is
+<p><span id="unlabeled-div-91" class="proof"><em>Proof</em>. </span>We prove the result by contradiction. Assume that <span class="math inline">\(n\)</span> is
 composite and has no non-trivial divisor smaller than <span class="math inline">\(\sqrt{n}\)</span>. Since
 <span class="math inline">\(n\)</span> is composite, it has at least two non-trivial divisors
 <span class="math inline">\(a,b\in\mathbb{N}\)</span>, such that <span class="math inline">\(ab=n\)</span>. But every divisor is larger than
@@ -255,14 +260,14 @@ still exponential in <span class="math inline">\(\lambda\)</span>. We need to lo
 approach. We turn our attention to Fermat’s little theorem:</p>
 
 <div class="proposition">
-<span id="prp:unnamed-chunk-34" class="proposition"><strong>Proposition B.2  (Fermat’s little theorem)  </strong></span><em>Let <span class="math inline">\(p\)</span> be a prime
+<span id="prp:unnamed-chunk-36" class="proposition"><strong>Proposition B.2  (Fermat’s little theorem)  </strong></span><em>Let <span class="math inline">\(p\)</span> be a prime
 number. Then, for any <span class="math inline">\(x\in\mathbb{Z}\)</span> such that <span class="math inline">\(p\nmid x\)</span>, we have
 that <span class="math display">\[x^{p-1}\equiv1\pmod{p}.\]</span></em>
 </div>
 <p>This theorem tells us about a condition that all prime numbers verify,
 which gives us an easy condition to test and discard composite numbers.
 Given a candidate <span class="math inline">\(n\)</span>, choose some <span class="math inline">\(x\in\mathbb{Z}\)</span> such that
-<span class="math inline">\(\gcd(n,x)=1\)</span>, and compute <span class="math display">\[x^{n-1}\bmod{p}.\]</span> If the result is not
+<span class="math inline">\(\gcd(n,x)=1\)</span>, and compute <span class="math display">\[x^{n-1}\bmod{n}.\]</span> If the result is not
 <span class="math inline">\(1\)</span>, then we conclude that <span class="math inline">\(n\)</span> is not a prime. This is known as the
 <em>Fermat primality test</em>, and it is very efficient. But what happens if
 the result is <span class="math inline">\(1\)</span>? Does this mean that <span class="math inline">\(n\)</span> is a prime? Unfortunately, it
@@ -271,7 +276,7 @@ to verify that <span class="math display">\[3^{90}\pmod{91}=1,\]</span> but <spa
 prime. We call the numbers that produce these “false positives”
 <em>pseudoprimes</em>.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-83" class="definition"><strong>Definition B.1  </strong></span><em>Let <span class="math inline">\(n\in\mathbb{Z}\)</span> be a composite number, and let
+<p><span id="def:unlabeled-div-93" class="definition"><strong>Definition B.1  </strong></span><em>Let <span class="math inline">\(n\in\mathbb{Z}\)</span> be a composite number, and let
 <span class="math inline">\(x\in\mathbb{Z}\)</span> such that <span class="math inline">\(\gcd(x,n)=1\)</span>. We call <span class="math inline">\(n\)</span> an</em> <span class="math inline">\(x\)</span>-Fermat
 pseudoprime <em>if</em> <span class="math display">\[x^{n-1}\equiv1\pmod{n}.\]</span></p>
 </div>
@@ -285,7 +290,7 @@ the test for <span class="math inline">\(x=5\)</span>. Problem solved.</p>
 <p>Or is it? What if there are some truly evil numbers that can fool the
 Fermat test for all the possible bases?</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-84" class="definition"><strong>Definition B.2  </strong></span><em>Let <span class="math inline">\(n\in\mathbb{Z}\)</span> be a composite number. We say
+<p><span id="def:unlabeled-div-94" class="definition"><strong>Definition B.2  </strong></span><em>Let <span class="math inline">\(n\in\mathbb{Z}\)</span> be a composite number. We say
 that <span class="math inline">\(n\)</span> is a</em> Carmichael number <em>if it is a <span class="math inline">\(x\)</span>-Fermat pseudoprime for
 every <span class="math inline">\(x\in\mathbb{Z}\)</span> such that</em> <span class="math inline">\(\gcd(n,x)=1\)</span>.</p>
 </div>
@@ -297,7 +302,7 @@ bases. We need a better test.</p>
 <p>The solution lies on a strengthened version of Fermat’s little theorem.</p>
 
 <div class="proposition">
-<span id="prp:unnamed-chunk-35" class="proposition"><strong>Proposition B.3  </strong></span><em>Let <span class="math inline">\(p\in\mathbb{N}\)</span> be an odd prime, and let
+<span id="prp:unnamed-chunk-37" class="proposition"><strong>Proposition B.3  </strong></span><em>Let <span class="math inline">\(p\in\mathbb{N}\)</span> be an odd prime, and let
 <span class="math inline">\(p-1=2^st\)</span> such that <span class="math inline">\(2\nmid t\)</span>. If <span class="math inline">\(\gcd(p,x)=1\)</span>, then either
 <span class="math display">\[x^t\equiv1\pmod{p},\]</span> or there exists <span class="math inline">\(i\in\{0,1,\dots,s-1\}\)</span> such
 that <span class="math display">\[x^{2^it}\equiv-1\pmod{p}.\]</span></em>
@@ -309,14 +314,14 @@ checks, and if <span class="math inline">\(p\)</span> has bitlength <span class=
 each check amounts to modular exponentiation, so overall this is
 efficient. As before, this new test also produces false positives.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-86" class="definition"><strong>Definition B.3  </strong></span><em>Let <span class="math inline">\(n\in\mathbb{Z}\)</span> be an odd composite integer,
+<p><span id="def:unlabeled-div-96" class="definition"><strong>Definition B.3  </strong></span><em>Let <span class="math inline">\(n\in\mathbb{Z}\)</span> be an odd composite integer,
 and let <span class="math inline">\(n-1=2^st\)</span>. Let <span class="math inline">\(x\in\mathbb{Z}\)</span> such that <span class="math inline">\(\gcd(x,n)=1\)</span>. We
 call <span class="math inline">\(n\)</span> a</em> strong <span class="math inline">\(x\)</span>-Fermat pseudoprime <em>if
 <span class="math display">\[x^{t-1}\equiv1\pmod{n},\]</span> or there exists <span class="math inline">\(i\in\{0,1,\dots,s-1\}\)</span> such
 that</em> <span class="math display">\[x^{2^it}\equiv-1\pmod{n}.\]</span></p>
 </div>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-87" class="exercise"><strong>Exercise B.1  </strong></span><em>Check that <span class="math inline">\(2047\)</span> is a strong <span class="math inline">\(2\)</span>-Fermat pseudoprime,
+<p><span id="exr:unlabeled-div-97" class="exercise"><strong>Exercise B.1  </strong></span><em>Check that <span class="math inline">\(2047\)</span> is a strong <span class="math inline">\(2\)</span>-Fermat pseudoprime,
 because it satisfies the first condition, and that <span class="math inline">\(91\)</span> is a strong
 <span class="math inline">\(10\)</span>-Fermat pseudoprime, because it satisfies the second condition.</em></p>
 </div>
@@ -328,7 +333,7 @@ that <span class="math inline">\(n\)</span> does not pass the strong test, showi
 composite. Moreover, most of the bases will do!</p>
 
 <div class="proposition">
-<span id="prp:unnamed-chunk-36" class="proposition"><strong>Proposition B.4  (Monier–Rabin)  </strong></span><em>Let <span class="math inline">\(n&gt;9\)</span> be an odd composite
+<span id="prp:unnamed-chunk-38" class="proposition"><strong>Proposition B.4  (Monier–Rabin)  </strong></span><em>Let <span class="math inline">\(n&gt;9\)</span> be an odd composite
 integer. Then, the number of bases <span class="math inline">\(x\)</span> smaller than <span class="math inline">\(n\)</span> such that <span class="math inline">\(n\)</span> is
 a strong <span class="math inline">\(x\)</span>-Fermat pseudoprime is at most <span class="math inline">\(\frac14\varphi(n)\)</span>.</em>
 </div>
@@ -350,13 +355,13 @@ efficiency and almost-perfect reliability.</p>
 <p>If you are still concerned about the error probability, there are some
 alternatives that <em>never</em> produce erroneous results, while still running
 in polynomial time. However, they are much slower than the Miller–Rabin
-test, which is why they are not often used in practice.<a href="#fn34" class="footnote-ref" id="fnref34"><sup>34</sup></a></p>
+test, which is why they are not often used in practice.<a href="#fn40" class="footnote-ref" id="fnref40"><sup>40</sup></a></p>
 </div>
 <div class="footnotes">
 <hr />
-<ol start="34">
-<li id="fn34"><p>Agrawal, M., Kayal, N., &amp; Saxena, N. (2004). PRIMES is in P.
-<em>Annals of mathematics</em>, 781-793.<a href="primality-testing.html#fnref34" class="footnote-back">↩︎</a></p></li>
+<ol start="40">
+<li id="fn40"><p>Agrawal, M., Kayal, N., &amp; Saxena, N. (2004). PRIMES is in P.
+<em>Annals of mathematics</em>, 781-793.<a href="primality-testing.html#fnref40" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
