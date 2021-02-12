@@ -52,7 +52,7 @@ The documentation at <https://doc.sagemath.org/> is pretty good, although most o
 
 #### Changelog {-}
 
--   12/02/2021. Section \@ref(discrete-logarithm-cryptosystems) added. Some typos fixed in Sections \@ref(algebraic-structures), (public-key-encryption) and Appendix \@ref(primality-testing).
+-   12/02/2021. Section \@ref(discrete-logarithm-cryptosystems) added. Some typos fixed in Sections \@ref(algebraic-structures), \@ref(public-key-encryption) and Appendix \@ref(primality-testing).
 -   05/02/2021. Section \@ref(public-key-encryption) and Appendix \@ref(primality-testing) added. Minor fixes in Section \@ref(algebraic-structures). CRT moved to Section \@ref(elementary-number-theory).
 -   26/01/2021. Section \@ref(algebraic-structures) and Appendices \@ref(ring-theory) and \@ref(polydiv) added.
 -   21/01/2021. Minor fixes and additions in Sections \@ref(hash-functions) and \@ref(elementary-number-theory).
