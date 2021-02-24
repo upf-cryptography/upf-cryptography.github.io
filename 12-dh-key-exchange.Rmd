@@ -301,15 +301,15 @@ required.
     $\mathsf{m}$ small, and the receiver's public key
     $(\mathbb{G}, g, h)$, choose a uniformly random $r\in\mathbb{Z}_p$
     and output the ciphertext
-    $$\mathsf{c}=(\mathsf{c}_1,\mathsf{c}_2)=(g^r,g^mh^r).$$
+    $$\mathsf{c}=(\mathsf{c}_1,\mathsf{c}_2)=(g^r,g^{\mathsf{m}}h^r).$$
 
 -   $\mathsf{Dec}$: given a ciphertext $\mathsf{c}$ and the secret key
-    $d$, output $$\log_g\frac{\mathsf{c}_2}{\mathsf{c}_1^x}.$$
+    $x$, output $$\log_g\frac{\mathsf{c}_2}{\mathsf{c}_1^x}.$$
 
 It is easy to see that decryption recovers the original message
 encrypted. Indeed, observe that
-$$g^mh^r=g^m\left(g^x\right)^r=g^{m+xr},$$ and thus
-$$\log_g\frac{\mathsf{c}_2}{\mathsf{c}_1^x}=\log_g\frac{g^{m+xr}}{\left(g^r\right)^x}=\log_g g^m=m.$$
+$$g^{\mathsf{m}}h^r=g^{\mathsf{m}}\left(g^x\right)^r=g^{{\mathsf{m}}+xr},$$ and thus
+$$\log_g\frac{\mathsf{c}_2}{\mathsf{c}_1^x}=\log_g\frac{g^{{\mathsf{m}}+xr}}{\left(g^r\right)^x}=\log_g g^{\mathsf{m}}={\mathsf{m}}.$$
 
 One thing that might seem counter-intuitive is the fact that we are
 supposed to find the discrete logarithm of $g^m$ to recover the message.
@@ -320,6 +320,11 @@ does not contradict the discrete logarithm problem, which states that
 the discrete logarithm should be hard to compute for *uniformly random*
 elements of $\mathbb{Z}_p$, but it is fine if it can be solved for small
 values.
+
+**Note.** This version of the ElGamal encryption scheme is known as *lifted ElGamal*, because the message $\mathsf{m}$ is an element in $\mathbb{Z}_p$ that is *lifted* to the exponent to operate with the group element $g^{\mathsf{m}}$. It is also possible to use a group element as message directly, in which case encryption is performed as
+$$\mathsf{c}=(\mathsf{c}_1,\mathsf{c}_2)=(g^r,\mathsf{m}h^r)$$
+and decryption consists of computing
+$$\frac{\mathsf{c}_2}{\mathsf{c}_1^x}.$$
 
 Intuitively, the security of the scheme relies on the DLog problem being
 hard, because an adversary that can compute discrete logarithms would be

@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>B Primality testing | Cryptography lecture notes</title>
-  <meta name="description" content="B Primality testing | Cryptography lecture notes" />
+  <title>C Polynomial interpolation | Cryptography lecture notes</title>
+  <meta name="description" content="C Polynomial interpolation | Cryptography lecture notes" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="B Primality testing | Cryptography lecture notes" />
+  <meta property="og:title" content="C Polynomial interpolation | Cryptography lecture notes" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="B Primality testing | Cryptography lecture notes" />
+  <meta name="twitter:title" content="C Polynomial interpolation | Cryptography lecture notes" />
   
   
   
@@ -29,8 +29,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="ring-theory.html"/>
-<link rel="next" href="polynomial-interpolation.html"/>
+<link rel="prev" href="primality-testing.html"/>
+<link rel="next" href="refreshers.html"/>
 <script src="libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -234,144 +234,96 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="primality-testing" class="section level1" number="12">
-<h1><span class="header-section-number">B</span> Primality testing</h1>
-<p>Many modern cryptographic schemes require some very large prime numbers,
-so we are interested in generating these numbers efficiently. The basic
-strategy is very simple: pick a random number of the desired size, and
-check whether it is prime. If it is not, pick another. A consequence of
-the prime number theorem
-(Proposition <a href="elementary-number-theory.html#prp:pnt">5.3</a>) is that, on average, we need about <span class="math inline">\(\lambda\)</span>
-tries to find a prime of bitlength <span class="math inline">\(\lambda\)</span>, so that’s not too bad.</p>
-<p>But what about recognizing whether a number is prime or not? This part
-is solved with a <em>primality test</em>. In this section, we look at some of
-them.</p>
-<p>The naive way to check primality is to check if the candidate integer
-<span class="math inline">\(n=O(2^\lambda)\)</span> is divisible by any other smaller integer. If that’s
-not the case, then necessarily <span class="math inline">\(n\)</span> is prime. So, in general, this
-algorithm runs in time <span class="math inline">\(O(n)\)</span>, which is exponential in <span class="math inline">\(\lambda\)</span>. We can
-do slightly better by observing that it is enough to check divisors up
-to <span class="math inline">\(\sqrt{n}\)</span>.</p>
-
-<div class="proposition">
-<span id="prp:unnamed-chunk-35" class="proposition"><strong>Proposition B.1  </strong></span><em>Let <span class="math inline">\(n\in\mathbb{N}\)</span>. If <span class="math inline">\(n\)</span> is composite, then <span class="math inline">\(n\)</span>
-has a non-trivial divisor <span class="math inline">\(d\leq\sqrt{n}\)</span>.</em>
+<div id="polynomial-interpolation" class="section level1" number="13">
+<h1><span class="header-section-number">C</span> Polynomial interpolation</h1>
+<p>We start from a very well-known idea: two different points in a plane
+determine a line. Or equivalently: given two different points in a
+plane, there is exactly one line that contains both.</p>
+<p>More formally, let <span class="math inline">\((x_0,y_0)\)</span> and <span class="math inline">\((x_1,y_1)\)</span> be points in
+<span class="math inline">\(\mathbb{R}^2\)</span>, such that <span class="math inline">\(x_0\neq x_1\)</span>.<a href="#fn44" class="footnote-ref" id="fnref44"><sup>44</sup></a> Then there is a unique
+polynomial <span class="math inline">\(p(X)\)</span> of degree at most <span class="math inline">\(1\)</span> such that
+<span class="math display">\[p(x_0)=y_0,\qquad \text{and} \qquad p(x_1)=y_1.\]</span> Although can find
+this polynomial by finding the slope of the line, we will show another
+approach that yields the same result, that we will later generalize to a
+higher number of points. Consider the following simpler problem.</p>
+<div class="problem">
+<p><strong>Problem 7</strong>. <em>Given <span class="math inline">\(x_0,x_1\in\mathbb{R}\)</span>, find a polynomial
+<span class="math inline">\(\ell_0(X)\)</span> of degree at most <span class="math inline">\(1\)</span> such that
+<span class="math display">\[\ell_0(x_0)=1,\qquad\text{ and }\ell_0(x_1)=0.\]</span></em></p>
 </div>
-<div class="proof">
-<p><span id="unlabeled-div-98" class="proof"><em>Proof</em>. </span>We prove the result by contradiction. Assume that <span class="math inline">\(n\)</span> is
-composite and has no non-trivial divisor smaller than <span class="math inline">\(\sqrt{n}\)</span>. Since
-<span class="math inline">\(n\)</span> is composite, it has at least two non-trivial divisors
-<span class="math inline">\(a,b\in\mathbb{N}\)</span>, such that <span class="math inline">\(ab=n\)</span>. But every divisor is larger than
-<span class="math inline">\(\sqrt{n}\)</span>, therefore <span class="math display">\[n=ab&gt;\sqrt{n}\cdot\sqrt{n}=n,\]</span> and thus <span class="math inline">\(n&gt;n\)</span>,
-which is a contradiction.</p>
-</div>
-<p>Still, our primality test would run in time <span class="math inline">\(O(\sqrt{n})\)</span>, which is
-still exponential in <span class="math inline">\(\lambda\)</span>. We need to look for a more efficient
-approach. We turn our attention to Fermat’s little theorem:</p>
-
-<div class="proposition">
-<span id="prp:unnamed-chunk-36" class="proposition"><strong>Proposition B.2  (Fermat’s little theorem)  </strong></span><em>Let <span class="math inline">\(p\)</span> be a prime
-number. Then, for any <span class="math inline">\(x\in\mathbb{Z}\)</span> such that <span class="math inline">\(p\nmid x\)</span>, we have
-that <span class="math display">\[x^{p-1}\equiv1\pmod{p}.\]</span></em>
-</div>
-<p>This theorem tells us about a condition that all prime numbers verify,
-which gives us an easy condition to test and discard composite numbers.
-Given a candidate <span class="math inline">\(n\)</span>, choose some <span class="math inline">\(x\in\mathbb{Z}\)</span> such that
-<span class="math inline">\(\gcd(n,x)=1\)</span>, and compute <span class="math display">\[x^{n-1}\bmod{n}.\]</span> If the result is not
-<span class="math inline">\(1\)</span>, then we conclude that <span class="math inline">\(n\)</span> is not a prime. This is known as the
-<em>Fermat primality test</em>, and it is very efficient. But what happens if
-the result is <span class="math inline">\(1\)</span>? Does this mean that <span class="math inline">\(n\)</span> is a prime? Unfortunately, it
-is not as simple as this. For example, take <span class="math inline">\(n=91\)</span> and <span class="math inline">\(x=3\)</span>. It is easy
-to verify that <span class="math display">\[3^{90}\pmod{91}=1,\]</span> but <span class="math inline">\(91=7\cdot13\)</span>, so it is not a
-prime. We call the numbers that produce these “false positives”
-<em>pseudoprimes</em>.</p>
-<div class="definition">
-<p><span id="def:unlabeled-div-100" class="definition"><strong>Definition B.1  </strong></span><em>Let <span class="math inline">\(n\in\mathbb{Z}\)</span> be a composite number, and let
-<span class="math inline">\(x\in\mathbb{Z}\)</span> such that <span class="math inline">\(\gcd(x,n)=1\)</span>. We call <span class="math inline">\(n\)</span> an</em> <span class="math inline">\(x\)</span>-Fermat
-pseudoprime <em>if</em> <span class="math display">\[x^{n-1}\equiv1\pmod{n}.\]</span></p>
-</div>
-<p>Moreover, for any <span class="math inline">\(x\)</span> there are many <span class="math inline">\(x\)</span>-Fermat pseudoprimes. Okay, so
-everybody don’t panic. Fermat’s little theorem tell us that primes
-verify the condition <span class="math display">\[x^{p-1}\equiv1\pmod{p}\]</span> for <em>every</em> <span class="math inline">\(x\)</span> such
-that <span class="math inline">\(\gcd(p,x)=1\)</span>. So surely we can find some other base <span class="math inline">\(x\)</span> so that
-<span class="math inline">\(91\)</span> cannot fool the test. Indeed, <span class="math display">\[5^{90}\bmod{91} = 64.\]</span> So that’s
-it, we are now sure that <span class="math inline">\(91\)</span> is not a prime, because it does not pass
-the test for <span class="math inline">\(x=5\)</span>. Problem solved.</p>
-<p>Or is it? What if there are some truly evil numbers that can fool the
-Fermat test for all the possible bases?</p>
-<div class="definition">
-<p><span id="def:unlabeled-div-101" class="definition"><strong>Definition B.2  </strong></span><em>Let <span class="math inline">\(n\in\mathbb{Z}\)</span> be a composite number. We say
-that <span class="math inline">\(n\)</span> is a</em> Carmichael number <em>if it is a <span class="math inline">\(x\)</span>-Fermat pseudoprime for
-every <span class="math inline">\(x\in\mathbb{Z}\)</span> such that</em> <span class="math inline">\(\gcd(n,x)=1\)</span>.</p>
-</div>
-<p>Unfortunately, there are too many of these Carmichael numbers. For large
-values of <span class="math inline">\(B\in\mathbb{N}\)</span>, the number of Carmichael numbers up to <span class="math inline">\(B\)</span>
-is approximately <span class="math inline">\(B^{2/7}\)</span>. This means that a significant amount of
-numbers will fool our test, even if we run it for all the possible
-bases. We need a better test.</p>
-<p>The solution lies on a strengthened version of Fermat’s little theorem.</p>
-
-<div class="proposition">
-<span id="prp:unnamed-chunk-37" class="proposition"><strong>Proposition B.3  </strong></span><em>Let <span class="math inline">\(p\in\mathbb{N}\)</span> be an odd prime, and let
-<span class="math inline">\(p-1=2^st\)</span> such that <span class="math inline">\(2\nmid t\)</span>. If <span class="math inline">\(\gcd(p,x)=1\)</span>, then either
-<span class="math display">\[x^t\equiv1\pmod{p},\]</span> or there exists <span class="math inline">\(i\in\{0,1,\dots,s-1\}\)</span> such
-that <span class="math display">\[x^{2^it}\equiv-1\pmod{p}.\]</span></em>
-</div>
-<p>Again, the idea is to test our numbers against this result, and see if
-they satisfy the equations. This version is called the <em>strong Fermat
-primality test</em>. Observe that, in the worst case, we need to perform <span class="math inline">\(s\)</span>
-checks, and if <span class="math inline">\(p\)</span> has bitlength <span class="math inline">\(\lambda\)</span>, then <span class="math inline">\(s=O(\lambda)\)</span>, and
-each check amounts to modular exponentiation, so overall this is
-efficient. As before, this new test also produces false positives.</p>
-<div class="definition">
-<p><span id="def:unlabeled-div-103" class="definition"><strong>Definition B.3  </strong></span><em>Let <span class="math inline">\(n\in\mathbb{Z}\)</span> be an odd composite integer,
-and let <span class="math inline">\(n-1=2^st\)</span>. Let <span class="math inline">\(x\in\mathbb{Z}\)</span> such that <span class="math inline">\(\gcd(x,n)=1\)</span>. We
-call <span class="math inline">\(n\)</span> a</em> strong <span class="math inline">\(x\)</span>-Fermat pseudoprime <em>if
-<span class="math display">\[x^{t-1}\equiv1\pmod{n},\]</span> or there exists <span class="math inline">\(i\in\{0,1,\dots,s-1\}\)</span> such
-that</em> <span class="math display">\[x^{2^it}\equiv-1\pmod{n}.\]</span></p>
-</div>
+<p>The simplest idea to achieve the second condition is to make <span class="math inline">\(x_1\)</span> a
+root of the polynomial. Note that, since the degree must be at most <span class="math inline">\(1\)</span>,
+the polynomial will have at most one root, making <span class="math inline">\(x_1\)</span> the only root.
+Let us then consider the polynomial <span class="math display">\[\hat\ell_0(X)=X-x_1.\]</span> Clearly
+this polynomial satisfies the second condition, but it fails at the
+first, since <span class="math display">\[\hat\ell_0(x_1)=x_0-x_1,\]</span> which might be different from
+<span class="math inline">\(1\)</span>. Thus, to ensure the second condition, we rescale the polynomial by
+dividing by the value at <span class="math inline">\(x_0\)</span>: <span class="math display">\[\ell_0(X)=\frac{X-x_1}{x_0-x_1}.\]</span>
+This new polynomial is indeed a solution for the problem. Similarly, we
+can find another polynomial <span class="math inline">\(\ell_1(X)\)</span> that is <span class="math inline">\(0\)</span> at <span class="math inline">\(x_0\)</span> and <span class="math inline">\(1\)</span> at
+<span class="math inline">\(x_1\)</span>. Finally, the solution to our original problem will be
+<span class="math display">\[p(X)=y_0\ell_0(X)+y_1\ell_1(X).\]</span></p>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-104" class="exercise"><strong>Exercise B.1  </strong></span><em>Check that <span class="math inline">\(2047\)</span> is a strong <span class="math inline">\(2\)</span>-Fermat pseudoprime,
-because it satisfies the first condition, and that <span class="math inline">\(91\)</span> is a strong
-<span class="math inline">\(10\)</span>-Fermat pseudoprime, because it satisfies the second condition.</em></p>
+<p><span id="exr:unlabeled-div-106" class="exercise"><strong>Exercise C.1  </strong></span><em>Check that this polynomial has degree at most <span class="math inline">\(1\)</span>,
+that <span class="math inline">\(p(x_0)=y_0\)</span> and <span class="math inline">\(p(x_1)=y_1\)</span>.</em></p>
 </div>
-<p>So why bother with the strong Fermat test, if it has the same flaw? The
-key point is that, even if we have strong pseudoprimes, the strong
-Fermat test does not have its version of Carmichael numbers. That is,
-for any composite number <span class="math inline">\(n\)</span> we will always be able to find a base such
-that <span class="math inline">\(n\)</span> does not pass the strong test, showing that it is indeed
-composite. Moreover, most of the bases will do!</p>
-
+<p>It is easy to check that this polynomial verifies the conditions above.
+We say that this line is an <em>interpolation</em> of the points. This idea can
+be generalized to polynomial of any degree. That is, there is a unique
+parabola (polynomial of degree <span class="math inline">\(2\)</span>) that contains three given points in
+the plane. There is a degree-<span class="math inline">\(3\)</span> polynomial that contains four given
+points, and so on. Moreover, this also works over a finite field
+<span class="math inline">\(\mathbb{F}_p\)</span> for any prime <span class="math inline">\(p\)</span>, when the operations are considered
+modulo <span class="math inline">\(p\)</span> and division is inversion modulo <span class="math inline">\(p\)</span>.</p>
 <div class="proposition">
-<span id="prp:unnamed-chunk-38" class="proposition"><strong>Proposition B.4  (Monier–Rabin)  </strong></span><em>Let <span class="math inline">\(n&gt;9\)</span> be an odd composite
-integer. Then, the number of bases <span class="math inline">\(x\)</span> smaller than <span class="math inline">\(n\)</span> such that <span class="math inline">\(n\)</span> is
-a strong <span class="math inline">\(x\)</span>-Fermat pseudoprime is at most <span class="math inline">\(\frac14\varphi(n)\)</span>.</em>
+<p><span id="prp:unlabeled-div-107" class="proposition"><strong>Proposition C.1  </strong></span><em>Let <span class="math inline">\(n\in\mathbb{N}\)</span>, and let <span class="math inline">\(p\in\mathbb{Z}\)</span> be a
+prime number. Consider <span class="math inline">\(n+1\)</span> pairs <span class="math inline">\((x_i,y_i)\)</span>, for <span class="math inline">\(i=0,\dots,n\)</span>, of
+points in <span class="math inline">\(\mathbb{F}_p\)</span>, such that the <span class="math inline">\(x_i\)</span> are pairwise different.
+Then, there is a unique polynomial <span class="math inline">\(p(X)\)</span> of degree at most <span class="math inline">\(n\)</span> such
+that <span class="math display">\[p(x_i)=y_i,\qquad\text{ for all }i=0,\dots,n.\]</span> The polynomial
+<span class="math inline">\(p(X)\)</span> is called the</em> Lagrange interpolation polynomial <em>of degree <span class="math inline">\(n\)</span>
+relative to the points <span class="math inline">\((x_i,y_i)\)</span> for</em> <span class="math inline">\(i=0,\dots,n\)</span>.</p>
 </div>
-<p>This is a very strong result. Since <span class="math inline">\(\varphi(n)&lt;n\)</span>, this tells us that,
-by picking a base in <span class="math inline">\(\mathbb{Z}_n\)</span> at random, there is only a
-probability of <span class="math inline">\(1/4\)</span> that the test lies. Of course, we want a smaller
-probability, so we repeat the test many times. By using <span class="math inline">\(\lambda\)</span>
-iterations for different random bases, we bring the error probability
-down to <span class="math inline">\(1/4^\lambda\)</span>. Observe that this decreases exponentially in
-<span class="math inline">\(\lambda\)</span>! To give some concrete numbers, for <span class="math inline">\(\lambda=1024\)</span>, we have
-that <span class="math display">\[\frac{1}{4^\lambda}\approx 3.094346\cdot 10^{-67},\]</span> and this
-looks like a failure probability that we can live with.</p>
-<p>Asymptotically, we have an algorithm that runs <span class="math inline">\(\lambda\)</span> iterations, and
-each of these is computing <span class="math inline">\(O(\lambda)\)</span> exponentiations, so in total we
-have a running cost of <span class="math inline">\(O(\lambda^2)\)</span> modular exponentiations.</p>
-<p>This test is known as the <em>Miller–Rabin primality test</em>, and it is in
-essence what is used in practice to check for primality, due to its high
-efficiency and almost-perfect reliability.</p>
-<p>If you are still concerned about the error probability, there are some
-alternatives that <em>never</em> produce erroneous results, while still running
-in polynomial time. However, they are much slower than the Miller–Rabin
-test, which is why they are not often used in practice.<a href="#fn43" class="footnote-ref" id="fnref43"><sup>43</sup></a></p>
+<p>The strategy to build this polynomial explicitly is to generalize what
+we have done before for two points. That is, we first want to solve the
+following problem.</p>
+<div class="problem">
+<p><strong>Problem 8</strong>. <em>Given <span class="math inline">\(x_0,\dots,x_n\in\mathbb{F}_p\)</span>, find polynomials
+<span class="math inline">\(\ell_i(X)\)</span>, for <span class="math inline">\(i=0,\dots,n\)</span>, of degree at most <span class="math inline">\(n\)</span> such that
+<span class="math display">\[\ell_i(x_i)=1,\qquad\text{ and }\ell_i(x_j)=0, \qquad \text{ for all }j\neq i.\]</span></em></p>
+</div>
+<p>That is, we want polynomials such that each of them is <span class="math inline">\(1\)</span> at at one of
+the points and <span class="math inline">\(0\)</span> at the rest of the points. For the polynomial
+<span class="math inline">\(\ell_i(X)\)</span>, we ensure that all <span class="math inline">\(x_j\neq x_i\)</span> are roots of the
+polynomial. We consider: <span class="math display">\[\hat\ell_i(X)=\prod_{j\neq i}(X-x_j).\]</span> This
+polynomial has degree <span class="math inline">\(n\)</span>, since it has <span class="math inline">\(n\)</span> factors, each of degree <span class="math inline">\(1\)</span>.
+Moreover, it clearly satisfies that <span class="math inline">\(\hat\ell_i(x_j)=0\)</span> if <span class="math inline">\(j\neq i\)</span>.
+However, we still run into the problem that it produces the wrong value
+at <span class="math inline">\(x_i\)</span>. Indeed, <span class="math display">\[\hat\ell_i(x_i)=\prod_{j\neq i}(x_i-x_j).\]</span> We solve
+the issue by dividing the polynomial by this value, and thus we consider
+the polynomial
+<span class="math display">\[\ell_i(X)=\frac{\prod_{j\neq i}(X-x_j)}{\prod_{j\neq i}(x_i-x_j)}=\prod_{j\neq i}\frac{(X-x_j)}{x_i-x_j}.\]</span>
+The polynomials <span class="math inline">\(\ell_i(X)\)</span> are known as the <em>Lagrange basis
+polynomials</em>, as we can now use them as a basis for building any
+interpolation polynomial relative to the points <span class="math inline">\(x_0,\dots,x_n\)</span>. Indeed,
+we consider the linear combination <span class="math display">\[p(X)=\sum_{i=0}^n y_i\ell_i(X).\]</span>
+It is easy to check that this polynomial satisfies that <span class="math display">\[p(x_i)=y_i\]</span>
+for all <span class="math inline">\(i=0,\dots,n\)</span>. Moreover, since the degree of the <span class="math inline">\(\ell_i(X)\)</span> is
+<span class="math inline">\(n\)</span>, and addition of the polynomials or multiplication by constant do
+not increase the degree (although they might reduce it), the polynomial
+<span class="math inline">\(p(X)\)</span> will have degree at most <span class="math inline">\(m\)</span>. Therefore, this is the Lagrange
+interpolation polynomial that we were looking for.</p>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-108" class="exercise"><strong>Exercise C.2  </strong></span><em>Compute the Lagrange interpolation polynomial
+corresponding to the points <span class="math inline">\((0,1),(1,-1),(2,2),(3,8)\)</span>.</em></p>
+</div>
 </div>
 <div class="footnotes">
 <hr />
-<ol start="43">
-<li id="fn43"><p>Agrawal, M., Kayal, N., &amp; Saxena, N. (2004). PRIMES is in P.
-<em>Annals of mathematics</em>, 781-793.<a href="primality-testing.html#fnref43" class="footnote-back">↩︎</a></p></li>
+<ol start="44">
+<li id="fn44"><p>We require the <span class="math inline">\(x\)</span>-coordinates to be different because we want to
+formulate this in terms of functions, and a function cannot have two
+outputs for the same input.<a href="polynomial-interpolation.html#fnref44" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
@@ -379,8 +331,8 @@ test, which is why they are not often used in practice.<a href="#fn43" class="fo
           </div>
         </div>
       </div>
-<a href="ring-theory.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="polynomial-interpolation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="primality-testing.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="refreshers.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

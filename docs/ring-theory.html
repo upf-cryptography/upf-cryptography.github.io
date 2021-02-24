@@ -29,7 +29,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="cryptanalysis.html"/>
+<link rel="prev" href="secret-sharing.html"/>
 <link rel="next" href="primality-testing.html"/>
 <script src="libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
@@ -194,18 +194,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.2" data-path="discrete-logarithm-cryptosystems.html"><a href="discrete-logarithm-cryptosystems.html#the-diffie-hellman-key-exchange"><i class="fa fa-check"></i><b>8.2</b> The Diffie-Hellman key exchange</a></li>
 <li class="chapter" data-level="8.3" data-path="discrete-logarithm-cryptosystems.html"><a href="discrete-logarithm-cryptosystems.html#the-elgamal-encryption-scheme"><i class="fa fa-check"></i><b>8.3</b> The ElGamal encryption scheme</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="signatures.html"><a href="signatures.html"><i class="fa fa-check"></i><b>9</b> Digital signatures</a></li>
-<li class="part"><span><b>IV Other topics</b></span></li>
-<li class="chapter" data-level="10" data-path="cryptanalysis.html"><a href="cryptanalysis.html"><i class="fa fa-check"></i><b>10</b> Cryptanalysis</a></li>
+<li class="chapter" data-level="9" data-path="digital-signatures.html"><a href="digital-signatures.html"><i class="fa fa-check"></i><b>9</b> Digital signatures</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="digital-signatures.html"><a href="digital-signatures.html#signature-schemes"><i class="fa fa-check"></i><b>9.1</b> Signature schemes</a></li>
+<li class="chapter" data-level="9.2" data-path="digital-signatures.html"><a href="digital-signatures.html#rsa-signatures"><i class="fa fa-check"></i><b>9.2</b> RSA signatures</a></li>
+<li class="chapter" data-level="9.3" data-path="digital-signatures.html"><a href="digital-signatures.html#signing-large-messages"><i class="fa fa-check"></i><b>9.3</b> Signing large messages</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="secret-sharing.html"><a href="secret-sharing.html"><i class="fa fa-check"></i><b>10</b> Secret sharing</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="secret-sharing.html"><a href="secret-sharing.html#secret-sharing-1"><i class="fa fa-check"></i><b>10.1</b> Secret sharing</a></li>
+<li class="chapter" data-level="10.2" data-path="secret-sharing.html"><a href="secret-sharing.html#sec:ssss"><i class="fa fa-check"></i><b>10.2</b> The Shamir secret sharing scheme</a></li>
+<li class="chapter" data-level="10.3" data-path="secret-sharing.html"><a href="secret-sharing.html#threshold-decryption-in-the-elgamal-encryption-scheme"><i class="fa fa-check"></i><b>10.3</b> Threshold decryption in the ElGamal encryption scheme</a></li>
+</ul></li>
 <li class="appendix"><span><b>Appendices</b></span></li>
 <li class="chapter" data-level="A" data-path="ring-theory.html"><a href="ring-theory.html"><i class="fa fa-check"></i><b>A</b> Ring theory</a></li>
 <li class="chapter" data-level="B" data-path="primality-testing.html"><a href="primality-testing.html"><i class="fa fa-check"></i><b>B</b> Primality testing</a></li>
-<li class="chapter" data-level="C" data-path="refreshers.html"><a href="refreshers.html"><i class="fa fa-check"></i><b>C</b> Refreshers</a>
+<li class="chapter" data-level="C" data-path="polynomial-interpolation.html"><a href="polynomial-interpolation.html"><i class="fa fa-check"></i><b>C</b> Polynomial interpolation</a></li>
+<li class="chapter" data-level="D" data-path="refreshers.html"><a href="refreshers.html"><i class="fa fa-check"></i><b>D</b> Refreshers</a>
 <ul>
-<li class="chapter" data-level="C.1" data-path="refreshers.html"><a href="refreshers.html#set-notation"><i class="fa fa-check"></i><b>C.1</b> Set notation</a></li>
-<li class="chapter" data-level="C.2" data-path="refreshers.html"><a href="refreshers.html#probability-theory"><i class="fa fa-check"></i><b>C.2</b> Probability theory</a></li>
-<li class="chapter" data-level="C.3" data-path="refreshers.html"><a href="refreshers.html#asymptotic-notation"><i class="fa fa-check"></i><b>C.3</b> Asymptotic notation</a></li>
-<li class="chapter" data-level="C.4" data-path="refreshers.html"><a href="refreshers.html#polydiv"><i class="fa fa-check"></i><b>C.4</b> Polynomial division</a></li>
+<li class="chapter" data-level="D.1" data-path="refreshers.html"><a href="refreshers.html#set-notation"><i class="fa fa-check"></i><b>D.1</b> Set notation</a></li>
+<li class="chapter" data-level="D.2" data-path="refreshers.html"><a href="refreshers.html#probability-theory"><i class="fa fa-check"></i><b>D.2</b> Probability theory</a></li>
+<li class="chapter" data-level="D.3" data-path="refreshers.html"><a href="refreshers.html#asymptotic-notation"><i class="fa fa-check"></i><b>D.3</b> Asymptotic notation</a></li>
+<li class="chapter" data-level="D.4" data-path="refreshers.html"><a href="refreshers.html#polydiv"><i class="fa fa-check"></i><b>D.4</b> Polynomial division</a></li>
 </ul></li>
 </ul>
 
@@ -231,7 +241,7 @@ equipped with two operations, the first of them with the exact same
 properties of a commutative group operation, whereas the second does not
 require the existence of inverse.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-87" class="definition"><strong>Definition A.1  </strong></span><em>A</em> ring<a href="#fn39" class="footnote-ref" id="fnref39"><sup>39</sup></a> <em>is a triple <span class="math inline">\((\mathbb{K},\circ,\ast)\)</span>,
+<p><span id="def:unlabeled-div-94" class="definition"><strong>Definition A.1  </strong></span><em>A</em> ring<a href="#fn42" class="footnote-ref" id="fnref42"><sup>42</sup></a> <em>is a triple <span class="math inline">\((\mathbb{K},\circ,\ast)\)</span>,
 where <span class="math inline">\(\mathbb{K}\)</span> is a set and <span class="math inline">\(\circ\)</span> and <span class="math inline">\(\ast\)</span> are operations on
 <span class="math inline">\(\mathbb{K}\)</span>, that is, functions <span class="math display">\[\begin{aligned}
         \circ : \phantom{a} &amp; \mathbb{K}\times \mathbb{K}&amp; \rightarrow &amp; \phantom{a}\mathbb{K}&amp; \qquad\qquad &amp; \ast :&amp; \mathbb{K}\times\mathbb{K}&amp; \rightarrow &amp; \mathbb{K}\\
@@ -346,7 +356,7 @@ each element:</p>
 <span class="math inline">\(6\)</span>. Those elements in a ring that happen to have a multiplicative
 inverse receive a special name.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-88" class="definition"><strong>Definition A.2  </strong></span><em>Let <span class="math inline">\(\mathbb{K}\)</span> be a ring. An element
+<p><span id="def:unlabeled-div-95" class="definition"><strong>Definition A.2  </strong></span><em>Let <span class="math inline">\(\mathbb{K}\)</span> be a ring. An element
 <span class="math inline">\(x\in\mathbb{K}\)</span> that has a multiplicative inverse is called a</em> unit<em>.
 We denote the set of units of <span class="math inline">\(\mathbb{K}\)</span> by <span class="math inline">\(\mathbb{K}^*\)</span>.</em></p>
 </div>
@@ -379,17 +389,17 @@ inverse. What about the rest of the elements? In this case, the answer
 is affirmative: there exist rings in which every non-zero element is
 invertible, and we call those <em>fields</em>.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-89" class="definition"><strong>Definition A.3  </strong></span><em>A</em> field <em>is a ring in which every non-zero element
+<p><span id="def:unlabeled-div-96" class="definition"><strong>Definition A.3  </strong></span><em>A</em> field <em>is a ring in which every non-zero element
 has a multiplicative inverse in the ring.</em></p>
 </div>
 </div>
 <div class="footnotes">
 <hr />
-<ol start="39">
-<li id="fn39"><p>In an abstract algebra context, the definition of a ring is more
+<ol start="42">
+<li id="fn42"><p>In an abstract algebra context, the definition of a ring is more
 general, and what we are defining is known as a <em>commutative ring
 with unity</em>. Nevertheless, we stick to this definition for
-simplicity, since it is the only type of ring relevant to us.<a href="ring-theory.html#fnref39" class="footnote-back">↩︎</a></p></li>
+simplicity, since it is the only type of ring relevant to us.<a href="ring-theory.html#fnref42" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
@@ -397,7 +407,7 @@ simplicity, since it is the only type of ring relevant to us.<a href="ring-theor
           </div>
         </div>
       </div>
-<a href="cryptanalysis.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="secret-sharing.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="primality-testing.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>

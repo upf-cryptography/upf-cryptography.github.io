@@ -30,7 +30,7 @@
   
   
 <link rel="prev" href="public-key-encryption.html"/>
-<link rel="next" href="signatures.html"/>
+<link rel="next" href="digital-signatures.html"/>
 <script src="libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -194,18 +194,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.2" data-path="discrete-logarithm-cryptosystems.html"><a href="discrete-logarithm-cryptosystems.html#the-diffie-hellman-key-exchange"><i class="fa fa-check"></i><b>8.2</b> The Diffie-Hellman key exchange</a></li>
 <li class="chapter" data-level="8.3" data-path="discrete-logarithm-cryptosystems.html"><a href="discrete-logarithm-cryptosystems.html#the-elgamal-encryption-scheme"><i class="fa fa-check"></i><b>8.3</b> The ElGamal encryption scheme</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="signatures.html"><a href="signatures.html"><i class="fa fa-check"></i><b>9</b> Digital signatures</a></li>
-<li class="part"><span><b>IV Other topics</b></span></li>
-<li class="chapter" data-level="10" data-path="cryptanalysis.html"><a href="cryptanalysis.html"><i class="fa fa-check"></i><b>10</b> Cryptanalysis</a></li>
+<li class="chapter" data-level="9" data-path="digital-signatures.html"><a href="digital-signatures.html"><i class="fa fa-check"></i><b>9</b> Digital signatures</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="digital-signatures.html"><a href="digital-signatures.html#signature-schemes"><i class="fa fa-check"></i><b>9.1</b> Signature schemes</a></li>
+<li class="chapter" data-level="9.2" data-path="digital-signatures.html"><a href="digital-signatures.html#rsa-signatures"><i class="fa fa-check"></i><b>9.2</b> RSA signatures</a></li>
+<li class="chapter" data-level="9.3" data-path="digital-signatures.html"><a href="digital-signatures.html#signing-large-messages"><i class="fa fa-check"></i><b>9.3</b> Signing large messages</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="secret-sharing.html"><a href="secret-sharing.html"><i class="fa fa-check"></i><b>10</b> Secret sharing</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="secret-sharing.html"><a href="secret-sharing.html#secret-sharing-1"><i class="fa fa-check"></i><b>10.1</b> Secret sharing</a></li>
+<li class="chapter" data-level="10.2" data-path="secret-sharing.html"><a href="secret-sharing.html#sec:ssss"><i class="fa fa-check"></i><b>10.2</b> The Shamir secret sharing scheme</a></li>
+<li class="chapter" data-level="10.3" data-path="secret-sharing.html"><a href="secret-sharing.html#threshold-decryption-in-the-elgamal-encryption-scheme"><i class="fa fa-check"></i><b>10.3</b> Threshold decryption in the ElGamal encryption scheme</a></li>
+</ul></li>
 <li class="appendix"><span><b>Appendices</b></span></li>
 <li class="chapter" data-level="A" data-path="ring-theory.html"><a href="ring-theory.html"><i class="fa fa-check"></i><b>A</b> Ring theory</a></li>
 <li class="chapter" data-level="B" data-path="primality-testing.html"><a href="primality-testing.html"><i class="fa fa-check"></i><b>B</b> Primality testing</a></li>
-<li class="chapter" data-level="C" data-path="refreshers.html"><a href="refreshers.html"><i class="fa fa-check"></i><b>C</b> Refreshers</a>
+<li class="chapter" data-level="C" data-path="polynomial-interpolation.html"><a href="polynomial-interpolation.html"><i class="fa fa-check"></i><b>C</b> Polynomial interpolation</a></li>
+<li class="chapter" data-level="D" data-path="refreshers.html"><a href="refreshers.html"><i class="fa fa-check"></i><b>D</b> Refreshers</a>
 <ul>
-<li class="chapter" data-level="C.1" data-path="refreshers.html"><a href="refreshers.html#set-notation"><i class="fa fa-check"></i><b>C.1</b> Set notation</a></li>
-<li class="chapter" data-level="C.2" data-path="refreshers.html"><a href="refreshers.html#probability-theory"><i class="fa fa-check"></i><b>C.2</b> Probability theory</a></li>
-<li class="chapter" data-level="C.3" data-path="refreshers.html"><a href="refreshers.html#asymptotic-notation"><i class="fa fa-check"></i><b>C.3</b> Asymptotic notation</a></li>
-<li class="chapter" data-level="C.4" data-path="refreshers.html"><a href="refreshers.html#polydiv"><i class="fa fa-check"></i><b>C.4</b> Polynomial division</a></li>
+<li class="chapter" data-level="D.1" data-path="refreshers.html"><a href="refreshers.html#set-notation"><i class="fa fa-check"></i><b>D.1</b> Set notation</a></li>
+<li class="chapter" data-level="D.2" data-path="refreshers.html"><a href="refreshers.html#probability-theory"><i class="fa fa-check"></i><b>D.2</b> Probability theory</a></li>
+<li class="chapter" data-level="D.3" data-path="refreshers.html"><a href="refreshers.html#asymptotic-notation"><i class="fa fa-check"></i><b>D.3</b> Asymptotic notation</a></li>
+<li class="chapter" data-level="D.4" data-path="refreshers.html"><a href="refreshers.html#polydiv"><i class="fa fa-check"></i><b>D.4</b> Polynomial division</a></li>
 </ul></li>
 </ul>
 
@@ -503,14 +513,14 @@ and the secret key <span class="math display">\[\mathsf{sk}=x.\]</span></p></li>
 <span class="math inline">\(\mathsf{m}\)</span> small, and the receiver’s public key
 <span class="math inline">\((\mathbb{G}, g, h)\)</span>, choose a uniformly random <span class="math inline">\(r\in\mathbb{Z}_p\)</span>
 and output the ciphertext
-<span class="math display">\[\mathsf{c}=(\mathsf{c}_1,\mathsf{c}_2)=(g^r,g^mh^r).\]</span></p></li>
+<span class="math display">\[\mathsf{c}=(\mathsf{c}_1,\mathsf{c}_2)=(g^r,g^{\mathsf{m}}h^r).\]</span></p></li>
 <li><p><span class="math inline">\(\mathsf{Dec}\)</span>: given a ciphertext <span class="math inline">\(\mathsf{c}\)</span> and the secret key
-<span class="math inline">\(d\)</span>, output <span class="math display">\[\log_g\frac{\mathsf{c}_2}{\mathsf{c}_1^x}.\]</span></p></li>
+<span class="math inline">\(x\)</span>, output <span class="math display">\[\log_g\frac{\mathsf{c}_2}{\mathsf{c}_1^x}.\]</span></p></li>
 </ul>
 <p>It is easy to see that decryption recovers the original message
 encrypted. Indeed, observe that
-<span class="math display">\[g^mh^r=g^m\left(g^x\right)^r=g^{m+xr},\]</span> and thus
-<span class="math display">\[\log_g\frac{\mathsf{c}_2}{\mathsf{c}_1^x}=\log_g\frac{g^{m+xr}}{\left(g^r\right)^x}=\log_g g^m=m.\]</span></p>
+<span class="math display">\[g^{\mathsf{m}}h^r=g^{\mathsf{m}}\left(g^x\right)^r=g^{{\mathsf{m}}+xr},\]</span> and thus
+<span class="math display">\[\log_g\frac{\mathsf{c}_2}{\mathsf{c}_1^x}=\log_g\frac{g^{{\mathsf{m}}+xr}}{\left(g^r\right)^x}=\log_g g^{\mathsf{m}}={\mathsf{m}}.\]</span></p>
 <p>One thing that might seem counter-intuitive is the fact that we are
 supposed to find the discrete logarithm of <span class="math inline">\(g^m\)</span> to recover the message.
 But, at the same time, we will require the DLog problem to be hard for
@@ -520,6 +530,10 @@ does not contradict the discrete logarithm problem, which states that
 the discrete logarithm should be hard to compute for <em>uniformly random</em>
 elements of <span class="math inline">\(\mathbb{Z}_p\)</span>, but it is fine if it can be solved for small
 values.</p>
+<p><strong>Note.</strong> This version of the ElGamal encryption scheme is known as <em>lifted ElGamal</em>, because the message <span class="math inline">\(\mathsf{m}\)</span> is an element in <span class="math inline">\(\mathbb{Z}_p\)</span> that is <em>lifted</em> to the exponent to operate with the group element <span class="math inline">\(g^{\mathsf{m}}\)</span>. It is also possible to use a group element as message directly, in which case encryption is performed as
+<span class="math display">\[\mathsf{c}=(\mathsf{c}_1,\mathsf{c}_2)=(g^r,\mathsf{m}h^r)\]</span>
+and decryption consists of computing
+<span class="math display">\[\frac{\mathsf{c}_2}{\mathsf{c}_1^x}.\]</span></p>
 <p>Intuitively, the security of the scheme relies on the DLog problem being
 hard, because an adversary that can compute discrete logarithms would be
 able to recover <span class="math inline">\(x\)</span> and run the decryption algorithm. Moreover, observe
@@ -602,7 +616,7 @@ information theory</em>, 31(4), 469-472.<a href="discrete-logarithm-cryptosystem
         </div>
       </div>
 <a href="public-key-encryption.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="signatures.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="digital-signatures.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

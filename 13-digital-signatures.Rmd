@@ -1,1 +1,248 @@
-# Digital signatures {#signatures}
+# Digital signatures
+
+In this section, we take a detour from encryption to look at signature
+schemes, which also follow the public-key paradigm but fulfill a
+different purpose altogether. More precisely, we will learn about:
+
+1.  What are signature schemes and why do we care.
+
+2.  An example of signature schemes based on RSA.
+
+3.  How to sign large messages.
+
+## Signature schemes
+
+Our goal in this section will not be the same as before. No longer we
+are interested in obscuring the message being sent. Instead, consider
+the following example.
+
+Suppose that Bob receives a message from Alice. How can Bob know that
+the message was not intercepted in transit by an adversary, and modified
+before being forwarded to Bob? Moreover, what if the message does not
+come from Alice at all? To prevent these two problems, we want to
+somehow ensure:
+
+-   *Authenticity:* the message comes from the claimed sender.
+
+-   *Integrity:* the message was not modified in transit.
+
+::: {.exercise}
+*Think of some real-world examples in which failing to
+provide each of these properties might allow some malicious behaviour.*
+:::
+
+The solution to both is to append a signature to the message.
+
+::: {.definition}
+*A* signature scheme *is a triple of algorithms*
+$$(\mathsf{KeyGen},\mathsf{Sign},\mathsf{Verify}).$$
+
+-   *The $\mathsf{KeyGen}$ algorithm produces a pair of keys
+    $\mathsf{pk}$ and $\mathsf{sk}$ of length $\lambda$ according to
+    some probability distribution. The key $\mathsf{pk}$ is called the* public key *and the key $\mathsf{sk}$ is called the*secret key.
+
+-   *The $\mathsf{Sign}$ algorithm uses the secret key $\mathsf{sk}$ to
+    produce a* signature *$\sigma$ of a message $\mathsf{m}$ that
+    depends on the message and the key.*
+
+-   *The $\mathsf{Verify}$ algorithm uses the public key $\mathsf{pk}$,
+    the message $\mathsf{m}$ and the signature $\sigma$, and outputs $1$
+    or $0$ depending on whether $\sigma$ is a valid signature for
+    $\mathsf{m}$ nor not.*
+:::
+
+Now, instead of sending just $\mathsf{m}$, they proceed as follows.
+Alice runs the $\mathsf{KeyGen}$ algorithm to produce a pair of keys
+$(\mathsf{pk},\mathsf{sk})$, and publishes $\mathsf{pk}$. When Alice
+wants to sign the message $\mathsf{m}$, she computes
+$$\sigma=\mathsf{Sign}_{\mathsf{sk}}(\mathsf{m}),$$ and sends
+$(\mathsf{m},\sigma)$ to Bob. Upon receiving the message, Bob runs the
+$\mathsf{Verify}$ algorithm with $\mathsf{k}$, $\mathsf{m}$ and
+$\sigma$. The idea is that, with a good signature scheme, no adversary
+should be able to sign any message without knowledge of the secret key
+$\mathsf{sk}$. Therefore:
+
+-   Authenticity is guaranteed, since nobody except for Alice could have
+    signed the message.
+
+-   Integrity is also guaranteed, since an attacker intercepting
+    $(\mathsf{m},\sigma)$ does not know how to compute a signature for a
+    message different from $\mathsf{m}$.
+
+::: {.exercise}
+*One might think that using an encryption scheme
+already solves these issues. However, that is not true. Take, for
+example, the one-time pad. Show how an attacker against integrity can
+modify the ciphertext so that it decrypts to a different plaintext. Is
+there any real-world situations in which this could be troublesome?*
+:::
+
+Note that in encryption the message was first processed with the public
+key in the $\mathsf{Enc}$ algorithm and then with the secret key in the
+$\mathsf{Dec}$ algorithm. However, signatures first use the secret key
+in the $\mathsf{Sign}$ algorithm, and then the public key is used to
+verify. That is because, in encryption, we wanted that:
+
+-   Anyone can encrypt a message addressed to some party.
+
+-   Only this party can decrypt the messages addressed to them.
+
+However, the situation is reversed in signatures, as we want that:
+
+-   Only one party can sign messages on their own behalf.
+
+-   Everyone can verify that the message was indeed signed by this
+    party.
+
+Since in principle signatures are not encrypted, an eavesdropper could
+intercept a pair $(\mathsf{m},\sigma)$ of message and signature, and
+resend it later, impersonating the sender. We can prevent this from
+becoming an effective attack by time-stamping the message, that is,
+signing a version of the message that includes the time of sending, or
+an "expiration date", beyond which the signature is not considered
+valid.
+
+Thus, we will informally say that a signature scheme is secure if no
+efficient adversary is able to produce, without the secret key, a pair
+of message and a valid signature for it such that the message is not one
+of those already eavesdropped by the adversary.
+
+## RSA signatures
+
+Interestingly, one can run the RSA encryption scheme "backwards" to
+obtain a signature scheme. That is, we use the decryption algorithm to
+sign, and the encryption algorithm to verify.
+
+-   $\mathsf{KeyGen}$: on input a security parameter $\lambda$, choose
+    two uniformly random prime numbers $p,q$ of bitlength $\lambda/2$,
+    and let $N=pq$. Choose $e\in\mathbb{Z}_N$, and compute
+    $$d\equiv e^{-1}\pmod{\varphi(N)}.$$ Output the public key
+    $$\mathsf{pk}=(N,e),$$ and the secret key $$\mathsf{sk}=d.$$
+
+-   $\mathsf{Sign}$: given a message $\mathsf{m}\in\mathbb{Z}_N$, and
+    the sender's secret key key $d$, output a signature
+    $$\mathsf{m}^{d}\bmod{N}.$$
+
+-   $\mathsf{Verify}$: given a message $\mathsf{m}$, a signature
+    $\sigma$ and the public key $(N,e)$ of the sender, check whether
+    $$\sigma^e\equiv \mathsf{m}\pmod{N}.$$ If the equality holds, output
+    $1$ (accept the signature), otherwise output $0$ (reject the
+    signature).
+
+It is clear that genuine signatures are accepted, since
+$$\sigma^e\equiv \left(\mathsf{m}^d\right)^e\equiv \mathsf{m}^{ed}\equiv \mathsf{m}\pmod{N},$$
+similarly to how we argued in the case of RSA encryption, and the
+discussion about efficiency translates naturally.
+
+However, as it stands, the signature scheme is insecure. Recall that
+security means that an adversary cannot efficiently produce a pair of
+message and signature for a new message, given signatures of some
+messages.
+
+Let us assume that an adversary eavesdrops two message-signature pairs
+$(\mathsf{m}_0,\sigma_0)$ and $(\mathsf{m}_1,\sigma_1)$. Then, since
+$$\sigma_0^e\equiv \mathsf{m}_0,\qquad \text{ and }\qquad \sigma_1^e\equiv \mathsf{m}_1,$$
+we have that $$(\sigma_0\sigma_1)^e\equiv \mathsf{m}_0\mathsf{m}_1.$$
+Therefore, $(\sigma_0\sigma_1) \bmod{N}$ is a valid signature for the
+new message $(\mathsf{m}_0\mathsf{m}_1)\bmod{N}$.
+
+This attack is possible because of the *malleability* of RSA signatures.
+That is, given some messages and their signatures, it is easy to
+manipulate them to produce new signatures for new messages. In
+particular, in this case the product of two signatures yields the
+signature of the product of the messages. Thus, to prevent this attack,
+we will need to somehow sever this link between signatures of related
+messages.
+
+Moreover, there is another problem of a more practical nature. So far,
+we have achieved a way to sign a relatively short message, since
+$\mathsf{m}\in\mathbb{Z}_N^*$. We could make $N$ larger to account for
+larger messages, but this would have a significant impact on efficiency,
+so we want to look for an alternative approach.
+
+In the next section, we will solve these two issues at once.
+
+## Signing large messages
+
+We now focus on the problem of producing a signature scheme for an
+arbitrarily large message, starting from a fixed-length one. More
+precisely, let us say that we have a signature scheme for messages of
+length $\ell$, and we have a message $\mathsf{m}$ of length $2\ell$. Our
+first idea could be to split the message in two halves
+$\mathsf{m}_0,\mathsf{m}_1$, each of them of length $\ell$, and compute
+$$\sigma_0=\mathsf{Sign}_{\mathsf{sk}}(\mathsf{m}_0),\qquad\sigma_1=\mathsf{Sign}_{\mathsf{sk}}(\mathsf{m}_1),$$
+and send $(\mathsf{m},\sigma)$, where $\sigma=(\sigma_0|\sigma_1)$.
+However, two problems arise, one theoretical and one practical:
+
+-   A secure signature scheme should ensure that an adversary cannot
+    sign any new message. But the message $(\mathsf{m}_1|\mathsf{m}_0)$
+    is different from the message $(\mathsf{m}_0|\mathsf{m}_1)$, and it
+    is easy to provide the signature $(\sigma_1|\sigma_0)$. Thus, our
+    idea does not yield a secure signature scheme.
+
+-   Moreover, this becomes highly impractical as the message grows in
+    size. Assume that we are sending a video file, which could be
+    several gigabytes large. The signature is roughly as large as the
+    message, and thus we are sending a lot of extra information just for
+    authentication and integrity.
+
+::: {.exercise}
+*In an effort to defeat these issues, we consider
+simply signing the first block of length $\ell$ of the message,
+regardless of the size of the message. What is the issue with this?*
+:::
+
+Surely we can do better. What if, somehow, we could compress the whole
+message in just one block of length $\ell$, and we sign that block? And
+don't we have a tool that does exactly that? Indeed, we can use a hash
+function.
+
+Given a fixed-length signature scheme
+$$(\mathsf{KeyGen},\mathsf{Sign}, \mathsf{Verify})$$ and a public hash
+function $H$, we build an arbitrary-length signature scheme as follows.
+The $\mathsf{KeyGen}$ algorithm stays the same. To sign an
+arbitrarily-large message $\mathsf{m}$, we compute:
+$$\sigma=\mathsf{Sign}_{\mathsf{sk}}(H(\mathsf{m})).$$ That is, we
+reduce the problem to signing a fixed-length message $h$, by hashing the
+original message. We make the following observations:
+
+-   The hash function must be public and deterministic, because both
+    sender and recipient need to make use of it to compute
+    $H(\mathsf{m})$.
+
+-   Although $H(\mathsf{m})$ can be computed by adversaries, they cannot
+    sign it on their own because they lack the secret key $\mathsf{sk}$.
+
+Note that this also solves our security issue highlighted in the
+previous section, which stemmed from signatures of related messages
+being related. The intuition is that the outputs of a good hash function
+are "random-looking", regardless of the inputs being related.
+
+This variant of RSA signatures is described below, and is known as the
+*full-domain hash* signature scheme.
+
+-   $\mathsf{KeyGen}$: on input a security parameter $\lambda$, choose
+    two uniformly random prime numbers $p,q$ of bitlength $\lambda/2$,
+    and let $N=pq$. Let $H:\{0,1\}^*\rightarrow\mathbb{Z}_N$ be a hash
+    function. Choose $e\in\mathbb{Z}_N$, and compute
+    $$d\equiv e^{-1}\pmod{\varphi(N)}.$$ Output the public key
+    $$\mathsf{pk}=(N,e),$$ and the secret key $$\mathsf{sk}=d.$$
+
+-   $\mathsf{Sign}$: given a message $\mathsf{m}\in\{0,1\}^*$, and the
+    sender's secret key key $d$, output a signature
+    $$H(\mathsf{m})^{d}\bmod{N}.$$
+
+-   $\mathsf{Verify}$: given a message $\mathsf{m}$, a signature
+    $\sigma$ and the public key $(N,e)$ of the sender, check whether
+    $$\sigma^e\equiv H(\mathsf{m})\pmod{N}.$$ If the equality holds,
+    output $1$ (accept the signature), otherwise output $0$ (reject the
+    signature).
+
+::: {.proposition}
+*If the RSA problem is hard and $H$ behaves as an
+ideal[^39] hash function, then the full-domain hash signature scheme is
+secure.*
+:::
+
+
+[^39]: *See Proposition 7.1.*

@@ -194,18 +194,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.2" data-path="discrete-logarithm-cryptosystems.html"><a href="discrete-logarithm-cryptosystems.html#the-diffie-hellman-key-exchange"><i class="fa fa-check"></i><b>8.2</b> The Diffie-Hellman key exchange</a></li>
 <li class="chapter" data-level="8.3" data-path="discrete-logarithm-cryptosystems.html"><a href="discrete-logarithm-cryptosystems.html#the-elgamal-encryption-scheme"><i class="fa fa-check"></i><b>8.3</b> The ElGamal encryption scheme</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="signatures.html"><a href="signatures.html"><i class="fa fa-check"></i><b>9</b> Digital signatures</a></li>
-<li class="part"><span><b>IV Other topics</b></span></li>
-<li class="chapter" data-level="10" data-path="cryptanalysis.html"><a href="cryptanalysis.html"><i class="fa fa-check"></i><b>10</b> Cryptanalysis</a></li>
+<li class="chapter" data-level="9" data-path="digital-signatures.html"><a href="digital-signatures.html"><i class="fa fa-check"></i><b>9</b> Digital signatures</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="digital-signatures.html"><a href="digital-signatures.html#signature-schemes"><i class="fa fa-check"></i><b>9.1</b> Signature schemes</a></li>
+<li class="chapter" data-level="9.2" data-path="digital-signatures.html"><a href="digital-signatures.html#rsa-signatures"><i class="fa fa-check"></i><b>9.2</b> RSA signatures</a></li>
+<li class="chapter" data-level="9.3" data-path="digital-signatures.html"><a href="digital-signatures.html#signing-large-messages"><i class="fa fa-check"></i><b>9.3</b> Signing large messages</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="secret-sharing.html"><a href="secret-sharing.html"><i class="fa fa-check"></i><b>10</b> Secret sharing</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="secret-sharing.html"><a href="secret-sharing.html#secret-sharing-1"><i class="fa fa-check"></i><b>10.1</b> Secret sharing</a></li>
+<li class="chapter" data-level="10.2" data-path="secret-sharing.html"><a href="secret-sharing.html#sec:ssss"><i class="fa fa-check"></i><b>10.2</b> The Shamir secret sharing scheme</a></li>
+<li class="chapter" data-level="10.3" data-path="secret-sharing.html"><a href="secret-sharing.html#threshold-decryption-in-the-elgamal-encryption-scheme"><i class="fa fa-check"></i><b>10.3</b> Threshold decryption in the ElGamal encryption scheme</a></li>
+</ul></li>
 <li class="appendix"><span><b>Appendices</b></span></li>
 <li class="chapter" data-level="A" data-path="ring-theory.html"><a href="ring-theory.html"><i class="fa fa-check"></i><b>A</b> Ring theory</a></li>
 <li class="chapter" data-level="B" data-path="primality-testing.html"><a href="primality-testing.html"><i class="fa fa-check"></i><b>B</b> Primality testing</a></li>
-<li class="chapter" data-level="C" data-path="refreshers.html"><a href="refreshers.html"><i class="fa fa-check"></i><b>C</b> Refreshers</a>
+<li class="chapter" data-level="C" data-path="polynomial-interpolation.html"><a href="polynomial-interpolation.html"><i class="fa fa-check"></i><b>C</b> Polynomial interpolation</a></li>
+<li class="chapter" data-level="D" data-path="refreshers.html"><a href="refreshers.html"><i class="fa fa-check"></i><b>D</b> Refreshers</a>
 <ul>
-<li class="chapter" data-level="C.1" data-path="refreshers.html"><a href="refreshers.html#set-notation"><i class="fa fa-check"></i><b>C.1</b> Set notation</a></li>
-<li class="chapter" data-level="C.2" data-path="refreshers.html"><a href="refreshers.html#probability-theory"><i class="fa fa-check"></i><b>C.2</b> Probability theory</a></li>
-<li class="chapter" data-level="C.3" data-path="refreshers.html"><a href="refreshers.html#asymptotic-notation"><i class="fa fa-check"></i><b>C.3</b> Asymptotic notation</a></li>
-<li class="chapter" data-level="C.4" data-path="refreshers.html"><a href="refreshers.html#polydiv"><i class="fa fa-check"></i><b>C.4</b> Polynomial division</a></li>
+<li class="chapter" data-level="D.1" data-path="refreshers.html"><a href="refreshers.html#set-notation"><i class="fa fa-check"></i><b>D.1</b> Set notation</a></li>
+<li class="chapter" data-level="D.2" data-path="refreshers.html"><a href="refreshers.html#probability-theory"><i class="fa fa-check"></i><b>D.2</b> Probability theory</a></li>
+<li class="chapter" data-level="D.3" data-path="refreshers.html"><a href="refreshers.html#asymptotic-notation"><i class="fa fa-check"></i><b>D.3</b> Asymptotic notation</a></li>
+<li class="chapter" data-level="D.4" data-path="refreshers.html"><a href="refreshers.html#polydiv"><i class="fa fa-check"></i><b>D.4</b> Polynomial division</a></li>
 </ul></li>
 </ul>
 
@@ -233,7 +243,6 @@ constructions in this setting. More precisely, we will learn about:</p>
 <ul>
 <li><p>The paradigm of public-key cryptography.</p></li>
 <li><p>The RSA encryption scheme and its security.</p></li>
-<li><p>The ElGamal encryption scheme and its security.</p></li>
 </ul>
 <div id="public-key-cryptography" class="section level2" number="7.1">
 <h2><span class="header-section-number">7.1</span> Public-key cryptography</h2>
@@ -476,8 +485,7 @@ Bob, and then computes <span class="math display">\[(DDMM)^{e}\bmod{N}\]</span> 
 the list of results with <span class="math inline">\(\mathsf{c}\)</span> until they find a match, which
 tells them the date that was encrypted in <span class="math inline">\(\mathsf{c}\)</span>. This is known as
 a <em>chosen-plaintext attack (CPA)</em>, since the adversary can obtain the
-encryptions of messages of their own choice. More precisely, we
-introduce the following definition.</p>
+encryptions of messages of their own choice.</p>
 <p>Below is some code for running this attack. As an attacker, we have
 access to the security parameter <span class="math inline">\(\lambda\)</span>, the RSA modulus <code>N</code>, and the
 encryption exponent <code>e</code>. We intercept some ciphertext <code>c</code>, and

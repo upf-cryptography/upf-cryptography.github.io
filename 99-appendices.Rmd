@@ -9,7 +9,7 @@ properties of a commutative group operation, whereas the second does not
 require the existence of inverse.
 
 ::: {.definition}
-*A* ring[^39] *is a triple $(\mathbb{K},\circ,\ast)$,
+*A* ring[^42] *is a triple $(\mathbb{K},\circ,\ast)$,
 where $\mathbb{K}$ is a set and $\circ$ and $\ast$ are operations on
 $\mathbb{K}$, that is, functions $$\begin{aligned}
         \circ : \phantom{a} & \mathbb{K}\times \mathbb{K}& \rightarrow & \phantom{a}\mathbb{K}& \qquad\qquad & \ast :& \mathbb{K}\times\mathbb{K}& \rightarrow & \mathbb{K}\\
@@ -279,7 +279,101 @@ efficiency and almost-perfect reliability.
 If you are still concerned about the error probability, there are some
 alternatives that *never* produce erroneous results, while still running
 in polynomial time. However, they are much slower than the Miller--Rabin
-test, which is why they are not often used in practice.[^40]
+test, which is why they are not often used in practice.[^43]
+
+# Polynomial interpolation
+
+We start from a very well-known idea: two different points in a plane
+determine a line. Or equivalently: given two different points in a
+plane, there is exactly one line that contains both.
+
+More formally, let $(x_0,y_0)$ and $(x_1,y_1)$ be points in
+$\mathbb{R}^2$, such that $x_0\neq x_1$.[^44] Then there is a unique
+polynomial $p(X)$ of degree at most $1$ such that
+$$p(x_0)=y_0,\qquad \text{and} \qquad p(x_1)=y_1.$$ Although can find
+this polynomial by finding the slope of the line, we will show another
+approach that yields the same result, that we will later generalize to a
+higher number of points. Consider the following simpler problem.
+
+::: {.problem}
+**Problem 7**. *Given $x_0,x_1\in\mathbb{R}$, find a polynomial
+$\ell_0(X)$ of degree at most $1$ such that
+$$\ell_0(x_0)=1,\qquad\text{ and }\ell_0(x_1)=0.$$*
+:::
+
+The simplest idea to achieve the second condition is to make $x_1$ a
+root of the polynomial. Note that, since the degree must be at most $1$,
+the polynomial will have at most one root, making $x_1$ the only root.
+Let us then consider the polynomial $$\hat\ell_0(X)=X-x_1.$$ Clearly
+this polynomial satisfies the second condition, but it fails at the
+first, since $$\hat\ell_0(x_1)=x_0-x_1,$$ which might be different from
+$1$. Thus, to ensure the second condition, we rescale the polynomial by
+dividing by the value at $x_0$: $$\ell_0(X)=\frac{X-x_1}{x_0-x_1}.$$
+This new polynomial is indeed a solution for the problem. Similarly, we
+can find another polynomial $\ell_1(X)$ that is $0$ at $x_0$ and $1$ at
+$x_1$. Finally, the solution to our original problem will be
+$$p(X)=y_0\ell_0(X)+y_1\ell_1(X).$$
+
+::: {.exercise}
+*Check that this polynomial has degree at most $1$,
+that $p(x_0)=y_0$ and $p(x_1)=y_1$.*
+:::
+
+It is easy to check that this polynomial verifies the conditions above.
+We say that this line is an *interpolation* of the points. This idea can
+be generalized to polynomial of any degree. That is, there is a unique
+parabola (polynomial of degree $2$) that contains three given points in
+the plane. There is a degree-$3$ polynomial that contains four given
+points, and so on. Moreover, this also works over a finite field
+$\mathbb{F}_p$ for any prime $p$, when the operations are considered
+modulo $p$ and division is inversion modulo $p$.
+
+::: {.proposition}
+*Let $n\in\mathbb{N}$, and let $p\in\mathbb{Z}$ be a
+prime number. Consider $n+1$ pairs $(x_i,y_i)$, for $i=0,\dots,n$, of
+points in $\mathbb{F}_p$, such that the $x_i$ are pairwise different.
+Then, there is a unique polynomial $p(X)$ of degree at most $n$ such
+that $$p(x_i)=y_i,\qquad\text{ for all }i=0,\dots,n.$$ The polynomial
+$p(X)$ is called the* Lagrange interpolation polynomial *of degree $n$
+relative to the points $(x_i,y_i)$ for* $i=0,\dots,n$.
+:::
+
+The strategy to build this polynomial explicitly is to generalize what
+we have done before for two points. That is, we first want to solve the
+following problem.
+
+::: {.problem}
+**Problem 8**. *Given $x_0,\dots,x_n\in\mathbb{F}_p$, find polynomials
+$\ell_i(X)$, for $i=0,\dots,n$, of degree at most $n$ such that
+$$\ell_i(x_i)=1,\qquad\text{ and }\ell_i(x_j)=0, \qquad \text{ for all }j\neq i.$$*
+:::
+
+That is, we want polynomials such that each of them is $1$ at at one of
+the points and $0$ at the rest of the points. For the polynomial
+$\ell_i(X)$, we ensure that all $x_j\neq x_i$ are roots of the
+polynomial. We consider: $$\hat\ell_i(X)=\prod_{j\neq i}(X-x_j).$$ This
+polynomial has degree $n$, since it has $n$ factors, each of degree $1$.
+Moreover, it clearly satisfies that $\hat\ell_i(x_j)=0$ if $j\neq i$.
+However, we still run into the problem that it produces the wrong value
+at $x_i$. Indeed, $$\hat\ell_i(x_i)=\prod_{j\neq i}(x_i-x_j).$$ We solve
+the issue by dividing the polynomial by this value, and thus we consider
+the polynomial
+$$\ell_i(X)=\frac{\prod_{j\neq i}(X-x_j)}{\prod_{j\neq i}(x_i-x_j)}=\prod_{j\neq i}\frac{(X-x_j)}{x_i-x_j}.$$
+The polynomials $\ell_i(X)$ are known as the *Lagrange basis
+polynomials*, as we can now use them as a basis for building any
+interpolation polynomial relative to the points $x_0,\dots,x_n$. Indeed,
+we consider the linear combination $$p(X)=\sum_{i=0}^n y_i\ell_i(X).$$
+It is easy to check that this polynomial satisfies that $$p(x_i)=y_i$$
+for all $i=0,\dots,n$. Moreover, since the degree of the $\ell_i(X)$ is
+$n$, and addition of the polynomials or multiplication by constant do
+not increase the degree (although they might reduce it), the polynomial
+$p(X)$ will have degree at most $m$. Therefore, this is the Lagrange
+interpolation polynomial that we were looking for.
+
+::: {.exercise}
+*Compute the Lagrange interpolation polynomial
+corresponding to the points $(0,1),(1,-1),(2,2),(3,8)$.*
+:::
 
 # Refreshers {#refreshers}
 
@@ -477,10 +571,14 @@ field we are in. For example, if our coefficients are in $\mathbb{F}_5$,
 we cannot "divide" by $3$, but we can find the inverse of $3$ modulo
 $5$, and we must ensure that every coefficient is reduced modulo $5$.
 
-[^39]: In an abstract algebra context, the definition of a ring is more
+[^42]: In an abstract algebra context, the definition of a ring is more
     general, and what we are defining is known as a *commutative ring
     with unity*. Nevertheless, we stick to this definition for
     simplicity, since it is the only type of ring relevant to us.
 
-[^40]: Agrawal, M., Kayal, N., & Saxena, N. (2004). PRIMES is in P.
+[^43]: Agrawal, M., Kayal, N., & Saxena, N. (2004). PRIMES is in P.
     *Annals of mathematics*, 781-793.
+
+[^44]: We require the $x$-coordinates to be different because we want to
+    formulate this in terms of functions, and a function cannot have two
+    outputs for the same input.

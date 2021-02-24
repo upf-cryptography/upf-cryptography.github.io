@@ -9,8 +9,6 @@ constructions in this setting. More precisely, we will learn about:
 
 -   The RSA encryption scheme and its security.
 
--   The ElGamal encryption scheme and its security.
-
 ## Public-key cryptography
 
 In Section \@ref(introduction-to-security), we introduced a symmetric
@@ -279,8 +277,7 @@ $DD\in\{1,\dots,31\}$ and $MM\in\{1,\dots,12\}$. The attacker compares
 the list of results with $\mathsf{c}$ until they find a match, which
 tells them the date that was encrypted in $\mathsf{c}$. This is known as
 a *chosen-plaintext attack (CPA)*, since the adversary can obtain the
-encryptions of messages of their own choice. More precisely, we
-introduce the following definition.
+encryptions of messages of their own choice. 
 
 Below is some code for running this attack. As an attacker, we have
 access to the security parameter $\lambda$, the RSA modulus `N`, and the

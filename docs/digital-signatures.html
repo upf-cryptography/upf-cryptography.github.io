@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>B Primality testing | Cryptography lecture notes</title>
-  <meta name="description" content="B Primality testing | Cryptography lecture notes" />
+  <title>9 Digital signatures | Cryptography lecture notes</title>
+  <meta name="description" content="9 Digital signatures | Cryptography lecture notes" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="B Primality testing | Cryptography lecture notes" />
+  <meta property="og:title" content="9 Digital signatures | Cryptography lecture notes" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="B Primality testing | Cryptography lecture notes" />
+  <meta name="twitter:title" content="9 Digital signatures | Cryptography lecture notes" />
   
   
   
@@ -29,8 +29,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="ring-theory.html"/>
-<link rel="next" href="polynomial-interpolation.html"/>
+<link rel="prev" href="discrete-logarithm-cryptosystems.html"/>
+<link rel="next" href="secret-sharing.html"/>
 <script src="libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -234,144 +234,231 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="primality-testing" class="section level1" number="12">
-<h1><span class="header-section-number">B</span> Primality testing</h1>
-<p>Many modern cryptographic schemes require some very large prime numbers,
-so we are interested in generating these numbers efficiently. The basic
-strategy is very simple: pick a random number of the desired size, and
-check whether it is prime. If it is not, pick another. A consequence of
-the prime number theorem
-(Proposition <a href="elementary-number-theory.html#prp:pnt">5.3</a>) is that, on average, we need about <span class="math inline">\(\lambda\)</span>
-tries to find a prime of bitlength <span class="math inline">\(\lambda\)</span>, so that’s not too bad.</p>
-<p>But what about recognizing whether a number is prime or not? This part
-is solved with a <em>primality test</em>. In this section, we look at some of
-them.</p>
-<p>The naive way to check primality is to check if the candidate integer
-<span class="math inline">\(n=O(2^\lambda)\)</span> is divisible by any other smaller integer. If that’s
-not the case, then necessarily <span class="math inline">\(n\)</span> is prime. So, in general, this
-algorithm runs in time <span class="math inline">\(O(n)\)</span>, which is exponential in <span class="math inline">\(\lambda\)</span>. We can
-do slightly better by observing that it is enough to check divisors up
-to <span class="math inline">\(\sqrt{n}\)</span>.</p>
-
-<div class="proposition">
-<span id="prp:unnamed-chunk-35" class="proposition"><strong>Proposition B.1  </strong></span><em>Let <span class="math inline">\(n\in\mathbb{N}\)</span>. If <span class="math inline">\(n\)</span> is composite, then <span class="math inline">\(n\)</span>
-has a non-trivial divisor <span class="math inline">\(d\leq\sqrt{n}\)</span>.</em>
-</div>
-<div class="proof">
-<p><span id="unlabeled-div-98" class="proof"><em>Proof</em>. </span>We prove the result by contradiction. Assume that <span class="math inline">\(n\)</span> is
-composite and has no non-trivial divisor smaller than <span class="math inline">\(\sqrt{n}\)</span>. Since
-<span class="math inline">\(n\)</span> is composite, it has at least two non-trivial divisors
-<span class="math inline">\(a,b\in\mathbb{N}\)</span>, such that <span class="math inline">\(ab=n\)</span>. But every divisor is larger than
-<span class="math inline">\(\sqrt{n}\)</span>, therefore <span class="math display">\[n=ab&gt;\sqrt{n}\cdot\sqrt{n}=n,\]</span> and thus <span class="math inline">\(n&gt;n\)</span>,
-which is a contradiction.</p>
-</div>
-<p>Still, our primality test would run in time <span class="math inline">\(O(\sqrt{n})\)</span>, which is
-still exponential in <span class="math inline">\(\lambda\)</span>. We need to look for a more efficient
-approach. We turn our attention to Fermat’s little theorem:</p>
-
-<div class="proposition">
-<span id="prp:unnamed-chunk-36" class="proposition"><strong>Proposition B.2  (Fermat’s little theorem)  </strong></span><em>Let <span class="math inline">\(p\)</span> be a prime
-number. Then, for any <span class="math inline">\(x\in\mathbb{Z}\)</span> such that <span class="math inline">\(p\nmid x\)</span>, we have
-that <span class="math display">\[x^{p-1}\equiv1\pmod{p}.\]</span></em>
-</div>
-<p>This theorem tells us about a condition that all prime numbers verify,
-which gives us an easy condition to test and discard composite numbers.
-Given a candidate <span class="math inline">\(n\)</span>, choose some <span class="math inline">\(x\in\mathbb{Z}\)</span> such that
-<span class="math inline">\(\gcd(n,x)=1\)</span>, and compute <span class="math display">\[x^{n-1}\bmod{n}.\]</span> If the result is not
-<span class="math inline">\(1\)</span>, then we conclude that <span class="math inline">\(n\)</span> is not a prime. This is known as the
-<em>Fermat primality test</em>, and it is very efficient. But what happens if
-the result is <span class="math inline">\(1\)</span>? Does this mean that <span class="math inline">\(n\)</span> is a prime? Unfortunately, it
-is not as simple as this. For example, take <span class="math inline">\(n=91\)</span> and <span class="math inline">\(x=3\)</span>. It is easy
-to verify that <span class="math display">\[3^{90}\pmod{91}=1,\]</span> but <span class="math inline">\(91=7\cdot13\)</span>, so it is not a
-prime. We call the numbers that produce these “false positives”
-<em>pseudoprimes</em>.</p>
-<div class="definition">
-<p><span id="def:unlabeled-div-100" class="definition"><strong>Definition B.1  </strong></span><em>Let <span class="math inline">\(n\in\mathbb{Z}\)</span> be a composite number, and let
-<span class="math inline">\(x\in\mathbb{Z}\)</span> such that <span class="math inline">\(\gcd(x,n)=1\)</span>. We call <span class="math inline">\(n\)</span> an</em> <span class="math inline">\(x\)</span>-Fermat
-pseudoprime <em>if</em> <span class="math display">\[x^{n-1}\equiv1\pmod{n}.\]</span></p>
-</div>
-<p>Moreover, for any <span class="math inline">\(x\)</span> there are many <span class="math inline">\(x\)</span>-Fermat pseudoprimes. Okay, so
-everybody don’t panic. Fermat’s little theorem tell us that primes
-verify the condition <span class="math display">\[x^{p-1}\equiv1\pmod{p}\]</span> for <em>every</em> <span class="math inline">\(x\)</span> such
-that <span class="math inline">\(\gcd(p,x)=1\)</span>. So surely we can find some other base <span class="math inline">\(x\)</span> so that
-<span class="math inline">\(91\)</span> cannot fool the test. Indeed, <span class="math display">\[5^{90}\bmod{91} = 64.\]</span> So that’s
-it, we are now sure that <span class="math inline">\(91\)</span> is not a prime, because it does not pass
-the test for <span class="math inline">\(x=5\)</span>. Problem solved.</p>
-<p>Or is it? What if there are some truly evil numbers that can fool the
-Fermat test for all the possible bases?</p>
-<div class="definition">
-<p><span id="def:unlabeled-div-101" class="definition"><strong>Definition B.2  </strong></span><em>Let <span class="math inline">\(n\in\mathbb{Z}\)</span> be a composite number. We say
-that <span class="math inline">\(n\)</span> is a</em> Carmichael number <em>if it is a <span class="math inline">\(x\)</span>-Fermat pseudoprime for
-every <span class="math inline">\(x\in\mathbb{Z}\)</span> such that</em> <span class="math inline">\(\gcd(n,x)=1\)</span>.</p>
-</div>
-<p>Unfortunately, there are too many of these Carmichael numbers. For large
-values of <span class="math inline">\(B\in\mathbb{N}\)</span>, the number of Carmichael numbers up to <span class="math inline">\(B\)</span>
-is approximately <span class="math inline">\(B^{2/7}\)</span>. This means that a significant amount of
-numbers will fool our test, even if we run it for all the possible
-bases. We need a better test.</p>
-<p>The solution lies on a strengthened version of Fermat’s little theorem.</p>
-
-<div class="proposition">
-<span id="prp:unnamed-chunk-37" class="proposition"><strong>Proposition B.3  </strong></span><em>Let <span class="math inline">\(p\in\mathbb{N}\)</span> be an odd prime, and let
-<span class="math inline">\(p-1=2^st\)</span> such that <span class="math inline">\(2\nmid t\)</span>. If <span class="math inline">\(\gcd(p,x)=1\)</span>, then either
-<span class="math display">\[x^t\equiv1\pmod{p},\]</span> or there exists <span class="math inline">\(i\in\{0,1,\dots,s-1\}\)</span> such
-that <span class="math display">\[x^{2^it}\equiv-1\pmod{p}.\]</span></em>
-</div>
-<p>Again, the idea is to test our numbers against this result, and see if
-they satisfy the equations. This version is called the <em>strong Fermat
-primality test</em>. Observe that, in the worst case, we need to perform <span class="math inline">\(s\)</span>
-checks, and if <span class="math inline">\(p\)</span> has bitlength <span class="math inline">\(\lambda\)</span>, then <span class="math inline">\(s=O(\lambda)\)</span>, and
-each check amounts to modular exponentiation, so overall this is
-efficient. As before, this new test also produces false positives.</p>
-<div class="definition">
-<p><span id="def:unlabeled-div-103" class="definition"><strong>Definition B.3  </strong></span><em>Let <span class="math inline">\(n\in\mathbb{Z}\)</span> be an odd composite integer,
-and let <span class="math inline">\(n-1=2^st\)</span>. Let <span class="math inline">\(x\in\mathbb{Z}\)</span> such that <span class="math inline">\(\gcd(x,n)=1\)</span>. We
-call <span class="math inline">\(n\)</span> a</em> strong <span class="math inline">\(x\)</span>-Fermat pseudoprime <em>if
-<span class="math display">\[x^{t-1}\equiv1\pmod{n},\]</span> or there exists <span class="math inline">\(i\in\{0,1,\dots,s-1\}\)</span> such
-that</em> <span class="math display">\[x^{2^it}\equiv-1\pmod{n}.\]</span></p>
-</div>
+<div id="digital-signatures" class="section level1" number="9">
+<h1><span class="header-section-number">9</span> Digital signatures</h1>
+<p>In this section, we take a detour from encryption to look at signature
+schemes, which also follow the public-key paradigm but fulfill a
+different purpose altogether. More precisely, we will learn about:</p>
+<ol style="list-style-type: decimal">
+<li><p>What are signature schemes and why do we care.</p></li>
+<li><p>An example of signature schemes based on RSA.</p></li>
+<li><p>How to sign large messages.</p></li>
+</ol>
+<div id="signature-schemes" class="section level2" number="9.1">
+<h2><span class="header-section-number">9.1</span> Signature schemes</h2>
+<p>Our goal in this section will not be the same as before. No longer we
+are interested in obscuring the message being sent. Instead, consider
+the following example.</p>
+<p>Suppose that Bob receives a message from Alice. How can Bob know that
+the message was not intercepted in transit by an adversary, and modified
+before being forwarded to Bob? Moreover, what if the message does not
+come from Alice at all? To prevent these two problems, we want to
+somehow ensure:</p>
+<ul>
+<li><p><em>Authenticity:</em> the message comes from the claimed sender.</p></li>
+<li><p><em>Integrity:</em> the message was not modified in transit.</p></li>
+</ul>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-104" class="exercise"><strong>Exercise B.1  </strong></span><em>Check that <span class="math inline">\(2047\)</span> is a strong <span class="math inline">\(2\)</span>-Fermat pseudoprime,
-because it satisfies the first condition, and that <span class="math inline">\(91\)</span> is a strong
-<span class="math inline">\(10\)</span>-Fermat pseudoprime, because it satisfies the second condition.</em></p>
+<p><span id="exr:unlabeled-div-87" class="exercise"><strong>Exercise 9.1  </strong></span><em>Think of some real-world examples in which failing to
+provide each of these properties might allow some malicious behaviour.</em></p>
 </div>
-<p>So why bother with the strong Fermat test, if it has the same flaw? The
-key point is that, even if we have strong pseudoprimes, the strong
-Fermat test does not have its version of Carmichael numbers. That is,
-for any composite number <span class="math inline">\(n\)</span> we will always be able to find a base such
-that <span class="math inline">\(n\)</span> does not pass the strong test, showing that it is indeed
-composite. Moreover, most of the bases will do!</p>
-
+<p>The solution to both is to append a signature to the message.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-88" class="definition"><strong>Definition 9.1  </strong></span><em>A</em> signature scheme <em>is a triple of algorithms</em>
+<span class="math display">\[(\mathsf{KeyGen},\mathsf{Sign},\mathsf{Verify}).\]</span></p>
+<ul>
+<li><p><em>The <span class="math inline">\(\mathsf{KeyGen}\)</span> algorithm produces a pair of keys
+<span class="math inline">\(\mathsf{pk}\)</span> and <span class="math inline">\(\mathsf{sk}\)</span> of length <span class="math inline">\(\lambda\)</span> according to
+some probability distribution. The key <span class="math inline">\(\mathsf{pk}\)</span> is called the</em> public key <em>and the key <span class="math inline">\(\mathsf{sk}\)</span> is called the</em>secret key.</p></li>
+<li><p><em>The <span class="math inline">\(\mathsf{Sign}\)</span> algorithm uses the secret key <span class="math inline">\(\mathsf{sk}\)</span> to
+produce a</em> signature <em><span class="math inline">\(\sigma\)</span> of a message <span class="math inline">\(\mathsf{m}\)</span> that
+depends on the message and the key.</em></p></li>
+<li><p><em>The <span class="math inline">\(\mathsf{Verify}\)</span> algorithm uses the public key <span class="math inline">\(\mathsf{pk}\)</span>,
+the message <span class="math inline">\(\mathsf{m}\)</span> and the signature <span class="math inline">\(\sigma\)</span>, and outputs <span class="math inline">\(1\)</span>
+or <span class="math inline">\(0\)</span> depending on whether <span class="math inline">\(\sigma\)</span> is a valid signature for
+<span class="math inline">\(\mathsf{m}\)</span> nor not.</em></p></li>
+</ul>
+</div>
+<p>Now, instead of sending just <span class="math inline">\(\mathsf{m}\)</span>, they proceed as follows.
+Alice runs the <span class="math inline">\(\mathsf{KeyGen}\)</span> algorithm to produce a pair of keys
+<span class="math inline">\((\mathsf{pk},\mathsf{sk})\)</span>, and publishes <span class="math inline">\(\mathsf{pk}\)</span>. When Alice
+wants to sign the message <span class="math inline">\(\mathsf{m}\)</span>, she computes
+<span class="math display">\[\sigma=\mathsf{Sign}_{\mathsf{sk}}(\mathsf{m}),\]</span> and sends
+<span class="math inline">\((\mathsf{m},\sigma)\)</span> to Bob. Upon receiving the message, Bob runs the
+<span class="math inline">\(\mathsf{Verify}\)</span> algorithm with <span class="math inline">\(\mathsf{k}\)</span>, <span class="math inline">\(\mathsf{m}\)</span> and
+<span class="math inline">\(\sigma\)</span>. The idea is that, with a good signature scheme, no adversary
+should be able to sign any message without knowledge of the secret key
+<span class="math inline">\(\mathsf{sk}\)</span>. Therefore:</p>
+<ul>
+<li><p>Authenticity is guaranteed, since nobody except for Alice could have
+signed the message.</p></li>
+<li><p>Integrity is also guaranteed, since an attacker intercepting
+<span class="math inline">\((\mathsf{m},\sigma)\)</span> does not know how to compute a signature for a
+message different from <span class="math inline">\(\mathsf{m}\)</span>.</p></li>
+</ul>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-89" class="exercise"><strong>Exercise 9.2  </strong></span><em>One might think that using an encryption scheme
+already solves these issues. However, that is not true. Take, for
+example, the one-time pad. Show how an attacker against integrity can
+modify the ciphertext so that it decrypts to a different plaintext. Is
+there any real-world situations in which this could be troublesome?</em></p>
+</div>
+<p>Note that in encryption the message was first processed with the public
+key in the <span class="math inline">\(\mathsf{Enc}\)</span> algorithm and then with the secret key in the
+<span class="math inline">\(\mathsf{Dec}\)</span> algorithm. However, signatures first use the secret key
+in the <span class="math inline">\(\mathsf{Sign}\)</span> algorithm, and then the public key is used to
+verify. That is because, in encryption, we wanted that:</p>
+<ul>
+<li><p>Anyone can encrypt a message addressed to some party.</p></li>
+<li><p>Only this party can decrypt the messages addressed to them.</p></li>
+</ul>
+<p>However, the situation is reversed in signatures, as we want that:</p>
+<ul>
+<li><p>Only one party can sign messages on their own behalf.</p></li>
+<li><p>Everyone can verify that the message was indeed signed by this
+party.</p></li>
+</ul>
+<p>Since in principle signatures are not encrypted, an eavesdropper could
+intercept a pair <span class="math inline">\((\mathsf{m},\sigma)\)</span> of message and signature, and
+resend it later, impersonating the sender. We can prevent this from
+becoming an effective attack by time-stamping the message, that is,
+signing a version of the message that includes the time of sending, or
+an “expiration date”, beyond which the signature is not considered
+valid.</p>
+<p>Thus, we will informally say that a signature scheme is secure if no
+efficient adversary is able to produce, without the secret key, a pair
+of message and a valid signature for it such that the message is not one
+of those already eavesdropped by the adversary.</p>
+</div>
+<div id="rsa-signatures" class="section level2" number="9.2">
+<h2><span class="header-section-number">9.2</span> RSA signatures</h2>
+<p>Interestingly, one can run the RSA encryption scheme “backwards” to
+obtain a signature scheme. That is, we use the decryption algorithm to
+sign, and the encryption algorithm to verify.</p>
+<ul>
+<li><p><span class="math inline">\(\mathsf{KeyGen}\)</span>: on input a security parameter <span class="math inline">\(\lambda\)</span>, choose
+two uniformly random prime numbers <span class="math inline">\(p,q\)</span> of bitlength <span class="math inline">\(\lambda/2\)</span>,
+and let <span class="math inline">\(N=pq\)</span>. Choose <span class="math inline">\(e\in\mathbb{Z}_N\)</span>, and compute
+<span class="math display">\[d\equiv e^{-1}\pmod{\varphi(N)}.\]</span> Output the public key
+<span class="math display">\[\mathsf{pk}=(N,e),\]</span> and the secret key <span class="math display">\[\mathsf{sk}=d.\]</span></p></li>
+<li><p><span class="math inline">\(\mathsf{Sign}\)</span>: given a message <span class="math inline">\(\mathsf{m}\in\mathbb{Z}_N\)</span>, and
+the sender’s secret key key <span class="math inline">\(d\)</span>, output a signature
+<span class="math display">\[\mathsf{m}^{d}\bmod{N}.\]</span></p></li>
+<li><p><span class="math inline">\(\mathsf{Verify}\)</span>: given a message <span class="math inline">\(\mathsf{m}\)</span>, a signature
+<span class="math inline">\(\sigma\)</span> and the public key <span class="math inline">\((N,e)\)</span> of the sender, check whether
+<span class="math display">\[\sigma^e\equiv \mathsf{m}\pmod{N}.\]</span> If the equality holds, output
+<span class="math inline">\(1\)</span> (accept the signature), otherwise output <span class="math inline">\(0\)</span> (reject the
+signature).</p></li>
+</ul>
+<p>It is clear that genuine signatures are accepted, since
+<span class="math display">\[\sigma^e\equiv \left(\mathsf{m}^d\right)^e\equiv \mathsf{m}^{ed}\equiv \mathsf{m}\pmod{N},\]</span>
+similarly to how we argued in the case of RSA encryption, and the
+discussion about efficiency translates naturally.</p>
+<p>However, as it stands, the signature scheme is insecure. Recall that
+security means that an adversary cannot efficiently produce a pair of
+message and signature for a new message, given signatures of some
+messages.</p>
+<p>Let us assume that an adversary eavesdrops two message-signature pairs
+<span class="math inline">\((\mathsf{m}_0,\sigma_0)\)</span> and <span class="math inline">\((\mathsf{m}_1,\sigma_1)\)</span>. Then, since
+<span class="math display">\[\sigma_0^e\equiv \mathsf{m}_0,\qquad \text{ and }\qquad \sigma_1^e\equiv \mathsf{m}_1,\]</span>
+we have that <span class="math display">\[(\sigma_0\sigma_1)^e\equiv \mathsf{m}_0\mathsf{m}_1.\]</span>
+Therefore, <span class="math inline">\((\sigma_0\sigma_1) \bmod{N}\)</span> is a valid signature for the
+new message <span class="math inline">\((\mathsf{m}_0\mathsf{m}_1)\bmod{N}\)</span>.</p>
+<p>This attack is possible because of the <em>malleability</em> of RSA signatures.
+That is, given some messages and their signatures, it is easy to
+manipulate them to produce new signatures for new messages. In
+particular, in this case the product of two signatures yields the
+signature of the product of the messages. Thus, to prevent this attack,
+we will need to somehow sever this link between signatures of related
+messages.</p>
+<p>Moreover, there is another problem of a more practical nature. So far,
+we have achieved a way to sign a relatively short message, since
+<span class="math inline">\(\mathsf{m}\in\mathbb{Z}_N^*\)</span>. We could make <span class="math inline">\(N\)</span> larger to account for
+larger messages, but this would have a significant impact on efficiency,
+so we want to look for an alternative approach.</p>
+<p>In the next section, we will solve these two issues at once.</p>
+</div>
+<div id="signing-large-messages" class="section level2" number="9.3">
+<h2><span class="header-section-number">9.3</span> Signing large messages</h2>
+<p>We now focus on the problem of producing a signature scheme for an
+arbitrarily large message, starting from a fixed-length one. More
+precisely, let us say that we have a signature scheme for messages of
+length <span class="math inline">\(\ell\)</span>, and we have a message <span class="math inline">\(\mathsf{m}\)</span> of length <span class="math inline">\(2\ell\)</span>. Our
+first idea could be to split the message in two halves
+<span class="math inline">\(\mathsf{m}_0,\mathsf{m}_1\)</span>, each of them of length <span class="math inline">\(\ell\)</span>, and compute
+<span class="math display">\[\sigma_0=\mathsf{Sign}_{\mathsf{sk}}(\mathsf{m}_0),\qquad\sigma_1=\mathsf{Sign}_{\mathsf{sk}}(\mathsf{m}_1),\]</span>
+and send <span class="math inline">\((\mathsf{m},\sigma)\)</span>, where <span class="math inline">\(\sigma=(\sigma_0|\sigma_1)\)</span>.
+However, two problems arise, one theoretical and one practical:</p>
+<ul>
+<li><p>A secure signature scheme should ensure that an adversary cannot
+sign any new message. But the message <span class="math inline">\((\mathsf{m}_1|\mathsf{m}_0)\)</span>
+is different from the message <span class="math inline">\((\mathsf{m}_0|\mathsf{m}_1)\)</span>, and it
+is easy to provide the signature <span class="math inline">\((\sigma_1|\sigma_0)\)</span>. Thus, our
+idea does not yield a secure signature scheme.</p></li>
+<li><p>Moreover, this becomes highly impractical as the message grows in
+size. Assume that we are sending a video file, which could be
+several gigabytes large. The signature is roughly as large as the
+message, and thus we are sending a lot of extra information just for
+authentication and integrity.</p></li>
+</ul>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-90" class="exercise"><strong>Exercise 9.3  </strong></span><em>In an effort to defeat these issues, we consider
+simply signing the first block of length <span class="math inline">\(\ell\)</span> of the message,
+regardless of the size of the message. What is the issue with this?</em></p>
+</div>
+<p>Surely we can do better. What if, somehow, we could compress the whole
+message in just one block of length <span class="math inline">\(\ell\)</span>, and we sign that block? And
+don’t we have a tool that does exactly that? Indeed, we can use a hash
+function.</p>
+<p>Given a fixed-length signature scheme
+<span class="math display">\[(\mathsf{KeyGen},\mathsf{Sign}, \mathsf{Verify})\]</span> and a public hash
+function <span class="math inline">\(H\)</span>, we build an arbitrary-length signature scheme as follows.
+The <span class="math inline">\(\mathsf{KeyGen}\)</span> algorithm stays the same. To sign an
+arbitrarily-large message <span class="math inline">\(\mathsf{m}\)</span>, we compute:
+<span class="math display">\[\sigma=\mathsf{Sign}_{\mathsf{sk}}(H(\mathsf{m})).\]</span> That is, we
+reduce the problem to signing a fixed-length message <span class="math inline">\(h\)</span>, by hashing the
+original message. We make the following observations:</p>
+<ul>
+<li><p>The hash function must be public and deterministic, because both
+sender and recipient need to make use of it to compute
+<span class="math inline">\(H(\mathsf{m})\)</span>.</p></li>
+<li><p>Although <span class="math inline">\(H(\mathsf{m})\)</span> can be computed by adversaries, they cannot
+sign it on their own because they lack the secret key <span class="math inline">\(\mathsf{sk}\)</span>.</p></li>
+</ul>
+<p>Note that this also solves our security issue highlighted in the
+previous section, which stemmed from signatures of related messages
+being related. The intuition is that the outputs of a good hash function
+are “random-looking”, regardless of the inputs being related.</p>
+<p>This variant of RSA signatures is described below, and is known as the
+<em>full-domain hash</em> signature scheme.</p>
+<ul>
+<li><p><span class="math inline">\(\mathsf{KeyGen}\)</span>: on input a security parameter <span class="math inline">\(\lambda\)</span>, choose
+two uniformly random prime numbers <span class="math inline">\(p,q\)</span> of bitlength <span class="math inline">\(\lambda/2\)</span>,
+and let <span class="math inline">\(N=pq\)</span>. Let <span class="math inline">\(H:\{0,1\}^*\rightarrow\mathbb{Z}_N\)</span> be a hash
+function. Choose <span class="math inline">\(e\in\mathbb{Z}_N\)</span>, and compute
+<span class="math display">\[d\equiv e^{-1}\pmod{\varphi(N)}.\]</span> Output the public key
+<span class="math display">\[\mathsf{pk}=(N,e),\]</span> and the secret key <span class="math display">\[\mathsf{sk}=d.\]</span></p></li>
+<li><p><span class="math inline">\(\mathsf{Sign}\)</span>: given a message <span class="math inline">\(\mathsf{m}\in\{0,1\}^*\)</span>, and the
+sender’s secret key key <span class="math inline">\(d\)</span>, output a signature
+<span class="math display">\[H(\mathsf{m})^{d}\bmod{N}.\]</span></p></li>
+<li><p><span class="math inline">\(\mathsf{Verify}\)</span>: given a message <span class="math inline">\(\mathsf{m}\)</span>, a signature
+<span class="math inline">\(\sigma\)</span> and the public key <span class="math inline">\((N,e)\)</span> of the sender, check whether
+<span class="math display">\[\sigma^e\equiv H(\mathsf{m})\pmod{N}.\]</span> If the equality holds,
+output <span class="math inline">\(1\)</span> (accept the signature), otherwise output <span class="math inline">\(0\)</span> (reject the
+signature).</p></li>
+</ul>
 <div class="proposition">
-<span id="prp:unnamed-chunk-38" class="proposition"><strong>Proposition B.4  (Monier–Rabin)  </strong></span><em>Let <span class="math inline">\(n&gt;9\)</span> be an odd composite
-integer. Then, the number of bases <span class="math inline">\(x\)</span> smaller than <span class="math inline">\(n\)</span> such that <span class="math inline">\(n\)</span> is
-a strong <span class="math inline">\(x\)</span>-Fermat pseudoprime is at most <span class="math inline">\(\frac14\varphi(n)\)</span>.</em>
+<p><span id="prp:unlabeled-div-91" class="proposition"><strong>Proposition 9.1  </strong></span><em>If the RSA problem is hard and <span class="math inline">\(H\)</span> behaves as an
+ideal<a href="#fn39" class="footnote-ref" id="fnref39"><sup>39</sup></a> hash function, then the full-domain hash signature scheme is
+secure.</em></p>
 </div>
-<p>This is a very strong result. Since <span class="math inline">\(\varphi(n)&lt;n\)</span>, this tells us that,
-by picking a base in <span class="math inline">\(\mathbb{Z}_n\)</span> at random, there is only a
-probability of <span class="math inline">\(1/4\)</span> that the test lies. Of course, we want a smaller
-probability, so we repeat the test many times. By using <span class="math inline">\(\lambda\)</span>
-iterations for different random bases, we bring the error probability
-down to <span class="math inline">\(1/4^\lambda\)</span>. Observe that this decreases exponentially in
-<span class="math inline">\(\lambda\)</span>! To give some concrete numbers, for <span class="math inline">\(\lambda=1024\)</span>, we have
-that <span class="math display">\[\frac{1}{4^\lambda}\approx 3.094346\cdot 10^{-67},\]</span> and this
-looks like a failure probability that we can live with.</p>
-<p>Asymptotically, we have an algorithm that runs <span class="math inline">\(\lambda\)</span> iterations, and
-each of these is computing <span class="math inline">\(O(\lambda)\)</span> exponentiations, so in total we
-have a running cost of <span class="math inline">\(O(\lambda^2)\)</span> modular exponentiations.</p>
-<p>This test is known as the <em>Miller–Rabin primality test</em>, and it is in
-essence what is used in practice to check for primality, due to its high
-efficiency and almost-perfect reliability.</p>
-<p>If you are still concerned about the error probability, there are some
-alternatives that <em>never</em> produce erroneous results, while still running
-in polynomial time. However, they are much slower than the Miller–Rabin
-test, which is why they are not often used in practice.<a href="#fn43" class="footnote-ref" id="fnref43"><sup>43</sup></a></p>
+
+</div>
 </div>
 <div class="footnotes">
 <hr />
-<ol start="43">
-<li id="fn43"><p>Agrawal, M., Kayal, N., &amp; Saxena, N. (2004). PRIMES is in P.
-<em>Annals of mathematics</em>, 781-793.<a href="primality-testing.html#fnref43" class="footnote-back">↩︎</a></p></li>
+<ol start="39">
+<li id="fn39"><p><em>See Proposition 7.1.</em><a href="digital-signatures.html#fnref39" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
@@ -379,8 +466,8 @@ test, which is why they are not often used in practice.<a href="#fn43" class="fo
           </div>
         </div>
       </div>
-<a href="ring-theory.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="polynomial-interpolation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="discrete-logarithm-cryptosystems.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="secret-sharing.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
